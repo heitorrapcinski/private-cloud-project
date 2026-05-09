@@ -1,0 +1,69 @@
+# Kolla-Ansible Multinode Inventory
+[control]
+ctrl-az1fd1-01 ansible_host=10.0.10.11
+ctrl-az2fd1-01 ansible_host=10.0.10.12
+ctrl-az3fd1-01 ansible_host=10.0.10.13
+
+[network]
+net-az1fd2-01 ansible_host=10.0.10.41
+net-az1fd3-01 ansible_host=10.0.10.42
+net-az2fd2-01 ansible_host=10.0.10.43
+net-az2fd3-01 ansible_host=10.0.10.44
+net-az3fd2-01 ansible_host=10.0.10.45
+net-az3fd3-01 ansible_host=10.0.10.46
+
+[compute]
+compute-az1fd1-[01:12] ansible_host=10.0.10.[101:112]
+compute-az1fd2-[01:12] ansible_host=10.0.10.[113:124]
+compute-az1fd3-[01:12] ansible_host=10.0.10.[125:136]
+compute-az2fd1-[01:12] ansible_host=10.0.11.[101:112]
+compute-az2fd2-[01:12] ansible_host=10.0.11.[113:124]
+compute-az2fd3-[01:12] ansible_host=10.0.11.[125:136]
+compute-az3fd1-[01:12] ansible_host=10.0.12.[101:112]
+compute-az3fd2-[01:12] ansible_host=10.0.12.[113:124]
+compute-az3fd3-[01:12] ansible_host=10.0.12.[125:136]
+
+[monitoring]
+ctrl-az1fd1-01
+
+[storage]
+swift-az1fd1-[01:02] ansible_host=10.0.20.[101:102]
+swift-az1fd2-[01:02] ansible_host=10.0.20.[103:104]
+swift-az1fd3-[01:02] ansible_host=10.0.20.[105:106]
+swift-az2fd1-[01:02] ansible_host=10.0.21.[101:102]
+swift-az2fd2-[01:02] ansible_host=10.0.21.[103:104]
+swift-az2fd3-[01:02] ansible_host=10.0.21.[105:106]
+swift-az3fd1-[01:02] ansible_host=10.0.22.[101:102]
+swift-az3fd2-[01:02] ansible_host=10.0.22.[103:104]
+swift-az3fd3-[01:02] ansible_host=10.0.22.[105:106]
+cinder-az1fd1-01 ansible_host=10.0.20.201
+cinder-az2fd1-01 ansible_host=10.0.21.201
+cinder-az3fd1-01 ansible_host=10.0.22.201
+
+[loadbalancer]
+ctrl-az1fd1-01
+ctrl-az2fd1-01
+ctrl-az3fd1-01
+
+[database]
+ctrl-az1fd1-01
+ctrl-az2fd1-01
+ctrl-az3fd1-01
+
+[messaging]
+ctrl-az1fd1-01
+ctrl-az2fd1-01
+ctrl-az3fd1-01
+
+# Kolla-Ansible group mappings
+[baremetal:children]
+control
+network
+compute
+storage
+monitoring
+
+[all:vars]
+ansible_user=deploy
+ansible_become=true
+ansible_python_interpreter=/usr/bin/python3

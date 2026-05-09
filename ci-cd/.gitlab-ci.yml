@@ -1,0 +1,140 @@
+# GitLab CI/CD Pipeline for OpenStack Infrastructure
+# .gitlab-ci.yml
+
+stages:
+  - lint
+  - validate
+  - plan
+  - deploy
+  - verify
+
+variables:
+  ANSIBLE_FORCE_COLOR: "true"
+  TF_IN_AUTOMATION: "true"
+  KOLLA_INVENTORY: "ansible/inventory/multinode"
+
+# --- Lint Stage ---
+ansible-lint:
+  stage: lint
+  image: cytopia/ansible-lint:latest
+  script:
+    - ansible-lint ansible/playbooks/site.yml
+  rules:
+    - changes: ["ansible/**/*"]
+
+yaml-lint:
+  stage: lint
+  image: cytopia/yamllint:latest
+  script:
+    - yamllint -c .yamllint.yml ansible/ configs/
+  rules:
+    - changes: ["ansible/**/*", "configs/**/*"]
+
+terraform-fmt:
+  stage: lint
+  image: hashicorp/terraform:1.5
+  script:
+    - cd terraform && terraform fmt -check -recursive
+  rules:
+    - changes: ["terraform/**/*"]
+
+# --- Validate Stage ---
+terraform-validate:
+  stage: validate
+  image: hashicorp/terraform:1.5
+  script:
+    - cd terraform
+    - terraform init -backend=false
+    - terraform validate
+  rules:
+    - changes: ["terraform/**/*"]
+
+ansible-syntax:
+  stage: validate
+  image: ansible/ansible-runner:latest
+  script:
+    - ansible-playbook --syntax-check -i ${KOLLA_INVENTORY} ansible/playbooks/site.yml
+  rules:
+    - changes: ["ansible/**/*"]
+
+# --- Plan Stage ---
+terraform-plan:
+  stage: plan
+  image: hashicorp/terraform:1.5
+  script:
+    - cd terraform
+    - terraform init
+    - terraform plan -out=tfplan
+  artifacts:
+    paths: [terraform/tfplan]
+    expire_in: 1 hour
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes: ["terraform/**/*"]
+
+# --- Deploy Stage ---
+deploy-infrastructure:
+  stage: deploy
+  image: hashicorp/terraform:1.5
+  script:
+    - cd terraform
+    - terraform init
+    - terraform apply -auto-approve tfplan
+  dependencies: [terraform-plan]
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes: ["terraform/**/*"]
+  when: manual
+  environment:
+    name: production
+
+deploy-openstack:
+  stage: deploy
+  image: quay.io/openstack.kolla/kolla-ansible:2024.1
+  script:
+    - kolla-ansible -i ${KOLLA_INVENTORY} prechecks
+    - kolla-ansible -i ${KOLLA_INVENTORY} deploy
+    - kolla-ansible -i ${KOLLA_INVENTORY} post-deploy
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes: ["ansible/**/*", "configs/**/*"]
+  when: manual
+  environment:
+    name: production
+
+deploy-configs:
+  stage: deploy
+  image: ansible/ansible-runner:latest
+  script:
+    - ansible-playbook -i ${KOLLA_INVENTORY} ansible/playbooks/update-configs.yml
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes: ["configs/**/*"]
+  when: manual
+
+# --- Verify Stage ---
+smoke-tests:
+  stage: verify
+  image: openstackci/python-openstackclient:latest
+  script:
+    - source /etc/kolla/admin-openrc.sh
+    - openstack service list
+    - openstack compute service list
+    - openstack network agent list
+    - openstack volume service list
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  needs: [deploy-openstack]
+
+tempest-smoke:
+  stage: verify
+  image: openstackci/tempest:latest
+  script:
+    - tempest run --smoke --concurrency 4
+  artifacts:
+    paths: [tempest-results/]
+    expire_in: 7 days
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  needs: [smoke-tests]
+  allow_failure: true

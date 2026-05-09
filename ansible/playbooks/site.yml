@@ -1,0 +1,95 @@
+---
+# Site playbook - orchestrates full deployment
+- name: Pre-flight checks
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: Verify connectivity
+      ansible.builtin.ping:
+
+    - name: Check minimum RAM
+      ansible.builtin.assert:
+        that: ansible_memtotal_mb >= 65536
+        fail_msg: "Host {{ inventory_hostname }} has insufficient RAM"
+      when: "'compute' in group_names"
+
+    - name: Check OS version
+      ansible.builtin.assert:
+        that: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '22.04'
+        fail_msg: "Host {{ inventory_hostname }} is not Ubuntu 22.04"
+
+- name: Base OS configuration
+  hosts: all
+  become: true
+  roles:
+    - role: base-os
+    - role: networking
+    - role: security-hardening
+    - role: monitoring-agent
+
+- name: Configure storage nodes
+  hosts: storage
+  become: true
+  roles:
+    - role: storage-prepare
+
+- name: Deploy OpenStack via Kolla-Ansible
+  hosts: localhost
+  tasks:
+    - name: Run kolla-ansible bootstrap-servers
+      ansible.builtin.command:
+        cmd: kolla-ansible -i inventory/multinode bootstrap-servers
+      changed_when: true
+
+    - name: Run kolla-ansible prechecks
+      ansible.builtin.command:
+        cmd: kolla-ansible -i inventory/multinode prechecks
+      changed_when: true
+
+    - name: Run kolla-ansible deploy
+      ansible.builtin.command:
+        cmd: kolla-ansible -i inventory/multinode deploy
+      changed_when: true
+
+    - name: Run kolla-ansible post-deploy
+      ansible.builtin.command:
+        cmd: kolla-ansible -i inventory/multinode post-deploy
+      changed_when: true
+
+- name: Post-deployment configuration
+  hosts: localhost
+  tasks:
+    - name: Source admin credentials
+      ansible.builtin.shell: |
+        source /etc/kolla/admin-openrc.sh
+      changed_when: false
+
+    - name: Create default flavors
+      ansible.builtin.command:
+        cmd: >
+          openstack flavor create {{ item.name }}
+          --ram {{ item.ram }} --vcpus {{ item.vcpus }} --disk {{ item.disk }}
+      loop:
+        - { name: "m1.small", ram: 4096, vcpus: 2, disk: 20 }
+        - { name: "m1.medium", ram: 8192, vcpus: 4, disk: 40 }
+        - { name: "m1.large", ram: 16384, vcpus: 8, disk: 80 }
+        - { name: "m1.xlarge", ram: 32768, vcpus: 16, disk: 160 }
+      changed_when: true
+      ignore_errors: true
+
+    - name: Create provider network
+      ansible.builtin.command:
+        cmd: >
+          openstack network create --external --share
+          --provider-network-type flat --provider-physical-network external
+          external
+      changed_when: true
+      ignore_errors: true
+
+    - name: Configure host aggregates
+      ansible.builtin.command:
+        cmd: >
+          openstack aggregate create --zone {{ item }} {{ item }}-general
+      loop: [az1, az2, az3]
+      changed_when: true
+      ignore_errors: true

@@ -53,9 +53,9 @@ inject_partition = -2
 num_pcie_ports = 28
 
 [compute]
-cpu_allocation_ratio = 4.0
+cpu_allocation_ratio = 3.0
 ram_allocation_ratio = 1.5
-disk_allocation_ratio = 1.0
+disk_allocation_ratio = 1.5
 cpu_dedicated_set = 4-79
 cpu_shared_set = 0-3
 ```
@@ -101,8 +101,174 @@ cpu_shared_set = 0-3
 | az1-general | compute-az1fd*-* | availability_zone=az1 | General purpose |
 | az2-general | compute-az2fd*-* | availability_zone=az2 | General purpose |
 | az3-general | compute-az3fd*-* | availability_zone=az3 | General purpose |
+| shared-compute | 81 nodes (9/rack) | overcommit=3:1, service_tier=shared | Recursos compartilhados |
+| dedicated-compute | 27 nodes (3/rack) | overcommit=1:1, service_tier=dedicated | Recursos dedicados |
 | pinned-cpu | selecionados | cpu_policy=dedicated | HPC workloads |
 | ssd-ephemeral | todos | disk_type=ssd | NVMe local |
+
+## Ofertas de Overcommitment
+
+O compute plane oferece dois tiers de serviço baseados em overcommitment, implementados via Host Aggregates e Placement API.
+
+### Arquitetura de Tiers
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    Compute Plane - Tiers                          │
+│                                                                   │
+│  ┌───────────────────────────────┐  ┌─────────────────────────┐ │
+│  │     SHARED (1:3)              │  │   DEDICATED (1:1)       │ │
+│  │                               │  │                         │ │
+│  │  81 nodes (75% da frota)      │  │  27 nodes (25% da frota)│ │
+│  │  CPU ratio: 3.0               │  │  CPU ratio: 1.0         │ │
+│  │  RAM ratio: 1.5               │  │  RAM ratio: 1.0         │ │
+│  │  Disk ratio: 1.5              │  │  Disk ratio: 1.0        │ │
+│  │                               │  │                         │ │
+│  │  Workloads:                   │  │  Workloads:             │ │
+│  │  - Dev/Test                   │  │  - Bancos de dados      │ │
+│  │  - Web servers                │  │  - Aplicações críticas  │ │
+│  │  - Microservices              │  │  - Latência sensível    │ │
+│  │  - Batch processing           │  │  - Compliance (PCI/SOX) │ │
+│  └───────────────────────────────┘  └─────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Tier 1: Recursos Compartilhados (1:3)
+
+Proporção de overcommitment 1:3 para CPU — cada core físico é compartilhado entre até 3 vCPUs. Ideal para workloads com uso intermitente de CPU.
+
+```ini
+# /etc/nova/nova.conf (shared compute nodes)
+[compute]
+cpu_allocation_ratio = 3.0
+ram_allocation_ratio = 1.5
+disk_allocation_ratio = 1.5
+```
+
+**Capacidade por nó (shared):**
+
+| Recurso | Físico | Disponível (overcommit) |
+|---------|--------|------------------------|
+| vCPUs | 80 cores | 240 vCPUs |
+| RAM | 1 TB | 1.5 TB |
+| Disk | 7.68 TB NVMe | 11.52 TB |
+
+**Capacidade total tier shared (81 nodes):**
+- 19.440 vCPUs
+- 121.5 TB RAM
+- 933 TB disk
+
+### Tier 2: Recursos Dedicados (1:1)
+
+Proporção 1:1 — sem overcommitment. Cada vCPU mapeia diretamente para um core físico. Garante performance previsível e isolamento de recursos.
+
+```ini
+# /etc/nova/nova.conf (dedicated compute nodes)
+[compute]
+cpu_allocation_ratio = 1.0
+ram_allocation_ratio = 1.0
+disk_allocation_ratio = 1.0
+```
+
+**Capacidade por nó (dedicated):**
+
+| Recurso | Físico | Disponível |
+|---------|--------|-----------|
+| vCPUs | 76 (80 - 4 reservados) | 76 vCPUs |
+| RAM | 1 TB (- 16 GB host) | ~1008 GB |
+| Disk | 7.68 TB NVMe | 7.68 TB |
+
+**Capacidade total tier dedicated (27 nodes):**
+- 2.052 vCPUs
+- 27 TB RAM
+- 207 TB disk
+
+### Configuração via Host Aggregates
+
+```bash
+# Criar aggregates
+openstack aggregate create --zone az1 shared-az1
+openstack aggregate create --zone az1 dedicated-az1
+
+# Definir metadata
+openstack aggregate set --property service_tier=shared shared-az1
+openstack aggregate set --property service_tier=dedicated dedicated-az1
+openstack aggregate set --property cpu_allocation_ratio=3.0 shared-az1
+openstack aggregate set --property cpu_allocation_ratio=1.0 dedicated-az1
+openstack aggregate set --property ram_allocation_ratio=1.5 shared-az1
+openstack aggregate set --property ram_allocation_ratio=1.0 dedicated-az1
+
+# Adicionar hosts
+openstack aggregate add host shared-az1 compute-az1fd1-01
+# ... (9 nodes por rack, 27 por AZ para shared)
+openstack aggregate add host dedicated-az1 compute-az1fd1-10
+# ... (3 nodes por rack, 9 por AZ para dedicated)
+```
+
+### Flavors por Tier
+
+#### Shared Flavors (overcommit 1:3)
+
+| Flavor | vCPU | RAM | Disk | Extra Specs |
+|--------|------|-----|------|-------------|
+| s1.small | 2 | 4 GB | 20 GB | service_tier=shared |
+| s1.medium | 4 | 8 GB | 40 GB | service_tier=shared |
+| s1.large | 8 | 16 GB | 80 GB | service_tier=shared |
+| s1.xlarge | 16 | 32 GB | 160 GB | service_tier=shared |
+| s1.2xlarge | 32 | 64 GB | 320 GB | service_tier=shared |
+
+#### Dedicated Flavors (overcommit 1:1)
+
+| Flavor | vCPU | RAM | Disk | Extra Specs |
+|--------|------|-----|------|-------------|
+| d1.small | 2 | 4 GB | 20 GB | service_tier=dedicated, hw:cpu_policy=dedicated |
+| d1.medium | 4 | 8 GB | 40 GB | service_tier=dedicated, hw:cpu_policy=dedicated |
+| d1.large | 8 | 16 GB | 80 GB | service_tier=dedicated, hw:cpu_policy=dedicated |
+| d1.xlarge | 16 | 32 GB | 160 GB | service_tier=dedicated, hw:cpu_policy=dedicated |
+| d1.2xlarge | 32 | 64 GB | 320 GB | service_tier=dedicated, hw:cpu_policy=dedicated, hw:numa_nodes=2 |
+
+### Scheduler Filters
+
+```ini
+# /etc/nova/nova.conf (controller)
+[filter_scheduler]
+enabled_filters = AvailabilityZoneFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter,AggregateInstanceExtraSpecsFilter,NUMATopologyFilter,AggregateMultiTenancyIsolation
+available_filters = nova.scheduler.filters.all_filters
+
+# AggregateInstanceExtraSpecsFilter garante que flavors com
+# service_tier=shared só agendam em hosts do aggregate shared
+```
+
+### Distribuição de Hosts por Rack
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  Rack (12 compute nodes)                                     │
+│                                                               │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │  Shared (9 nodes)                                    │    │
+│  │  compute-{az}{fd}-01 a 09                            │    │
+│  │  CPU 3:1 | RAM 1.5:1 | Disk 1.5:1                   │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                                                               │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │  Dedicated (3 nodes)                                  │    │
+│  │  compute-{az}{fd}-10 a 12                            │    │
+│  │  CPU 1:1 | RAM 1:1 | Disk 1:1                       │    │
+│  └─────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Monitoramento e SLA por Tier
+
+| Métrica | Shared | Dedicated |
+|---------|--------|-----------|
+| SLA Disponibilidade | 99.9% | 99.99% |
+| CPU Steal máximo | 15% | 0% (garantido) |
+| Latência de rede (P99) | < 2ms | < 0.5ms |
+| IOPS garantido | Best-effort | Reservado via QoS |
+| Live Migration | Permitida | Janela programada |
+| Noisy Neighbor | Possível | Isolado |
 
 ## Live Migration
 
@@ -199,13 +365,13 @@ openstack baremetal node create \
 
 ### Resource Classes
 
-| Resource Class | Inventário | Uso |
-|----------------|-----------|-----|
-| VCPU | 160 per host (4:1) | Virtual CPUs |
-| PCPU | 76 per host | Dedicated CPUs |
-| MEMORY_MB | 1048576 per host | RAM |
-| DISK_GB | 7000 per host | Ephemeral |
-| CUSTOM_BAREMETAL_LARGE | 1 per BM node | Bare metal |
+| Resource Class | Inventário (Shared) | Inventário (Dedicated) | Uso |
+|----------------|--------------------|-----------------------|-----|
+| VCPU | 240 per host (3:1) | 76 per host (1:1) | Virtual CPUs |
+| PCPU | 76 per host | 76 per host | Dedicated CPUs |
+| MEMORY_MB | 1572864 per host (1.5:1) | 1032192 per host (1:1) | RAM |
+| DISK_GB | 11520 per host (1.5:1) | 7680 per host (1:1) | Ephemeral |
+| CUSTOM_BAREMETAL_LARGE | 1 per BM node | 1 per BM node | Bare metal |
 
 ### Traits
 
@@ -295,8 +461,10 @@ cpupower frequency-set -g performance
 
 1. **host-passthrough CPU**: Máxima performance, expõe todas as features do host
 2. **Cells por AZ**: Isolamento de falha, DB/MQ independentes por AZ
-3. **4:1 CPU overcommit**: Balanceamento entre density e performance para workloads gerais
-4. **Dedicated CPU set**: Cores 0-3 reservados para host OS, evita contention
-5. **NVMe ephemeral**: Performance de disco local para VMs sem Cinder
-6. **Live migration auto-converge**: Garante conclusão mesmo com VMs write-intensive
-7. **Ironic Redfish**: API moderna, suporte a BIOS config, virtual media boot
+3. **Dois tiers de overcommit**: Shared (1:3) para workloads gerais, Dedicated (1:1) para serviços críticos
+4. **75/25 split**: 75% da frota para shared maximiza densidade, 25% dedicado atende SLAs premium
+5. **Dedicated CPU set**: Cores 0-3 reservados para host OS, evita contention
+6. **NVMe ephemeral**: Performance de disco local para VMs sem Cinder
+7. **Live migration auto-converge**: Garante conclusão mesmo com VMs write-intensive
+8. **Ironic Redfish**: API moderna, suporte a BIOS config, virtual media boot
+9. **AggregateInstanceExtraSpecsFilter**: Garante isolamento entre tiers via scheduler

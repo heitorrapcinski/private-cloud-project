@@ -23,16 +23,66 @@ Documentar a estratégia de continuidade operacional da nuvem privada, definindo
 
 ## Domínios de Falha
 
+A resiliência da plataforma é construída sobre três camadas concêntricas de isolamento físico:
+
+```
+Região ─► Availability Zone ─► Fault Domain ─► Nó/Componente
+ (1)         (3 por região)     (3 por AZ)      (N por FD)
+```
+
+### O que é um Fault Domain (FD)
+
+Um **FD** é uma unidade física de isolamento dentro de uma AZ, usada para limitar o raio de impacto de falhas correlacionadas de **média escala** — aquelas que afetam múltiplos nós simultaneamente, mas não a AZ inteira. Na nossa arquitetura, **cada FD corresponde a 1 rack físico**, totalizando 9 FDs (3 por AZ × 3 AZs).
+
+A distinção entre AZ e FD é crucial:
+
+| Camada | Protege contra | Exemplo de evento |
+|--------|----------------|-------------------|
+| Região | Catástrofe geográfica | Terremoto, incêndio do DC inteiro |
+| AZ | Falha correlacionada de grande escala | Perda de chiller plant, falha de utility feed da sala |
+| FD (rack) | Falha correlacionada de média escala | PDU dupla, par MLAG, in-row cooling, queda de rack |
+| Nó | Falha de componente individual | Disco, NIC, PSU, memória |
+
+Sem a camada de FD, uma falha de rack derrubaria múltiplos nós simultaneamente sem que o scheduler tivesse ciência — quebrando as premissas de HA que assumem independência estatística entre réplicas. O FD é o mecanismo que transforma "temos 3 AZs" em resiliência real contra falhas de rack.
+
+### Mapeamento Físico dos FDs
+
+| FD | Racks | Função principal |
+|----|-------|------------------|
+| FD1 | R1 (AZ1), R4 (AZ2), R7 (AZ3) | Control plane + Cinder + HSM |
+| FD2 | R2 (AZ1), R5 (AZ2), R8 (AZ3) | Spine + compute + GPU + Swift |
+| FD3 | R3 (AZ1), R6 (AZ2), R9 (AZ3) | Compute + GPU + Swift |
+
+### Uso por Serviço
+
+| Serviço | Placement por FD | Benefício |
+|---------|------------------|-----------|
+| Control plane (ctrl/db/mq/lb) | 1 nó em FD1 de cada AZ | Quorum 2/3 sobrevive à perda de qualquer rack |
+| Compute | Distribuído entre FD1/FD2/FD3 de cada AZ | Server groups com anti-affinity colocam réplicas em FDs distintos |
+| GPU compute | 1 nó em cada FD (R1-R9) | Falha de rack remove no máximo 1 GPU node por AZ |
+| Swift | 2 nós em cada FD | Replicas zone-aware garantem distribuição entre AZs e FDs |
+| Network nodes | FD2/FD3 de cada AZ | Gateway sempre disponível em FDs não-controller |
+| Spine fabric | 1 spine em FD2 de cada AZ | Falha de rack FD2 remove 1 spine; ECMP mantém 2/3 bandwidth |
+| HSM | 1 appliance em FD1 de cada AZ | HA activeA sobrevive à perda de qualquer rack |
+
+Exposição operacional:
+
+- **Nova host aggregates** recebem metadata `fault_domain=fd1|fd2|fd3`, permitindo que tenants usem server groups com anti-affinity `fault_domain` para espalhar réplicas de aplicação.
+- **Swift rings** mapeiam zones para AZs; devices são distribuídos entre nós de racks distintos (FDs) ao construir o ring, garantindo que as 3 replicas de cada objeto fiquem em FDs diferentes.
+- **Placement traits** customizados (`CUSTOM_FAULT_DOMAIN_FD1` etc.) permitem que scheduler filters garantam distribuição explícita quando o workload exige.
+
+### Níveis de Falha e Raio de Blast
+
 A plataforma é projetada contra quatro níveis de falha, em ordem crescente de impacto:
 
-| Nível | Escopo | Racks afetados | Estratégia |
-|-------|--------|---------------|------------|
-| L1 | Componente individual (disco, NIC, PSU) | Parte de 1 rack | Redundância intra-nó (RAID, bonding, dual-PSU) |
-| L2 | Nó completo (servidor ou appliance) | 1 rack | Scheduler + replicação cross-nó |
-| L3 | Rack inteiro (FD) | 1 rack | Quorum 2/3 + 3 FDs por AZ |
-| L4 | Availability Zone completa | 3 racks | Quorum 2/3 entre AZs + evacuate manual |
+| Nível | Escopo | FDs afetados | Racks afetados | Capacity loss | Estratégia |
+|-------|--------|--------------|----------------|---------------|------------|
+| L1 | Componente individual (disco, NIC, PSU) | 0 (parte de 1 FD) | 0 | < 1% | Redundância intra-nó (RAID, bonding, dual-PSU) |
+| L2 | Nó completo (servidor ou appliance) | 0 (parte de 1 FD) | 0 | < 1% | Scheduler + replicação cross-nó dentro do mesmo FD |
+| L3 | Rack inteiro = 1 FD | 1 | 1 | ~11% | Quorum 2/3 entre os 3 FDs da AZ + placement aware |
+| L4 | Availability Zone completa = 3 FDs | 3 | 3 | ~33% | Quorum 2/3 entre AZs + evacuate manual |
 
-Eventos acima de L4 (perda de região inteira) não são cobertos pelo design atual e são tratados na seção **Riscos Não Cobertos**.
+Eventos acima de L4 (perda de região inteira = 9 FDs, 100% de capacity loss) não são cobertos pelo design atual e são tratados na seção **Riscos Não Cobertos**.
 
 ---
 

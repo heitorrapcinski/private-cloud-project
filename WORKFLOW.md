@@ -1,4 +1,4 @@
-# Fluxo de Trabalho Agile-Agêntico: Da Intenção ao Impacto em Horas
+# Fluxo de Trabalho Agile-Agentic: Da Intenção ao Impacto em Horas
 
 Este modelo redefine o ciclo tradicional agile, comprimindo sprints de semanas para ciclos de 24 horas (**Daily Sprints**). A estratégia baseia-se em uma operação de dois turnos: o **Turno Humano** (focado em requisitos, design e detalhamento de tarefas) e o **Turno de Agentes** (focado em execução das demais fases de engenharia).
 

@@ -9,13 +9,13 @@
 │  ┌─────────────────────────────────────────────────────────┐    │
 │  │              Nova Scheduler + Placement API              │    │
 │  │  Filters: PciPassthrough, AZ, NUMA, Aggregate           │    │
-│  │  Resource Class: CUSTOM_GPU_NVIDIA_A100                  │    │
+│  │  Resource Class: CUSTOM_GPU_COMPUTE_80GB                 │    │
 │  └────────────────────────┬────────────────────────────────┘    │
 │                           │                                      │
 │  ┌────────────────────────┴────────────────────────────────┐    │
 │  │                   Cyborg Service                         │    │
 │  │  Device Profiles → Accelerator Requests (ARQs)          │    │
-│  │  Driver: nvidia-gpu                                      │    │
+│  │  Driver: vendor-gpu (PCI passthrough)                    │    │
 │  └────────────────────────┬────────────────────────────────┘    │
 │                           │                                      │
 │       ┌───────────────────┼───────────────────┐                 │
@@ -28,46 +28,55 @@
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## Hardware GPU Nodes (9 unidades — 3 por AZ)
+## Hardware GPU Nodes — Requisitos Técnicos (9 unidades — 3 por AZ)
 
-| Componente | Especificação |
-|------------|---------------|
-| Servidor | Dell PowerEdge R750xa (2U) |
-| CPU | 2x Intel Xeon Platinum 8380 (40C/80T) |
+| Componente | Requisito Técnico |
+|------------|-------------------|
+| Form factor | Servidor rack 2U, dual-socket, com suporte a aceleradores PCIe Gen4 x16 e SXM |
+| CPU | 2x processadores x86_64, 40 cores / 80 threads cada, suporte a VT-d/IOMMU, AVX-512 |
 | RAM | 1 TB DDR4-3200 ECC RDIMM |
-| GPU | 4x NVIDIA A100 80GB SXM4 (NVLink) |
-| Boot | 2x 480GB SSD SATA (RAID1) |
-| Local Storage | 2x 3.84TB NVMe U.2 |
-| NIC | 2x Mellanox ConnectX-6 25GbE (4 ports) |
-| IPMI | iDRAC 9 Enterprise |
-| PSU | 2x 2400W Platinum (redundante) |
-| Cooling | Direct liquid cooling (GPU) + air (CPU) |
+| GPU | 4x aceleradores compute-class com as seguintes características: |
+|     | &nbsp;&nbsp;• 80 GB HBM2e VRAM por acelerador |
+|     | &nbsp;&nbsp;• Interconexão NVLink ≥ 600 GB/s bidirecional entre GPUs do mesmo nó |
+|     | &nbsp;&nbsp;• Form factor SXM4 (ou equivalente com suporte a NVLink) |
+|     | &nbsp;&nbsp;• Suporte a particionamento MIG (Multi-Instance GPU) |
+|     | &nbsp;&nbsp;• FP64 ≥ 9 TFLOPS, FP32 ≥ 19 TFLOPS, TF32 ≥ 150 TFLOPS |
+|     | &nbsp;&nbsp;• API CUDA compatível (runtime + driver) |
+|     | &nbsp;&nbsp;• TDP ≥ 400W por GPU |
+| Boot | 2x SSD SATA 480 GB em RAID1 |
+| Local Storage | 2x NVMe U.2 3.84 TB |
+| NIC | 2x portas 25GbE com RDMA, SR-IOV |
+| Gerenciamento OOB | BMC com IPMI 2.0 e Redfish |
+| PSU | 2x 2400W Platinum, hot-swap, feeds redundantes |
+| Cooling | Direct liquid cooling para GPUs + air cooling para CPUs |
 
 ### Distribuição por AZ
 
 | Nó | AZ | FD | Rack | GPUs |
 |----|----|----|------|------|
-| gpu-az1fd1-01 | AZ1 | FD1 | R1 | 4x A100 80GB |
-| gpu-az1fd2-01 | AZ1 | FD2 | R2 | 4x A100 80GB |
-| gpu-az1fd3-01 | AZ1 | FD3 | R3 | 4x A100 80GB |
-| gpu-az2fd1-01 | AZ2 | FD1 | R4 | 4x A100 80GB |
-| gpu-az2fd2-01 | AZ2 | FD2 | R5 | 4x A100 80GB |
-| gpu-az2fd3-01 | AZ2 | FD3 | R6 | 4x A100 80GB |
-| gpu-az3fd1-01 | AZ3 | FD1 | R7 | 4x A100 80GB |
-| gpu-az3fd2-01 | AZ3 | FD2 | R8 | 4x A100 80GB |
-| gpu-az3fd3-01 | AZ3 | FD3 | R9 | 4x A100 80GB |
+| gpu-az1fd1-01 | AZ1 | FD1 | R1 | 4x 80GB |
+| gpu-az1fd2-01 | AZ1 | FD2 | R2 | 4x 80GB |
+| gpu-az1fd3-01 | AZ1 | FD3 | R3 | 4x 80GB |
+| gpu-az2fd1-01 | AZ2 | FD1 | R4 | 4x 80GB |
+| gpu-az2fd2-01 | AZ2 | FD2 | R5 | 4x 80GB |
+| gpu-az2fd3-01 | AZ2 | FD3 | R6 | 4x 80GB |
+| gpu-az3fd1-01 | AZ3 | FD1 | R7 | 4x 80GB |
+| gpu-az3fd2-01 | AZ3 | FD2 | R8 | 4x 80GB |
+| gpu-az3fd3-01 | AZ3 | FD3 | R9 | 4x 80GB |
 
-**Total:** 36 GPUs NVIDIA A100 80GB (2.880 GB VRAM)
+**Total:** 36 GPUs compute-class (2.880 GB VRAM agregada)
 
 ## Integração OpenStack
 
 ### Nova PCI Passthrough
 
+> Os vendor_id e product_id devem refletir os aceleradores efetivamente instalados. Os valores abaixo são placeholders.
+
 ```ini
 # /etc/nova/nova.conf (GPU compute nodes)
 [pci]
-alias = {"vendor_id": "10de", "product_id": "20b2", "device_type": "type-PCI", "name": "a100", "numa_policy": "preferred"}
-passthrough_whitelist = [{"vendor_id": "10de", "product_id": "20b2"}]
+alias = {"vendor_id": "VVVV", "product_id": "PPPP", "device_type": "type-PCI", "name": "gpu80", "numa_policy": "preferred"}
+passthrough_whitelist = [{"vendor_id": "VVVV", "product_id": "PPPP"}]
 
 [compute]
 cpu_allocation_ratio = 1.0
@@ -77,7 +86,7 @@ ram_allocation_ratio = 1.0
 ```ini
 # /etc/nova/nova.conf (controller)
 [pci]
-alias = {"vendor_id": "10de", "product_id": "20b2", "device_type": "type-PCI", "name": "a100", "numa_policy": "preferred"}
+alias = {"vendor_id": "VVVV", "product_id": "PPPP", "device_type": "type-PCI", "name": "gpu80", "numa_policy": "preferred"}
 
 [filter_scheduler]
 enabled_filters = AvailabilityZoneFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,PciPassthroughFilter,NUMATopologyFilter,AggregateInstanceExtraSpecsFilter
@@ -116,16 +125,16 @@ password = NOVA_PASS
 ```json
 [
   {
-    "name": "a100-1gpu",
-    "groups": [{"resources:CUSTOM_GPU_NVIDIA_A100": "1"}]
+    "name": "gpu80-1",
+    "groups": [{"resources:CUSTOM_GPU_COMPUTE_80GB": "1"}]
   },
   {
-    "name": "a100-2gpu",
-    "groups": [{"resources:CUSTOM_GPU_NVIDIA_A100": "2"}]
+    "name": "gpu80-2",
+    "groups": [{"resources:CUSTOM_GPU_COMPUTE_80GB": "2"}]
   },
   {
-    "name": "a100-4gpu",
-    "groups": [{"resources:CUSTOM_GPU_NVIDIA_A100": "4"}]
+    "name": "gpu80-4",
+    "groups": [{"resources:CUSTOM_GPU_COMPUTE_80GB": "4"}]
   }
 ]
 ```
@@ -134,17 +143,17 @@ password = NOVA_PASS
 
 | Flavor | vCPU | RAM | Disk | GPUs | Extra Specs |
 |--------|------|-----|------|------|-------------|
-| g1.large | 8 | 32 GB | 100 GB | 1x A100 | dedicated CPU, NUMA |
-| g1.xlarge | 16 | 64 GB | 200 GB | 2x A100 | dedicated CPU, NUMA |
-| g1.2xlarge | 32 | 128 GB | 400 GB | 4x A100 | dedicated CPU, NUMA, NVLink |
-| g1.inference | 4 | 16 GB | 50 GB | 1x A100 | dedicated CPU, inference workloads |
+| g1.large | 8 | 32 GB | 100 GB | 1x 80GB | dedicated CPU, NUMA |
+| g1.xlarge | 16 | 64 GB | 200 GB | 2x 80GB | dedicated CPU, NUMA |
+| g1.2xlarge | 32 | 128 GB | 400 GB | 4x 80GB | dedicated CPU, NUMA, NVLink |
+| g1.inference | 4 | 16 GB | 50 GB | 1x 80GB | dedicated CPU, inference workloads |
 
 ### Extra Specs dos Flavors
 
 ```bash
 # g1.large
 openstack flavor set g1.large \
-  --property "pci_passthrough:alias"="a100:1" \
+  --property "pci_passthrough:alias"="gpu80:1" \
   --property "hw:cpu_policy"="dedicated" \
   --property "hw:numa_nodes"="1" \
   --property "hw:mem_page_size"="1GB" \
@@ -152,7 +161,7 @@ openstack flavor set g1.large \
 
 # g1.2xlarge (full node — 4 GPUs com NVLink)
 openstack flavor set g1.2xlarge \
-  --property "pci_passthrough:alias"="a100:4" \
+  --property "pci_passthrough:alias"="gpu80:4" \
   --property "hw:cpu_policy"="dedicated" \
   --property "hw:numa_nodes"="2" \
   --property "hw:mem_page_size"="1GB" \
@@ -182,21 +191,21 @@ openstack aggregate add host gpu-az1 gpu-az1fd3-01
 
 | Resource Class | Inventário por Host | Total (9 nodes) |
 |----------------|--------------------:|----------------:|
-| CUSTOM_GPU_NVIDIA_A100 | 4 | 36 |
+| CUSTOM_GPU_COMPUTE_80GB | 4 | 36 |
 | PCPU | 76 | 684 |
 | MEMORY_MB | 1032192 | ~9 TB |
 
 ### Traits
 
 ```
-CUSTOM_GPU_NVIDIA_A100_80GB
+CUSTOM_GPU_COMPUTE_80GB_HBM2E
 CUSTOM_GPU_NVLINK
 CUSTOM_GPU_MIG_CAPABLE
 HW_GPU_API_CUDA
 HW_GPU_API_VULKAN
 ```
 
-## NVIDIA Driver & Runtime
+## GPU Driver & Runtime
 
 ```ini
 # /etc/nova/nova.conf (GPU nodes)
@@ -209,11 +218,12 @@ enabled_vgpu_types =
 ### Preparação do Host
 
 ```bash
-# Instalar NVIDIA driver (headless, sem X11)
-apt install nvidia-driver-535-server nvidia-utils-535-server
+# Instalar driver de GPU compatível com o hardware (headless, sem X11)
+# O pacote específico depende do fornecedor do acelerador instalado
+apt install <gpu-driver-server-package> <gpu-utils-package>
 
-# Verificar GPUs
-nvidia-smi
+# Verificar GPUs via ferramenta do fornecedor
+<gpu-smi-tool>
 
 # Habilitar IOMMU (GRUB)
 GRUB_CMDLINE_LINUX="intel_iommu=on iommu=pt hugepagesz=1G hugepages=512"
@@ -226,12 +236,12 @@ find /sys/kernel/iommu_groups/ -type l | sort -V
 
 | Métrica | Fonte | Alerta |
 |---------|-------|--------|
-| GPU Utilization | nvidia_gpu_exporter | > 95% sustained 10min |
-| GPU Memory Used | nvidia_gpu_exporter | > 90% |
-| GPU Temperature | nvidia_gpu_exporter | > 83°C |
-| ECC Errors | nvidia_gpu_exporter | > 0 uncorrectable |
-| Power Draw | nvidia_gpu_exporter | > 350W per GPU |
-| NVLink Bandwidth | nvidia_gpu_exporter | < 50% expected |
+| GPU Utilization | gpu_exporter | > 95% sustained 10min |
+| GPU Memory Used | gpu_exporter | > 90% |
+| GPU Temperature | gpu_exporter | > 83°C |
+| ECC Errors | gpu_exporter | > 0 uncorrectable |
+| Power Draw | gpu_exporter | > 350W per GPU |
+| NVLink Bandwidth | gpu_exporter | < 50% expected |
 
 ### Prometheus Exporter
 
@@ -253,22 +263,23 @@ find /sys/kernel/iommu_groups/ -type l | sort -V
 
 | Métrica | Valor |
 |---------|-------|
-| Total GPUs | 36x A100 80GB |
+| Total GPUs | 36x compute-class 80GB |
 | VRAM Total | 2.880 GB |
-| FP64 (por GPU) | 9.7 TFLOPS |
-| FP32 (por GPU) | 19.5 TFLOPS |
-| TF32 (por GPU) | 156 TFLOPS |
-| NVLink Bandwidth | 600 GB/s (bidirecional) |
+| FP64 (por GPU) | ≥ 9 TFLOPS |
+| FP32 (por GPU) | ≥ 19 TFLOPS |
+| TF32 (por GPU) | ≥ 150 TFLOPS |
+| NVLink Bandwidth | ≥ 600 GB/s (bidirecional) |
 | SLA Disponibilidade | 99.9% |
 | Overcommit | 1:1 (sem overcommit) |
 
 ## Decisões Arquiteturais
 
 1. **PCI Passthrough (não vGPU)**: Performance máxima, acesso direto ao hardware, sem overhead de virtualização
-2. **A100 80GB SXM4**: Suporte a NVLink para multi-GPU, MIG-capable para futura partição
+2. **GPU 80GB com NVLink**: Suporte a workloads multi-GPU com interconexão de alta largura de banda; particionamento MIG habilita futura subdivisão
 3. **1 GPU node por FD**: Distribui risco — falha de rack afeta no máximo 1 GPU node por AZ
 4. **Cyborg + Nova**: Cyborg gerencia lifecycle dos aceleradores, Nova faz scheduling via Placement
 5. **Dedicated CPU (1:1)**: Workloads GPU são CPU-bound no preprocessing — sem overcommit
 6. **Hugepages 1GB**: Reduz TLB misses para transferências GPU↔RAM
-7. **Liquid cooling**: A100 SXM4 dissipa 400W — requer cooling dedicado
+7. **Liquid cooling**: Aceleradores SXM dissipam ≥ 400W — requer cooling dedicado
 8. **NUMA-aware**: GPU afinidade com NUMA node local para minimizar latência PCIe
+9. **Requisitos agnósticos de marca**: Especificação baseada em capabilities (HBM2e, NVLink, CUDA, MIG) permite múltiplos fornecedores compatíveis

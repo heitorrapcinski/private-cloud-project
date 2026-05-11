@@ -325,9 +325,9 @@ image_cache_max_size = 107374182400  # 100GB NVMe cache
 
 ```bash
 # Base images com metadata
-openstack image set ubuntu-22.04 \
+openstack image set ubuntu-24.04 \
   --property os_distro=ubuntu \
-  --property os_version=22.04 \
+  --property os_version=24.04 \
   --property hw_disk_bus=virtio \
   --property hw_vif_model=virtio \
   --property hw_qemu_guest_agent=yes \

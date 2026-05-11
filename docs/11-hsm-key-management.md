@@ -24,21 +24,24 @@
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## Hardware HSM
+## Hardware HSM — Requisitos Técnicos
 
-### Appliance: Thales Luna Network HSM 7 (A790)
+### Appliance HSM (Network HSM)
 
-| Atributo | Especificação |
-|----------|---------------|
-| Modelo | Thales Luna Network HSM 7 (A790) |
-| Certificação | FIPS 140-2 Level 3 |
-| Performance | 20.000 RSA-2048 sign/s |
-| Algoritmos | RSA, ECC, AES, 3DES, SHA-2, HMAC |
-| Partições | Até 100 partições isoladas |
-| Conectividade | 2x 1GbE (HA bonding) |
-| Tamper Response | Zeroização automática em violação física |
-| Backup | Secure backup via Luna Backup HSM |
-| Rack | 1U |
+| Atributo | Requisito Técnico |
+|----------|-------------------|
+| Form factor | Appliance de rede 1U, rack-mount |
+| Certificação | FIPS 140-2 Level 3 (ou FIPS 140-3 Level 3) |
+| Performance | ≥ 20.000 operações RSA-2048 sign/s |
+| Algoritmos | RSA (1024-4096), ECC (P-256, P-384, P-521), AES (128/192/256), SHA-2 (256/384/512), HMAC, 3DES |
+| Partições | ≥ 100 partições isoladas por appliance |
+| Conectividade | 2x portas 1GbE em bonding para HA |
+| API | PKCS#11 v2.40+, KMIP 1.4+ |
+| HA | Suporte a replicação síncrona de chaves e HA group entre múltiplas unidades |
+| Tamper Response | Detecção física com zeroização automática de chaves em violação |
+| Backup | Suporte a backup criptografado para appliance offline ou cofre físico |
+| Auditoria | Trilha de auditoria interna + exportação via syslog |
+| Role Separation | Suporte a papéis distintos: Crypto Officer (CO), Auditor (AU), Security Officer (SO) |
 
 ### Distribuição por AZ
 
@@ -52,7 +55,7 @@
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                    HA Group (Luna HA)                          │
+│                    HA Group (HSM Cluster)                     │
 │                                                                │
 │  ┌────────────┐     ┌────────────┐     ┌────────────┐       │
 │  │  HSM AZ1   │     │  HSM AZ2   │     │  HSM AZ3   │       │
@@ -63,12 +66,12 @@
 │         └───────────────────┼───────────────────┘              │
 │                             │                                  │
 │                    ┌────────┴────────┐                        │
-│                    │  Luna HA Group  │                        │
-│                    │  Mode: activeE  │                        │
+│                    │   HA Group      │                        │
+│                    │  Mode: active   │                        │
 │                    │  (all active)   │                        │
 │                    └─────────────────┘                        │
 │                                                                │
-│  Política: haOnly (operações apenas via HA group)             │
+│  Política: operações apenas via HA group                       │
 │  Recuperação: automatic failover + auto-recovery              │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -77,9 +80,9 @@
 
 | Modo | Descrição | Uso |
 |------|-----------|-----|
-| activeE | Todas as partições ativas, load-balanced | **Produção** |
-| activeA | Primary ativo, replicas standby | DR |
-| N/A | Sem HA, partição única | Lab/Dev |
+| Active-Active | Todas as partições ativas, load-balanced | **Produção** |
+| Active-Passive | Primary ativo, replicas em standby | DR |
+| Standalone | Sem HA, partição única | Lab/Dev |
 
 ### Tolerância a Falhas
 
@@ -106,7 +109,7 @@ enabled_secretstore_plugins = store_crypto
 enabled_crypto_plugins = p11_crypto
 
 [p11_crypto_plugin]
-# Luna Client library
+# Biblioteca PKCS#11 fornecida pelo vendor do HSM
 library_path = /usr/lib/libCryptoki2_64.so
 
 # HA Group slot (virtual slot do HA group)
@@ -125,7 +128,7 @@ hmac_key_type = CKK_AES
 hmac_keywrap_mechanism = CKM_AES_CBC_PAD
 
 # Token labels
-token_serial_number = LUNA_HA_GROUP
+token_serial_number = HSM_HA_GROUP
 token_label = barbican-ha
 
 # Encryption mechanism
@@ -134,42 +137,31 @@ seed_file = /etc/barbican/seed.bin
 seed_length = 32
 ```
 
-### Luna Client Configuration
+### PKCS#11 Client Configuration
 
 ```ini
-# /etc/Chrystoki.conf
-Chrystoki2 = {
-  LibUNIX64 = /usr/lib/libCryptoki2_64.so;
-}
+# Exemplo genérico de configuração do cliente PKCS#11
+# O arquivo específico e o formato variam conforme o vendor do HSM.
+# Requisitos funcionais:
+#   - Biblioteca libCryptoki2_64.so (ou equivalente PKCS#11 v2.40+)
+#   - Suporte a NTLS (Network Trust Link) ou TLS mútuo para conexão com os appliances
+#   - Configuração de HA group listando os três appliances
 
-Luna = {
-  DefaultTimeOut = 500000;
-  PEDTimeout1 = 100000;
-  PEDTimeout2 = 200000;
-  KeypairGenTimeOut = 2700000;
-}
-
-CardReader = {
-  RemoteCommand = 1;
-}
-
-LunaSA Client = {
+HSMClient = {
+  # Timeouts
   ReceiveTimeout = 20000;
-  SSLConfigFile = /etc/Chrystoki.conf;
   TCPKeepAlive = 1;
   NetClient = 1;
 
+  # Appliances do cluster
   ServerName00 = hsm-az1-01;
   ServerPort00 = 1792;
-  ServerHtl00 = 0;
 
   ServerName01 = hsm-az2-01;
   ServerPort01 = 1792;
-  ServerHtl01 = 0;
 
   ServerName02 = hsm-az3-01;
   ServerPort02 = 1792;
-  ServerHtl02 = 0;
 }
 
 HASynchronize = {
@@ -315,8 +307,8 @@ topics = notifications,barbican_audit
 |---------|-------|--------|
 | HSM Reachability | barbican health check | Unreachable > 5s |
 | PKCS#11 Latency | barbican metrics | P99 > 50ms |
-| HA Group Members | Luna client | Members < 3 |
-| Partition Usage | Luna admin | > 80% key slots |
+| HA Group Members | PKCS#11 client | Members < 3 |
+| Partition Usage | HSM admin | > 80% key slots |
 | HSM Temperature | SNMP/IPMI | > 40°C |
 | Failed Auth Attempts | HSM audit log | > 3 in 5min |
 | Key Operations/sec | barbican metrics | > 15.000/s (capacity) |
@@ -327,16 +319,16 @@ topics = notifications,barbican_audit
 
 ```
 ┌──────────────┐     ┌──────────────┐
-│  Luna Backup │     │  Offline     │
-│  HSM (USB)   │◄────│  Storage     │
-│              │     │  (cofre)     │
+│  Backup HSM  │     │  Offline     │
+│  offline     │◄────│  Storage     │
+│  (dedicado)  │     │  (cofre)     │
 └──────────────┘     └──────────────┘
 
 Procedimento:
-1. Conectar Luna Backup HSM ao appliance primary
-2. lunacm: partition backup (encrypted)
-3. Armazenar backup HSM em cofre físico (site separado)
-4. Frequência: semanal + após key rotation
+1. Conectar appliance de backup ao HSM primary (via USB ou via rede, conforme vendor)
+2. Executar partition backup (criptografado pelo HSM)
+3. Armazenar mídia de backup em cofre físico (site separado)
+4. Frequência: semanal + após cada key rotation
 ```
 
 ### Recovery
@@ -344,7 +336,7 @@ Procedimento:
 | Cenário | RTO | RPO | Procedimento |
 |---------|-----|-----|--------------|
 | 1 HSM failure | < 1s | 0 | Auto-failover (HA group) |
-| Full cluster loss | 4h | Last backup | Restore from Luna Backup HSM |
+| Full cluster loss | 4h | Last backup | Restore from HSM backup offline |
 | Key compromise | 1h | 0 | Revoke + re-encrypt affected data |
 
 ## Rede e Conectividade
@@ -354,10 +346,10 @@ Procedimento:
 │  VLAN 200 (DB/HSM Replication) — Isolada                 │
 │                                                           │
 │  Controller Nodes ──► HSM Appliances (port 1792/TCP)     │
-│  (Barbican)           (NTLS — Network Trust Link)        │
+│  (Barbican)           (NTLS — Network Trust Link / mTLS) │
 │                                                           │
 │  Firewall Rules:                                         │
-│  - ALLOW 10.0.200.0/24 → HSM:1792 (NTLS)               │
+│  - ALLOW 10.0.200.0/24 → HSM:1792 (NTLS/PKCS#11)        │
 │  - ALLOW 10.0.200.0/24 → HSM:22 (admin SSH, restrito)   │
 │  - DENY ALL other                                        │
 └─────────────────────────────────────────────────────────┘
@@ -365,11 +357,12 @@ Procedimento:
 
 ## Decisões Arquiteturais
 
-1. **Thales Luna 7**: Líder de mercado em HSM network, suporte nativo PKCS#11 para Barbican
+1. **HSM network appliance FIPS 140-2 Level 3**: Padrão de mercado para KMS em nuvem privada; suporte nativo a PKCS#11 para integração com Barbican
 2. **FIPS 140-2 Level 3**: Requisito para compliance financeiro (PCI-DSS) e governamental
 3. **3 HSMs (1 por AZ)**: Tolerância a falha de AZ inteira sem perda de serviço
-4. **HA Group activeE**: Todas as partições ativas, load-balanced, sem single point of failure
+4. **HA Group Active-Active**: Todas as partições ativas, load-balanced, sem single point of failure
 5. **PKCS#11 (não KMIP)**: Performance superior, integração nativa com Barbican p11_crypto plugin
 6. **MKEK nunca sai do HSM**: Chave mestra protegida por hardware — impossível extrair
 7. **Hierarquia KEK→pKEK→DEK**: Permite rotação de MKEK sem re-encrypt de todos os dados
 8. **Rede isolada (VLAN 200)**: HSMs acessíveis apenas pelos controllers, sem exposição a tenants
+9. **Requisitos agnósticos de marca**: Especificação baseada em certificações (FIPS), APIs (PKCS#11, KMIP) e capabilities — permite múltiplos fornecedores compatíveis

@@ -210,7 +210,7 @@ resource "openstack_compute_flavor_v2" "g1_large" {
   disk      = 100
   is_public = true
   extra_specs = {
-    "pci_passthrough:alias"  = "a100:1"
+    "pci_passthrough:alias"  = "gpu80:1"
     "hw:cpu_policy"          = "dedicated"
     "hw:numa_nodes"          = "1"
     "hw:mem_page_size"       = "1GB"
@@ -225,7 +225,7 @@ resource "openstack_compute_flavor_v2" "g1_xlarge" {
   disk      = 200
   is_public = true
   extra_specs = {
-    "pci_passthrough:alias"  = "a100:2"
+    "pci_passthrough:alias"  = "gpu80:2"
     "hw:cpu_policy"          = "dedicated"
     "hw:numa_nodes"          = "2"
     "hw:mem_page_size"       = "1GB"
@@ -240,7 +240,7 @@ resource "openstack_compute_flavor_v2" "g1_2xlarge" {
   disk      = 400
   is_public = false
   extra_specs = {
-    "pci_passthrough:alias"  = "a100:4"
+    "pci_passthrough:alias"  = "gpu80:4"
     "hw:cpu_policy"          = "dedicated"
     "hw:numa_nodes"          = "2"
     "hw:mem_page_size"       = "1GB"
@@ -255,7 +255,7 @@ resource "openstack_compute_flavor_v2" "g1_inference" {
   disk      = 50
   is_public = true
   extra_specs = {
-    "pci_passthrough:alias"  = "a100:1"
+    "pci_passthrough:alias"  = "gpu80:1"
     "hw:cpu_policy"          = "dedicated"
     "hw:numa_nodes"          = "1"
     "service_tier"           = "gpu"

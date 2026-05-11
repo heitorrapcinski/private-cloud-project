@@ -120,7 +120,7 @@ O compute plane oferece três tiers de serviço, implementados via Host Aggregat
 │  │   SHARED (1:3)       │  │  DEDICATED (1:1) │  │ GPU (1:1) │ │
 │  │                      │  │                  │  │           │ │
 │  │  81 nodes (75%)      │  │  27 nodes (25%) │  │  9 nodes  │ │
-│  │  CPU ratio: 3.0      │  │  CPU ratio: 1.0 │  │  4x A100  │ │
+│  │  CPU ratio: 3.0      │  │  CPU ratio: 1.0 │  │  4x GPU   │ │
 │  │  RAM ratio: 1.5      │  │  RAM ratio: 1.0 │  │  per node │ │
 │  │                      │  │                  │  │           │ │
 │  │  Workloads:          │  │  Workloads:      │  │ Workloads:│ │
@@ -323,9 +323,8 @@ live_migration_bandwidth = 0  # unlimited, use QoS no switch
 
 | Driver | Interface | Uso |
 |--------|-----------|-----|
-| ipmi | power, management | Legacy servers |
-| redfish | power, management, bios | Dell iDRAC 9+ |
-| idrac-redfish | vendor-specific | Dell PowerEdge |
+| ipmi | power, management | Servidores legados compatíveis com IPMI 2.0 |
+| redfish | power, management, bios | Servidores com BMC compatível com Redfish |
 
 ### Provisioning Network
 
@@ -351,7 +350,7 @@ http_root = /httpboot
 
 ```bash
 openstack baremetal node create \
-  --driver idrac-redfish \
+  --driver redfish \
   --driver-info redfish_address=https://172.16.0.101/redfish/v1 \
   --driver-info redfish_username=admin \
   --driver-info redfish_password=SECURE \
@@ -390,7 +389,7 @@ CUSTOM_SSD_EPHEMERAL
 
 ```
 1. PXE boot via Ironic/MAAS
-2. Ubuntu 22.04 LTS base install
+2. Ubuntu 24.04 LTS (Noble) base install
 3. Ansible post-config (networking, packages)
 4. Kolla-Ansible deploy (nova-compute, neutron-ovn-agent)
 5. Register in Nova cell
@@ -418,7 +417,7 @@ openstack compute service set --enable compute-az1fd1-01 nova-compute
 ```
 1. Rack new server
 2. Cable (2x 25GbE to Leaf-A/B, 1x 1GbE to OOB)
-3. Configure IPMI/iDRAC
+3. Configure BMC (IPMI/Redfish)
 4. Add to Ansible inventory
 5. Run playbook: ansible-playbook -l new_host site.yml
 6. Verify: openstack hypervisor show <hostname>
@@ -468,4 +467,4 @@ cpupower frequency-set -g performance
 7. **Live migration auto-converge**: Garante conclusão mesmo com VMs write-intensive
 8. **Ironic Redfish**: API moderna, suporte a BIOS config, virtual media boot
 9. **AggregateInstanceExtraSpecsFilter**: Garante isolamento entre tiers via scheduler
-10. **GPU tier (PCI passthrough)**: NVIDIA A100 via Cyborg/Nova, sem overcommit, NUMA-aware (ver docs/10-gpu-compute.md)
+10. **GPU tier (PCI passthrough)**: Aceleradores GPU compute-class via Cyborg/Nova, sem overcommit, NUMA-aware (ver docs/10-gpu-compute.md)

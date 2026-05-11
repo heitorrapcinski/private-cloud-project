@@ -15,8 +15,8 @@
 
     - name: Check OS version
       ansible.builtin.assert:
-        that: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '22.04'
-        fail_msg: "Host {{ inventory_hostname }} is not Ubuntu 22.04"
+        that: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '24.04'
+        fail_msg: "Host {{ inventory_hostname }} is not Ubuntu 24.04"
 
 - name: Base OS configuration
   hosts: all

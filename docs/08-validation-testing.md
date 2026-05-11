@@ -23,7 +23,7 @@ openstack subnet create test-subnet --network test-net --subnet-range 192.168.99
 openstack router create test-router
 openstack router set test-router --external-gateway external
 openstack router add subnet test-router test-subnet
-openstack server create --flavor m1.small --image ubuntu-22.04 --network test-net test-vm
+openstack server create --flavor m1.small --image ubuntu-24.04 --network test-net test-vm
 openstack floating ip create external
 openstack server add floating ip test-vm <FLOATING_IP>
 
@@ -144,7 +144,7 @@ rabbitmqctl -n rabbit@mq-az1fd1-01 cluster_status
 ssh mq-az2fd1-01 "systemctl stop rabbitmq-server"
 
 # 3. Verify operations continue
-openstack server create --flavor m1.small --image ubuntu-22.04 --network test-net ha-test-vm
+openstack server create --flavor m1.small --image ubuntu-24.04 --network test-net ha-test-vm
 # Should succeed (quorum queues tolerate 1 node loss)
 
 # 4. Restart
@@ -178,7 +178,7 @@ ssh lb-01 "systemctl start keepalived"
 
 ```bash
 # 1. Create VM on specific host
-openstack server create --flavor m1.small --image ubuntu-22.04 \
+openstack server create --flavor m1.small --image ubuntu-24.04 \
   --network test-net --availability-zone az1::compute-az1fd1-01 ha-vm
 
 # 2. Verify VM is running

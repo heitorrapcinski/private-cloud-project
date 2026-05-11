@@ -53,80 +53,82 @@ Ambiente de laboratório para desenvolvimento, testes de integração e validaç
 | U30-U31 | Infra Nodes (2x 1U) | CI/CD, Monitoring |
 | U32-U42 | Reserva | Expansão futura |
 
-## Hardware BOM (Lab)
+## Hardware BOM (Lab) — Requisitos Técnicos
+
+> Especificações representam requisitos técnicos mínimos; qualquer hardware que atenda ou supere esses requisitos e suporte as APIs listadas (IPMI 2.0, Redfish) é compatível.
 
 ### Control Nodes (3 unidades)
 
-| Componente | Especificação |
-|------------|---------------|
-| Servidor | Dell PowerEdge R650xs (1U) |
-| CPU | 1x Intel Xeon Silver 4314 (16C/32T) |
+| Componente | Requisito Técnico |
+|------------|-------------------|
+| Form factor | Servidor rack 1U, single ou dual-socket |
+| CPU | 1x processador x86_64, 16 cores / 32 threads, base clock ≥ 2.4 GHz |
 | RAM | 128 GB DDR4-3200 ECC |
-| Boot | 2x 240GB SSD SATA (RAID1) |
-| Data | 1x 960GB NVMe |
-| NIC | 2x 25GbE (Mellanox ConnectX-5) |
-| IPMI | iDRAC 9 Express |
-| PSU | 2x 600W (redundante) |
+| Boot | 2x SSD SATA 240 GB em RAID1 |
+| Data | 1x NVMe 960 GB |
+| NIC | 2x portas 25GbE com RDMA |
+| Gerenciamento OOB | BMC com IPMI 2.0 e Redfish |
+| PSU | 2x 600W, hot-swap, redundantes |
 
 ### Compute Nodes (6 unidades)
 
-| Componente | Especificação |
-|------------|---------------|
-| Servidor | Dell PowerEdge R750xs (2U) |
-| CPU | 2x Intel Xeon Silver 4316 (20C/40T) |
+| Componente | Requisito Técnico |
+|------------|-------------------|
+| Form factor | Servidor rack 2U, dual-socket |
+| CPU | 2x processadores x86_64, 20 cores / 40 threads cada, suporte a VT-x, VT-d/IOMMU, AVX-512 |
 | RAM | 512 GB DDR4-3200 ECC |
-| Boot | 2x 240GB SSD SATA (RAID1) |
-| Local Storage | 2x 1.92TB NVMe (ephemeral) |
-| NIC | 2x 25GbE (Mellanox ConnectX-5) |
-| IPMI | iDRAC 9 Express |
-| PSU | 2x 800W (redundante) |
+| Boot | 2x SSD SATA 240 GB em RAID1 |
+| Local Storage | 2x NVMe 1.92 TB (ephemeral) |
+| NIC | 2x portas 25GbE com RDMA, SR-IOV |
+| Gerenciamento OOB | BMC com IPMI 2.0 e Redfish |
+| PSU | 2x 800W, hot-swap, redundantes |
 
 ### Storage Nodes (3 unidades)
 
-| Componente | Especificação |
-|------------|---------------|
-| Servidor | Dell PowerEdge R750xd (2U) |
-| CPU | 1x Intel Xeon Silver 4314 (16C/32T) |
+| Componente | Requisito Técnico |
+|------------|-------------------|
+| Form factor | Servidor rack 2U com baias mistas (HDD + NVMe) |
+| CPU | 1x processador x86_64, 16 cores / 32 threads, base clock ≥ 2.4 GHz |
 | RAM | 128 GB DDR4-3200 ECC |
-| Boot | 2x 240GB SSD SATA (RAID1) |
-| Object | 6x 4TB HDD SAS |
-| Block | 4x 1.92TB NVMe |
-| NIC | 2x 25GbE (Mellanox ConnectX-5) |
-| IPMI | iDRAC 9 Express |
-| PSU | 2x 800W (redundante) |
+| Boot | 2x SSD SATA 240 GB em RAID1 |
+| Object | 6x HDD SAS 12Gbps 4 TB |
+| Block | 4x NVMe 1.92 TB |
+| NIC | 2x portas 25GbE com RDMA |
+| Gerenciamento OOB | BMC com IPMI 2.0 e Redfish |
+| PSU | 2x 800W, hot-swap, redundantes |
 
 ### Network Nodes (2 unidades)
 
-| Componente | Especificação |
-|------------|---------------|
-| Servidor | Dell PowerEdge R650xs (1U) |
-| CPU | 1x Intel Xeon Silver 4310 (12C/24T) |
+| Componente | Requisito Técnico |
+|------------|-------------------|
+| Form factor | Servidor rack 1U |
+| CPU | 1x processador x86_64, 12 cores / 24 threads, base clock ≥ 2.1 GHz |
 | RAM | 64 GB DDR4-3200 ECC |
-| Boot | 2x 240GB SSD SATA (RAID1) |
-| NIC | 2x 25GbE (Mellanox ConnectX-5) |
-| IPMI | iDRAC 9 Express |
-| PSU | 2x 600W (redundante) |
+| Boot | 2x SSD SATA 240 GB em RAID1 |
+| NIC | 2x portas 25GbE com RDMA, SR-IOV, DPDK |
+| Gerenciamento OOB | BMC com IPMI 2.0 e Redfish |
+| PSU | 2x 600W, hot-swap, redundantes |
 
 ### Infra Nodes (2 unidades)
 
-| Componente | Especificação |
-|------------|---------------|
-| Servidor | Dell PowerEdge R650xs (1U) |
-| CPU | 1x Intel Xeon Silver 4310 (12C/24T) |
+| Componente | Requisito Técnico |
+|------------|-------------------|
+| Form factor | Servidor rack 1U |
+| CPU | 1x processador x86_64, 12 cores / 24 threads, base clock ≥ 2.1 GHz |
 | RAM | 64 GB DDR4-3200 ECC |
-| Boot | 2x 240GB SSD SATA (RAID1) |
-| Data | 2x 960GB NVMe |
-| NIC | 2x 25GbE (Mellanox ConnectX-5) |
-| IPMI | iDRAC 9 Express |
-| PSU | 2x 600W (redundante) |
+| Boot | 2x SSD SATA 240 GB em RAID1 |
+| Data | 2x NVMe 960 GB |
+| NIC | 2x portas 25GbE com RDMA |
+| Gerenciamento OOB | BMC com IPMI 2.0 e Redfish |
+| PSU | 2x 600W, hot-swap, redundantes |
 
 ### Switches
 
-| Equipamento | Modelo | Ports | Função |
-|-------------|--------|-------|--------|
-| Leaf A | Mellanox SN2700 | 32x 100GbE | Rede primária |
-| Leaf B | Mellanox SN2700 | 32x 100GbE | Rede redundante |
-| OOB Switch | Dell S3048-ON | 48x 1GbE | Management/IPMI |
+| Equipamento | Requisito Técnico | Função |
+|-------------|-------------------|--------|
+| Leaf A | Switch 32x 100GbE QSFP28, breakout 4x 25GbE, BGP/EVPN/MLAG | Rede primária |
+| Leaf B | Switch 32x 100GbE QSFP28, breakout 4x 25GbE, BGP/EVPN/MLAG | Rede redundante |
+| OOB Switch | Switch 48x 1GbE + 4x 10GbE uplink, VLAN isolada | Management/IPMI |
 
 ## Rede
 
@@ -153,7 +155,7 @@ Ambiente de laboratório para desenvolvimento, testes de integração e validaç
               │                         │
         ┌─────┴─────┐           ┌─────┴─────┐
         │  Leaf A   │           │  Leaf B   │
-        │ (SN2700)  │           │ (SN2700)  │
+        │ 32x100GbE │           │ 32x100GbE │
         └─────┬─────┘           └─────┬─────┘
               │                         │
               │    ┌─── MLAG ───┐      │
@@ -288,6 +290,7 @@ Exemplos:
 2. **Mesma stack de produção**: Garante paridade de testes
 3. **6 compute nodes**: Permite testar live migration, HA e host aggregates
 4. **Infra nodes separados**: CI/CD e monitoring não competem com OpenStack
-5. **Hardware Silver-tier**: Custo-benefício para lab sem comprometer funcionalidade
+5. **Hardware de tier reduzido**: CPUs e RAM de menor capacidade para custo-benefício sem comprometer funcionalidade
 6. **Single cell**: Simplifica operação do lab sem perder cobertura de testes
 7. **Host aggregates para overcommit**: Replica modelo de ofertas de produção (shared/dedicated)
+8. **Requisitos agnósticos de marca**: Especificação baseada em capabilities permite múltiplos fornecedores

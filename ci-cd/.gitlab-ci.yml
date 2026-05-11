@@ -90,7 +90,7 @@ deploy-infrastructure:
 
 deploy-openstack:
   stage: deploy
-  image: quay.io/openstack.kolla/kolla-ansible:2024.1
+  image: quay.io/openstack.kolla/kolla-ansible:2026.1
   script:
     - kolla-ansible -i ${KOLLA_INVENTORY} prechecks
     - kolla-ansible -i ${KOLLA_INVENTORY} deploy

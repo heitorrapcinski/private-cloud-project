@@ -1,7 +1,8 @@
 # OpenStack - Documentação Arquitetural Enterprise
 
 **Autor:** Arquiteto Sênior de Cloud Infrastructure  
-**Data:** 2026-05-08  
+**Data:** 2026-05-11  
+**Versão OpenStack:** 2026.1 Gazpacho (SLURP) — released Apr 1, 2026  
 **Escopo:** Análise dos 12 componentes core do ecossistema OpenStack  
 **Repositório:** `C:\Users\Heitor Rapcinski\Code\GitHub\openstack`
 
@@ -10,6 +11,17 @@
 ## 1. Visão Geral da Plataforma
 
 OpenStack é uma plataforma de cloud computing open-source composta por serviços modulares que controlam pools de computação, armazenamento e rede em um datacenter. A arquitetura segue o padrão **shared-nothing** com comunicação via APIs REST e message broker (RabbitMQ/AMQP).
+
+### 1.0 Destaques do 2026.1 Gazpacho
+
+O release 2026.1 (Gazpacho) é um release SLURP (Skip-Level Upgrade Release Process), destino suportado para upgrades a partir de 2024.1 ou 2025.1. Principais temas:
+
+- **Migração de eventlet para threading nativo** em Nova (scheduler, api, metadata, conductor, compute)
+- **Aprimoramentos de workload mobility**: live migration paralela, evacuate mais resiliente
+- **Ironic**: automação de bare metal mais inteligente, `node health` via Redfish (API microversion 1.109), `vendor` e `category` em Port (microversões 1.100 e 1.101)
+- **Neutron ML2/OVN**: constantes de sync movidas para `neutron_lib.ovn.constants`, correções em hierarchical binding
+- **Heat**: ação `stack abandon` agora compatível com convergence engine
+- **Keystone**: correções de segurança em tokens de backends read-only, LDAP `enabled` tratado como boolean, RBAC atualizado para `GET /v3/limits`
 
 ### 1.1 Princípios Arquiteturais
 
@@ -24,7 +36,7 @@ OpenStack é uma plataforma de cloud computing open-source composta por serviço
 
 ### 1.2 Stack Tecnológico Comum
 
-- **Linguagem:** Python 3.10+ (CPython)
+- **Linguagem:** Python 3.10+ (CPython) — 2026.1 Gazpacho foi testado com Python 3.10, 3.11 e 3.12 (default no Ubuntu 24.04 Noble)
 - **Build System:** pbr (Python Build Reasonableness) + pyproject.toml
 - **WSGI:** PasteDeploy, Pecan, Flask (varia por serviço)
 - **ORM:** SQLAlchemy + Alembic (migrações)
@@ -33,6 +45,7 @@ OpenStack é uma plataforma de cloud computing open-source composta por serviço
 - **Configuração:** oslo.config (INI files)
 - **Políticas:** oslo.policy (RBAC baseado em JSON/YAML)
 - **Logging:** oslo.log (structured logging)
+- **Concorrência:** desde Nova 33.0.0 (2026.1 Gazpacho), `nova-scheduler`, `nova-api`, `nova-metadata`, `nova-conductor` e `nova-compute` usam threading nativo por padrão (migração de eventlet)
 - **Licença:** Apache 2.0
 
 ### 1.3 Mapa de Dependências Inter-Serviços
@@ -122,11 +135,13 @@ keystone/
 | Atributo | Valor |
 |----------|-------|
 | **Função** | Gerenciamento do ciclo de vida de VMs (provisioning, scheduling, live migration) |
-| **Python** | >=3.11 |
+| **Versão** | 33.0.0 (2026.1 Gazpacho) — API microversão máxima 2.101 |
+| **Python** | >=3.10 |
 | **Framework** | PasteDeploy + Routes (WSGI nativo) |
 | **DB** | SQLAlchemy (cell databases + API database) |
-| **Hypervisors** | libvirt/KVM (principal), VMware, Hyper-V, Ironic (bare metal) |
+| **Hypervisors** | libvirt/KVM (principal), VMware, Ironic (bare metal) |
 | **Scheduler** | Filter/Weight-based com Placement API |
+| **Concorrência** | Threading nativo por padrão (eventlet descontinuado) |
 
 **Processos (11 binários):**
 - `nova-api` — REST API (via WSGI)
@@ -188,6 +203,7 @@ nova/
 | Atributo | Valor |
 |----------|-------|
 | **Função** | SDN — redes virtuais, subnets, routers, security groups, LBaaS, VPNaaS |
+| **Versão** | 28.0.0 (2026.1 Gazpacho) |
 | **Python** | >=3.10 |
 | **Framework** | Pecan (REST) + PasteDeploy |
 | **DB** | SQLAlchemy (MySQL/PostgreSQL) |
@@ -249,7 +265,7 @@ nova/
 | Atributo | Valor |
 |----------|-------|
 | **Função** | Registro e entrega de imagens de disco para VMs |
-| **Python** | >=3.11 |
+| **Python** | >=3.10 |
 | **Framework** | Routes + WebOb (WSGI nativo) |
 | **DB** | SQLAlchemy (MySQL/PostgreSQL) |
 | **Storage Backends** | File, Swift, Ceph RBD, S3, VMware Datastore |
@@ -308,10 +324,10 @@ Client ──► staging area ──► import task ──► backend store
 | Atributo | Valor |
 |----------|-------|
 | **Função** | Volumes persistentes (block devices) para instâncias |
-| **Python** | >=3.11 |
+| **Python** | >=3.10 |
 | **Framework** | Routes + PasteDeploy (WSGI) |
 | **DB** | SQLAlchemy (MySQL/PostgreSQL) |
-| **Backends** | LVM (ref.), Ceph RBD, NetApp, Dell EMC, Pure, HPE 3PAR, 100+ drivers |
+| **Backends** | LVM (ref.), Ceph RBD, NFS, iSCSI arrays, FC arrays, NVMe-oF, 100+ drivers vendor-specific |
 | **Protocols** | iSCSI, FC, NFS, RBD, NVMe-oF |
 
 **Processos:**
@@ -364,7 +380,8 @@ cinder/
 | Atributo | Valor |
 |----------|-------|
 | **Função** | Object storage distribuído, eventualmente consistente, altamente durável |
-| **Python** | >=3.7 |
+| **Versão** | 2.37.x (2026.1 Gazpacho) |
+| **Python** | >=3.8 |
 | **Framework** | WSGI nativo (PasteDeploy + middleware pipeline) |
 | **DB** | SQLite (per-device) — sem DB centralizado |
 | **Replicação** | 3 réplicas (default) ou Erasure Coding |
@@ -492,7 +509,7 @@ eventlet, greenlet, PasteDeploy, lxml, requests, xattr, PyECLib, cryptography, d
 | Atributo | Valor |
 |----------|-------|
 | **Função** | Gerenciamento de zonas DNS e recordsets via API |
-| **Python** | >=3.11 |
+| **Python** | >=3.10 |
 | **Framework** | Pecan + Flask |
 | **DB** | SQLAlchemy (MySQL/PostgreSQL) |
 | **DNS Backends** | BIND9, PowerDNS, Infoblox, Akamai, Designate (built-in) |
@@ -561,7 +578,7 @@ designate/
 | Atributo | Valor |
 |----------|-------|
 | **Função** | Armazenamento seguro de secrets, chaves, certificados |
-| **Python** | >=3.9 |
+| **Python** | >=3.10 |
 | **Framework** | Pecan (REST API) |
 | **DB** | SQLAlchemy (MySQL/PostgreSQL) |
 | **Crypto Backends** | Simple Crypto (default), PKCS#11 HSM, Vault, KMIP |
@@ -608,7 +625,7 @@ barbican/
 
 **Considerações HA:**
 - API stateless, múltiplas instâncias
-- HSM: PKCS#11 com HA (Luna, Thales, SoftHSM para dev)
+- HSM: PKCS#11 com HA (appliance FIPS 140-2 Level 3 em cluster; SoftHSM para dev)
 - Key encryption key (KEK) wrapping para proteção em repouso
 - Keystone listener garante cleanup de secrets em project delete
 - Soft delete + crypto shredding para compliance
@@ -626,7 +643,7 @@ barbican/
 | **Framework** | Pecan (REST API) |
 | **DB** | SQLAlchemy (MySQL/PostgreSQL) |
 | **Boot Methods** | PXE, iPXE, Virtual Media, HTTP Boot |
-| **Management** | IPMI, Redfish, iDRAC, iLO, SNMP |
+| **Management** | IPMI 2.0, Redfish, SNMP, vendor-specific BMC drivers |
 | **Configuração** | pyproject.toml (formato moderno) |
 
 **Processos:**
@@ -649,7 +666,7 @@ ironic/
 │   │   ├── console/  # Serial console (shellinabox, socat)
 │   │   ├── deploy/   # Direct deploy, Ansible deploy
 │   │   ├── inspect/  # Hardware inspection
-│   │   ├── management/ # IPMI, Redfish, iDRAC, iLO
+│   │   ├── management/ # IPMI, Redfish, vendor BMCs
 │   │   ├── network/  # Neutron flat/VLAN
 │   │   ├── power/    # Power on/off/reboot
 │   │   ├── raid/     # RAID configuration
@@ -710,7 +727,7 @@ hardware_type = ipmi
 | Atributo | Valor |
 |----------|-------|
 | **Função** | Provisionamento de clusters Kubernetes/Docker Swarm/Mesos |
-| **Python** | >=3.11 |
+| **Python** | >=3.10 |
 | **Framework** | Pecan + WSME (REST API) |
 | **DB** | SQLAlchemy (MySQL/PostgreSQL) |
 | **Orchestration** | Heat templates (default) ou CAPI (Cluster API) |
@@ -779,7 +796,7 @@ magnum-api ──► magnum-conductor ──► Heat Stack Create
 | Atributo | Valor |
 |----------|-------|
 | **Função** | Execução de containers diretamente na API OpenStack (sem cluster) |
-| **Python** | >=3.8 |
+| **Python** | >=3.10 |
 | **Framework** | Pecan (REST API) |
 | **DB** | SQLAlchemy (MySQL/PostgreSQL) |
 | **Container Runtime** | Docker (principal), CRI (containerd/CRI-O via gRPC) |
@@ -930,7 +947,7 @@ Client ──► Keystone (token request)
 | Autorização | RBAC granular | oslo.policy (system/project/domain scope) |
 | Dados em trânsito | TLS 1.2+ | oslo.middleware (ssl) |
 | Dados em repouso | Encryption | Barbican + LUKS (Cinder), Swift encryption |
-| Secrets | HSM-backed | Barbican + PKCS#11 (Luna, Thales) |
+| Secrets | HSM-backed | Barbican + PKCS#11 (appliance FIPS 140-2 Level 3) |
 | Auditoria | CADF events | pycadf + oslo.messaging notifications |
 | Isolamento | Namespaces | Neutron (network namespaces, security groups) |
 | Compliance | Secure erase | Ironic cleaning, Cinder volume wiping |

@@ -103,6 +103,30 @@
 | swift-az1fd1-02 | 10.0.20.102 | Swift node 2 |
 | cinder-az1fd1-01 | 10.0.20.201 | Cinder volume |
 
+### GPU Nodes (VLAN 10 — Management)
+
+| Host | IP | Função |
+|------|----|--------|
+| gpu-az1fd1-01 | 10.0.10.151 | GPU compute AZ1-FD1 |
+| gpu-az1fd2-01 | 10.0.10.152 | GPU compute AZ1-FD2 |
+| gpu-az1fd3-01 | 10.0.10.153 | GPU compute AZ1-FD3 |
+| gpu-az2fd1-01 | 10.0.10.154 | GPU compute AZ2-FD1 |
+| gpu-az2fd2-01 | 10.0.10.155 | GPU compute AZ2-FD2 |
+| gpu-az2fd3-01 | 10.0.10.156 | GPU compute AZ2-FD3 |
+| gpu-az3fd1-01 | 10.0.10.157 | GPU compute AZ3-FD1 |
+| gpu-az3fd2-01 | 10.0.10.158 | GPU compute AZ3-FD2 |
+| gpu-az3fd3-01 | 10.0.10.159 | GPU compute AZ3-FD3 |
+
+### HSM Appliances (VLAN 200 — Isolated)
+
+| Appliance | IP | Função |
+|-----------|----|--------|
+| hsm-az1-01 | 10.0.200.21 | HSM primary (AZ1) |
+| hsm-az2-01 | 10.0.200.22 | HSM replica (AZ2) |
+| hsm-az3-01 | 10.0.200.23 | HSM replica (AZ3) |
+
+Acesso aos HSMs restrito aos controllers via NTLS/PKCS#11 (porta 1792/TCP).
+
 ### VIP Addresses
 
 | Serviço | VIP | Port |

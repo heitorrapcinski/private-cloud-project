@@ -12,8 +12,8 @@ Projeto de implementação completa de nuvem privada OpenStack enterprise com:
 - **3.4 PB** object storage
 - **276 TB** block storage NVMe
 - **2 tiers de compute**: Shared (1:3 overcommit) e Dedicated (1:1)
-- **GPU Compute**: 9 nós com NVIDIA A100 80GB (36 GPUs, PCI passthrough)
-- **HSM Key Management**: Thales Luna 7 (FIPS 140-2 Level 3), cluster HA 3 AZs
+- **GPU Compute**: 9 nós com 4x GPU compute-class 80 GB HBM2e cada (36 GPUs, PCI passthrough)
+- **HSM Key Management**: Appliances FIPS 140-2 Level 3, cluster HA com 3 AZs
 
 ## Estrutura do Projeto
 
@@ -29,7 +29,7 @@ private-cloud-project/
 │   ├── 07-observability.md            # Ceilometer, Gnocchi, Prometheus
 │   ├── 08-validation-testing.md       # HA tests, DR tests, troubleshooting
 │   ├── 09-lab-infrastructure.md       # Lab de desenvolvimento (16 nodes)
-│   ├── 10-gpu-compute.md             # GPU tier (A100, Cyborg, PCI passthrough)
+│   ├── 10-gpu-compute.md             # GPU tier (Cyborg, PCI passthrough)
 │   └── 11-hsm-key-management.md      # HSM cluster (FIPS 140-2 L3, Barbican PKCS#11)
 ├── terraform/                     # Infrastructure as Code
 │   └── main.tf                        # Flavors, networks, aggregates
@@ -55,9 +55,9 @@ private-cloud-project/
 
 | Camada | Tecnologia |
 |--------|-----------|
-| OS | Ubuntu 22.04 LTS |
+| OS | Ubuntu 24.04 LTS (Noble) |
 | Hypervisor | KVM (libvirt) |
-| OpenStack | 2024.1 (Caracal) |
+| OpenStack | 2026.1 (Gazpacho) — SLURP |
 | Deployment | Kolla-Ansible |
 | SDN | OVN |
 | Database | MariaDB Galera |
@@ -67,7 +67,7 @@ private-cloud-project/
 | Block Storage | Cinder (LVM/NVMe) |
 | Monitoring | Prometheus + Grafana + Ceilometer |
 | Logging | Fluentd + Loki |
-| Secrets | Barbican + HSM (Thales Luna 7, FIPS 140-2 L3) |
+| Secrets | Barbican + HSM (appliance FIPS 140-2 Level 3) |
 | IaC | Terraform + Ansible |
 | CI/CD | GitLab CI |
 

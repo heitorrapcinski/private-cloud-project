@@ -38,7 +38,7 @@
 │  │   ├── Octavia LB certificates                  │
 │  │   └── Barbican-managed certs                   │
 │  └── Intermediate CA - Management                 │
-│      ├── IPMI/iDRAC                               │
+│      ├── BMC/IPMI                                 │
 │      └── Switch management                        │
 └──────────────────────────────────────────────────┘
 ```
@@ -100,10 +100,10 @@ connection = mysql+pymysql://nova:PASS@10.0.200.5/nova?ssl_ca=/etc/pki/ca-trust/
 │         ┌────┴───┐  ┌────┴───┐  ┌────┴───┐     │
 │         │ HSM-01 │  │ HSM-02 │  │ HSM-03 │     │
 │         │ (AZ1)  │  │ (AZ2)  │  │ (AZ3)  │     │
-│         │Luna 7  │  │Luna 7  │  │Luna 7  │     │
+│         │ FIPS L3│  │ FIPS L3│  │ FIPS L3│     │
 │         └────────┘  └────────┘  └────────┘     │
 │                                                    │
-│  FIPS 140-2 Level 3 | Luna HA Group (activeE)    │
+│  FIPS 140-2 Level 3 | HA Group (Active-Active)   │
 │  Ver: docs/11-hsm-key-management.md              │
 └──────────────────────────────────────────────────┘
 ```
@@ -357,7 +357,7 @@ driver = log
 - [ ] SSH key-only authentication
 - [ ] Fail2ban on all nodes
 - [ ] Automatic security updates (unattended-upgrades)
-- [ ] CIS Benchmark compliance (Ubuntu 22.04)
+- [ ] CIS Benchmark compliance (Ubuntu 24.04)
 - [ ] SELinux/AppArmor enforcing
 - [ ] Disable unnecessary services
 - [ ] NTP synchronized (chrony)

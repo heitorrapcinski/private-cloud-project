@@ -19,9 +19,13 @@
 
 ## Topologia por Rack
 
-Cada rack (42U) segue um layout lógico padronizado. Racks de FD1 (R1, R4, R7) recebem também appliances HSM, enquanto todos os racks recebem um nó GPU.
+Cada rack (42U) segue um layout lógico padronizado. Existem três variantes:
 
-### Rack Padrão (FD2, FD3 — R2, R3, R5, R6, R8, R9)
+- **Rack FD1** (R1, R4, R7 — um por AZ): aloja control plane, Cinder, HSM, GPU, network node.
+- **Rack FD2** (R2, R5, R8 — um por AZ): aloja um dos 3 spines do fabric (core network), além de compute, GPU, Swift e network node.
+- **Rack FD3** (R3, R6, R9 — um por AZ): rack padrão de compute/GPU/Swift/network node (sem spine nem HSM).
+
+### Rack FD3 (R3, R6, R9) — Rack Padrão
 
 | Posição U | Equipamento | Função |
 |-----------|-------------|--------|
@@ -33,10 +37,30 @@ Cada rack (42U) segue um layout lógico padronizado. Racks de FD1 (R1, R4, R7) r
 | U7-U30 | Compute Nodes (12x 2U) | KVM Hypervisors |
 | U31-U32 | GPU Compute Node (1x 2U) | Aceleração GPU |
 | U33-U36 | Swift Storage Nodes (2x 2U) | Object Storage |
-| U37-U38 | Network Nodes (1x 1U) ou Reserva | OVN Gateway |
+| U37-U38 | Network Node (1x 1U) ou Reserva | OVN Gateway |
 | U39-U42 | Cable Management / Reserva | Organização e expansão |
 
-### Rack FD1 (R1, R4, R7 — um por AZ)
+### Rack FD2 (R2, R5, R8) — Aloja Spine (1 por AZ)
+
+O spine da AZ ocupa o rack FD2, consumindo espaço que antes estava destinado a compute. Cada rack FD2 perde 2 nós de compute em relação ao rack FD3 para acomodar o spine, o patch panel do fabric e a ventilação dedicada.
+
+| Posição U | Equipamento | Função |
+|-----------|-------------|--------|
+| U1-U2 | PDU A + PDU B | Energia redundante (feeds distintos) |
+| U3 | Patch Panel Fibra | Uplinks de leaves locais |
+| U4 | ToR Switch A (Leaf) | Rede primária |
+| U5 | ToR Switch B (Leaf) | Rede redundante |
+| U6 | Management Switch | OOB/IPMI |
+| U7 | Spine Switch (1x 1U) | Core fabric (1 spine por AZ) |
+| U8-U9 | Spine Patch Panel (MPO/LC) | Uplinks spine ↔ 18 leaves + mesh inter-spine |
+| U10 | Reserva de cooling | Headroom térmico do spine |
+| U11-U30 | Compute Nodes (10x 2U) | KVM Hypervisors |
+| U31-U32 | GPU Compute Node (1x 2U) | Aceleração GPU |
+| U33-U36 | Swift Storage Nodes (2x 2U) | Object Storage |
+| U37-U38 | Network Node (1x 1U) | OVN Gateway |
+| U39-U42 | Cable Management | Organização |
+
+### Rack FD1 (R1, R4, R7) — Control Plane + Cinder + HSM
 
 | Posição U | Equipamento | Função |
 |-----------|-------------|--------|
@@ -72,10 +96,24 @@ Cada rack (42U) segue um layout lógico padronizado. Racks de FD1 (R1, R4, R7) r
 | lb-02 | AZ2 | FD1 | R4 | HAProxy + Keepalived (BACKUP) |
 | lb-03 | AZ3 | FD1 | R7 | HAProxy + Keepalived (BACKUP) |
 
-### Compute Plane (108 nós total)
+### Compute Plane (102 nós total)
 
-- 12 compute nodes por rack × 9 racks = 108 hypervisors
-- Cada AZ: 36 compute nodes (12 por FD)
+A distribuição reflete a presença dos spines nos racks FD2, que cedem 2 slots de compute cada.
+
+| Rack | AZ | FD | Compute Nodes |
+|------|----|----|--------------:|
+| R1 | AZ1 | FD1 | 12 |
+| R2 | AZ1 | FD2 | 10 (spine-01 ocupa 2 slots) |
+| R3 | AZ1 | FD3 | 12 |
+| R4 | AZ2 | FD1 | 12 |
+| R5 | AZ2 | FD2 | 10 (spine-02 ocupa 2 slots) |
+| R6 | AZ2 | FD3 | 12 |
+| R7 | AZ3 | FD1 | 12 |
+| R8 | AZ3 | FD2 | 10 (spine-03 ocupa 2 slots) |
+| R9 | AZ3 | FD3 | 12 |
+| **Total** |    |    | **102** |
+
+- Cada AZ: 34 compute nodes (12+10+12)
 - Overcommit ratio: 3:1 CPU / 1.5:1 RAM (tier shared) e 1:1 (tier dedicated)
 
 ### GPU Compute Plane (9 nós total)
@@ -83,7 +121,7 @@ Cada rack (42U) segue um layout lógico padronizado. Racks de FD1 (R1, R4, R7) r
 - 1 GPU node por rack × 9 racks = 9 GPU nodes
 - Cada AZ: 3 GPU nodes (1 por FD)
 - Overcommit: 1:1 (sem overcommit)
-- Detalhes em `docs/10-gpu-compute.md`
+- Detalhes em `docs/09-gpu-compute.md`
 
 ### Storage Plane
 
@@ -110,7 +148,17 @@ Cada rack (42U) segue um layout lógico padronizado. Racks de FD1 (R1, R4, R7) r
 | hsm-az2-01 | AZ2 | FD1 | R4 | Partição replicada (HA activeE) |
 | hsm-az3-01 | AZ3 | FD1 | R7 | Partição replicada (HA activeE) |
 
-Detalhes em `docs/11-hsm-key-management.md`.
+Detalhes em `docs/10-hsm-key-management.md`.
+
+### Spine Plane (Core Fabric)
+
+| Spine | AZ | FD | Rack | Função |
+|-------|----|----|------|--------|
+| spine-01 | AZ1 | FD2 | R2 | Core fabric — AZ1 |
+| spine-02 | AZ2 | FD2 | R5 | Core fabric — AZ2 |
+| spine-03 | AZ3 | FD2 | R8 | Core fabric — AZ3 |
+
+Cada leaf tem 3 uplinks 100GbE (1 para cada spine). Os 3 spines formam full-mesh triangular (3 links inter-spine). Falha de um spine mantém 2/3 da capacidade underlay; ECMP redistribui fluxos automaticamente via BGP/BFD.
 
 ## Hardware — Requisitos Técnicos (Bill of Materials)
 
@@ -129,7 +177,7 @@ Detalhes em `docs/11-hsm-key-management.md`.
 | Gerenciamento OOB | Controladora BMC com suporte a IPMI 2.0 e Redfish |
 | PSU | 2x 800W Platinum, hot-swap, feeds redundantes |
 
-### Compute Nodes (108 unidades)
+### Compute Nodes (102 unidades)
 
 | Componente | Requisito Técnico |
 |------------|-------------------|
@@ -217,20 +265,21 @@ Detalhes em `docs/11-hsm-key-management.md`.
 | Componente | Requisito Técnico |
 |------------|-------------------|
 | Ports | 32x 100GbE QSFP28, com breakout para 4x 25GbE por porta |
-| Uplinks | 4x 100GbE para camada Spine |
-| Downlinks | 28x 100GbE (breakout 25GbE para hosts = 112 portas 25GbE) |
+| Uplinks | 3x 100GbE para camada Spine (1 por spine, full-mesh triangular) |
+| Downlinks | 29x 100GbE (breakout 25GbE para hosts = 116 portas 25GbE) |
 | Protocolo | BGP, EVPN, MLAG, BFD, VXLAN hardware offload |
 | Buffer | ≥ 16 MB shared buffer |
 | Latência | ≤ 500 ns port-to-port |
 | OS | Network OS aberto/programável com APIs declarativas |
 
-### Switches — Spine (4 unidades)
+### Switches — Spine (3 unidades — 1 por AZ, alojados em R2, R5, R8)
 
 | Componente | Requisito Técnico |
 |------------|-------------------|
 | Ports | 32x 400GbE QSFP-DD, com breakout para 4x 100GbE por porta |
-| Conectividade | Full-mesh entre Spines |
-| Protocolo | BGP (eBGP underlay), EVPN (overlay), BFD |
+| Conectividade | Full-mesh triangular entre os 3 Spines (1 link por par) |
+| Uplinks para leaves | 18 portas 100GbE (1 por leaf, todos os 18 leaves do fabric) |
+| Protocolo | BGP (eBGP underlay), EVPN (overlay), BFD, ECMP |
 | Latência | ≤ 500 ns port-to-port |
 | OS | Network OS aberto/programável |
 
@@ -287,19 +336,19 @@ Exemplos:
 |-----------|-----------|
 | Racks | 9 |
 | Control Nodes | 12 |
-| Compute Nodes | 108 |
+| Compute Nodes | 102 |
 | GPU Compute Nodes | 9 |
 | Swift Storage Nodes | 18 |
 | Cinder Storage Nodes | 3 |
 | Network Nodes | 6 |
 | HSM Appliances | 3 |
 | Leaf Switches | 18 |
-| Spine Switches | 4 |
+| Spine Switches | 3 (1 por AZ, em R2/R5/R8) |
 | OOB Switches | 9 |
-| **Total Servidores** | **156** |
+| **Total Servidores** | **150** |
 | **Total Appliances** | **3** (HSM) |
-| **Total vCPUs (compute)** | 17.280 (108 × 160 threads) |
-| **Total RAM (compute)** | 108 TB |
+| **Total vCPUs (compute)** | 16.320 (102 × 160 threads) |
+| **Total RAM (compute)** | 102 TB |
 | **Total GPUs** | 36 (9 × 4) |
 | **Total VRAM** | 2.880 GB (36 × 80 GB) |
 | **Total Object Storage** | 3.456 PB raw (18 × 12 × 16TB) |
@@ -309,11 +358,13 @@ Exemplos:
 
 1. **3 AZs com 3 FDs cada**: Garante que qualquer falha de rack afeta no máximo 1/9 da capacidade.
 2. **Control Plane distribuído**: Um nó de cada serviço por AZ elimina SPOF.
-3. **Spine-Leaf**: Latência previsível, escalabilidade horizontal, sem STP.
-4. **25GbE para hosts**: Custo-benefício ideal para workloads enterprise; RDMA e SR-IOV obrigatórios.
-5. **NVMe para Cinder**: Latência sub-milissegundo para block storage.
-6. **HDD para Swift**: Custo/TB otimizado para object storage com replicação 3x.
-7. **Dual-homed networking**: Cada host com 2 NICs em switches distintos (MLAG).
-8. **GPU compute plane dedicado**: Aceleradores em nós separados, 1 por FD, distribuindo risco entre AZs.
-9. **HSM em FD1 de cada AZ**: Cluster de 3 appliances em HA activeE para chaves criptográficas FIPS 140-2 Level 3.
-10. **Requisitos técnicos agnósticos de marca**: Especificações baseadas em padrões abertos (IPMI, Redfish, PKCS#11, PCIe) permitem múltiplos fornecedores.
+3. **Spine-Leaf com 3 spines distribuídos**: Um spine por AZ (em R2/R5/R8) aloja o core fabric junto dos demais equipamentos; falha de rack FD2 de uma AZ remove 1 spine + 10 computes + 2 Swift + 1 GPU, mas o ECMP mantém 2/3 da bandwidth underlay e o control plane sobrevive via quorum 2/3.
+4. **Full-mesh triangular entre spines**: 3 links inter-spine (1 por par) mantêm caminhos de backup para tráfego entre leaves de AZs distintas sem depender de um único spine.
+5. **Trade-off explícito de capacidade**: Manter apenas 9 racks custou 6 compute nodes (108 → 102) e 1 spine a menos (4 → 3). A decisão prioriza footprint físico e simplicidade operacional sobre capacidade bruta.
+6. **25GbE para hosts**: Custo-benefício ideal para workloads enterprise; RDMA e SR-IOV obrigatórios.
+7. **NVMe para Cinder**: Latência sub-milissegundo para block storage.
+8. **HDD para Swift**: Custo/TB otimizado para object storage com replicação 3x.
+9. **Dual-homed networking**: Cada host com 2 NICs em switches distintos (MLAG).
+10. **GPU compute plane dedicado**: Aceleradores em nós separados, 1 por FD, distribuindo risco entre AZs.
+11. **HSM em FD1 de cada AZ**: Cluster de 3 appliances em HA activeE para chaves criptográficas FIPS 140-2 Level 3.
+12. **Requisitos técnicos agnósticos de marca**: Especificações baseadas em padrões abertos (IPMI, Redfish, PKCS#11, PCIe) permitem múltiplos fornecedores.

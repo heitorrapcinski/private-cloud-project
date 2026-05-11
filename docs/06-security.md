@@ -104,7 +104,7 @@ connection = mysql+pymysql://nova:PASS@10.0.200.5/nova?ssl_ca=/etc/pki/ca-trust/
 │         └────────┘  └────────┘  └────────┘     │
 │                                                    │
 │  FIPS 140-2 Level 3 | HA Group (Active-Active)   │
-│  Ver: docs/11-hsm-key-management.md              │
+│  Ver: docs/10-hsm-key-management.md              │
 └──────────────────────────────────────────────────┘
 ```
 

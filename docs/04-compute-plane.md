@@ -16,7 +16,7 @@
 │  ┌────┴─────┐       ┌────┴─────┐       ┌────┴─────┐           │
 │  │  Cell-1  │       │  Cell-2  │       │  Cell-3  │           │
 │  │  (AZ1)   │       │  (AZ2)   │       │  (AZ3)   │           │
-│  │ 36 nodes │       │ 36 nodes │       │ 36 nodes │           │
+│  │ 34 nodes │       │ 34 nodes │       │ 34 nodes │           │
 │  └──────────┘       └──────────┘       └──────────┘           │
 │                                                                   │
 │  ┌─────────────────────────────────────────────────────────┐    │
@@ -101,8 +101,8 @@ cpu_shared_set = 0-3
 | az1-general | compute-az1fd*-* | availability_zone=az1 | General purpose |
 | az2-general | compute-az2fd*-* | availability_zone=az2 | General purpose |
 | az3-general | compute-az3fd*-* | availability_zone=az3 | General purpose |
-| shared-compute | 81 nodes (9/rack) | overcommit=3:1, service_tier=shared | Recursos compartilhados |
-| dedicated-compute | 27 nodes (3/rack) | overcommit=1:1, service_tier=dedicated | Recursos dedicados |
+| shared-compute | 78 nodes (~76%) | overcommit=3:1, service_tier=shared | Recursos compartilhados |
+| dedicated-compute | 24 nodes (~24%) | overcommit=1:1, service_tier=dedicated | Recursos dedicados |
 | pinned-cpu | selecionados | cpu_policy=dedicated | HPC workloads |
 | ssd-ephemeral | todos | disk_type=ssd | NVMe local |
 
@@ -119,7 +119,7 @@ O compute plane oferece três tiers de serviço, implementados via Host Aggregat
 │  ┌──────────────────────┐  ┌──────────────────┐  ┌───────────┐ │
 │  │   SHARED (1:3)       │  │  DEDICATED (1:1) │  │ GPU (1:1) │ │
 │  │                      │  │                  │  │           │ │
-│  │  81 nodes (75%)      │  │  27 nodes (25%) │  │  9 nodes  │ │
+│  │  78 nodes (~76%)     │  │  24 nodes (~24%) │  │  9 nodes  │ │
 │  │  CPU ratio: 3.0      │  │  CPU ratio: 1.0 │  │  4x GPU   │ │
 │  │  RAM ratio: 1.5      │  │  RAM ratio: 1.0 │  │  per node │ │
 │  │                      │  │                  │  │           │ │
@@ -129,7 +129,7 @@ O compute plane oferece três tiers de serviço, implementados via Host Aggregat
 │  │  - Microservices     │  │  - Compliance    │  │ - Render  │ │
 │  └──────────────────────┘  └──────────────────┘  └───────────┘ │
 │                                                                   │
-│  Ver docs/10-gpu-compute.md para detalhes do tier GPU            │
+│  Ver docs/09-gpu-compute.md para detalhes do tier GPU            │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -153,10 +153,10 @@ disk_allocation_ratio = 1.5
 | RAM | 1 TB | 1.5 TB |
 | Disk | 7.68 TB NVMe | 11.52 TB |
 
-**Capacidade total tier shared (81 nodes):**
-- 19.440 vCPUs
-- 121.5 TB RAM
-- 933 TB disk
+**Capacidade total tier shared (78 nodes):**
+- 18.720 vCPUs (78 × 240)
+- 117 TB RAM (78 × 1.5)
+- 898 TB disk (78 × 11.52)
 
 ### Tier 2: Recursos Dedicados (1:1)
 
@@ -178,10 +178,10 @@ disk_allocation_ratio = 1.0
 | RAM | 1 TB (- 16 GB host) | ~1008 GB |
 | Disk | 7.68 TB NVMe | 7.68 TB |
 
-**Capacidade total tier dedicated (27 nodes):**
-- 2.052 vCPUs
-- 27 TB RAM
-- 207 TB disk
+**Capacidade total tier dedicated (24 nodes):**
+- 1.824 vCPUs (24 × 76)
+- 24 TB RAM (24 × 1)
+- 184 TB disk (24 × 7.68)
 
 ### Configuração via Host Aggregates
 
@@ -200,9 +200,9 @@ openstack aggregate set --property ram_allocation_ratio=1.0 dedicated-az1
 
 # Adicionar hosts
 openstack aggregate add host shared-az1 compute-az1fd1-01
-# ... (9 nodes por rack, 27 por AZ para shared)
+# ... (26 nodes shared por AZ: 9 em FD1 + 8 em FD2 + 9 em FD3)
 openstack aggregate add host dedicated-az1 compute-az1fd1-10
-# ... (3 nodes por rack, 9 por AZ para dedicated)
+# ... (8 nodes dedicated por AZ: 3 em FD1 + 2 em FD2 + 3 em FD3)
 ```
 
 ### Flavors por Tier
@@ -243,7 +243,7 @@ available_filters = nova.scheduler.filters.all_filters
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  Rack (12 compute nodes)                                     │
+│  Rack FD1 ou FD3 (12 compute nodes)                          │
 │                                                               │
 │  ┌─────────────────────────────────────────────────────┐    │
 │  │  Shared (9 nodes)                                    │    │
@@ -254,6 +254,22 @@ available_filters = nova.scheduler.filters.all_filters
 │  ┌─────────────────────────────────────────────────────┐    │
 │  │  Dedicated (3 nodes)                                  │    │
 │  │  compute-{az}{fd}-10 a 12                            │    │
+│  │  CPU 1:1 | RAM 1:1 | Disk 1:1                       │    │
+│  └─────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│  Rack FD2 (10 compute nodes — spine ocupa 2 slots)           │
+│                                                               │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │  Shared (8 nodes)                                    │    │
+│  │  compute-{az}fd2-01 a 08                             │    │
+│  │  CPU 3:1 | RAM 1.5:1 | Disk 1.5:1                   │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                                                               │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │  Dedicated (2 nodes)                                  │    │
+│  │  compute-{az}fd2-09 a 10                             │    │
 │  │  CPU 1:1 | RAM 1:1 | Disk 1:1                       │    │
 │  └─────────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────────┘
@@ -467,4 +483,4 @@ cpupower frequency-set -g performance
 7. **Live migration auto-converge**: Garante conclusão mesmo com VMs write-intensive
 8. **Ironic Redfish**: API moderna, suporte a BIOS config, virtual media boot
 9. **AggregateInstanceExtraSpecsFilter**: Garante isolamento entre tiers via scheduler
-10. **GPU tier (PCI passthrough)**: Aceleradores GPU compute-class via Cyborg/Nova, sem overcommit, NUMA-aware (ver docs/10-gpu-compute.md)
+10. **GPU tier (PCI passthrough)**: Aceleradores GPU compute-class via Cyborg/Nova, sem overcommit, NUMA-aware (ver docs/09-gpu-compute.md)

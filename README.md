@@ -4,11 +4,11 @@
 
 Projeto de implementação completa de nuvem privada OpenStack enterprise com:
 
-- **1 Região** (RegionOne) + **1 Lab** (RegionLab)
+- **1 Região** (RegionOne)
 - **3 Availability Zones** (AZ1, AZ2, AZ3)
 - **9 Fault Domains** (3 por AZ)
-- **147 servidores** físicos (produção) + **16 servidores** (lab)
-- **108 TB RAM** de compute
+- **150 servidores** físicos
+- **102 TB RAM** de compute
 - **3.4 PB** object storage
 - **276 TB** block storage NVMe
 - **2 tiers de compute**: Shared (1:3 overcommit) e Dedicated (1:1)
@@ -28,9 +28,9 @@ private-cloud-project/
 │   ├── 06-security.md                 # Zero Trust, TLS, Barbican, RBAC
 │   ├── 07-observability.md            # Ceilometer, Gnocchi, Prometheus
 │   ├── 08-validation-testing.md       # HA tests, DR tests, troubleshooting
-│   ├── 09-lab-infrastructure.md       # Lab de desenvolvimento (16 nodes)
-│   ├── 10-gpu-compute.md             # GPU tier (Cyborg, PCI passthrough)
-│   └── 11-hsm-key-management.md      # HSM cluster (FIPS 140-2 L3, Barbican PKCS#11)
+│   ├── 09-gpu-compute.md              # GPU tier (Cyborg, PCI passthrough)
+│   ├── 10-hsm-key-management.md       # HSM cluster (FIPS 140-2 L3, Barbican PKCS#11)
+│   └── 11-business-continuity.md      # Plano de continuidade, RTO/RPO, riscos, roadmap
 ├── terraform/                     # Infrastructure as Code
 │   └── main.tf                        # Flavors, networks, aggregates
 ├── ansible/                       # Configuration Management
@@ -126,7 +126,6 @@ openstack service list
 | Fase | Documento |
 |------|-----------|
 | Day 0 (Planejamento) | docs/01-physical-architecture.md |
-| Day 0 (Lab) | docs/09-lab-infrastructure.md |
 | Day 1 (Implantação) | ansible/playbooks/site.yml |
 | Day 2 (Operação) | runbooks/operational-runbooks.md |
 | Day N (Expansão) | docs/04-compute-plane.md (Scale-Out) |

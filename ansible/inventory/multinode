@@ -14,13 +14,13 @@ net-az3fd3-01 ansible_host=10.0.10.46
 
 [compute]
 compute-az1fd1-[01:12] ansible_host=10.0.10.[101:112]
-compute-az1fd2-[01:12] ansible_host=10.0.10.[113:124]
+compute-az1fd2-[01:10] ansible_host=10.0.10.[113:122]
 compute-az1fd3-[01:12] ansible_host=10.0.10.[125:136]
 compute-az2fd1-[01:12] ansible_host=10.0.11.[101:112]
-compute-az2fd2-[01:12] ansible_host=10.0.11.[113:124]
+compute-az2fd2-[01:10] ansible_host=10.0.11.[113:122]
 compute-az2fd3-[01:12] ansible_host=10.0.11.[125:136]
 compute-az3fd1-[01:12] ansible_host=10.0.12.[101:112]
-compute-az3fd2-[01:12] ansible_host=10.0.12.[113:124]
+compute-az3fd2-[01:10] ansible_host=10.0.12.[113:122]
 compute-az3fd3-[01:12] ansible_host=10.0.12.[125:136]
 
 [monitoring]

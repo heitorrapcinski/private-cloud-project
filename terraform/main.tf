@@ -202,6 +202,100 @@ resource "openstack_blockstorage_volume_type_v3" "encrypted" {
   }
 }
 
+# --- GPU Flavors ---
+resource "openstack_compute_flavor_v2" "g1_large" {
+  name      = "g1.large"
+  ram       = 32768
+  vcpus     = 8
+  disk      = 100
+  is_public = true
+  extra_specs = {
+    "pci_passthrough:alias"  = "a100:1"
+    "hw:cpu_policy"          = "dedicated"
+    "hw:numa_nodes"          = "1"
+    "hw:mem_page_size"       = "1GB"
+    "service_tier"           = "gpu"
+  }
+}
+
+resource "openstack_compute_flavor_v2" "g1_xlarge" {
+  name      = "g1.xlarge"
+  ram       = 65536
+  vcpus     = 16
+  disk      = 200
+  is_public = true
+  extra_specs = {
+    "pci_passthrough:alias"  = "a100:2"
+    "hw:cpu_policy"          = "dedicated"
+    "hw:numa_nodes"          = "2"
+    "hw:mem_page_size"       = "1GB"
+    "service_tier"           = "gpu"
+  }
+}
+
+resource "openstack_compute_flavor_v2" "g1_2xlarge" {
+  name      = "g1.2xlarge"
+  ram       = 131072
+  vcpus     = 32
+  disk      = 400
+  is_public = false
+  extra_specs = {
+    "pci_passthrough:alias"  = "a100:4"
+    "hw:cpu_policy"          = "dedicated"
+    "hw:numa_nodes"          = "2"
+    "hw:mem_page_size"       = "1GB"
+    "service_tier"           = "gpu"
+  }
+}
+
+resource "openstack_compute_flavor_v2" "g1_inference" {
+  name      = "g1.inference"
+  ram       = 16384
+  vcpus     = 4
+  disk      = 50
+  is_public = true
+  extra_specs = {
+    "pci_passthrough:alias"  = "a100:1"
+    "hw:cpu_policy"          = "dedicated"
+    "hw:numa_nodes"          = "1"
+    "service_tier"           = "gpu"
+  }
+}
+
+# --- GPU Host Aggregates ---
+resource "openstack_compute_aggregate_v2" "gpu_az1" {
+  name = "gpu-az1"
+  zone = "az1"
+  metadata = {
+    service_tier = "gpu"
+  }
+}
+
+resource "openstack_compute_aggregate_v2" "gpu_az2" {
+  name = "gpu-az2"
+  zone = "az2"
+  metadata = {
+    service_tier = "gpu"
+  }
+}
+
+resource "openstack_compute_aggregate_v2" "gpu_az3" {
+  name = "gpu-az3"
+  zone = "az3"
+  metadata = {
+    service_tier = "gpu"
+  }
+}
+
+# --- HSM-Encrypted Volume Type ---
+resource "openstack_blockstorage_volume_type_v3" "hsm_encrypted" {
+  name        = "hsm-encrypted-luks"
+  description = "LUKS encrypted storage with HSM-backed keys (FIPS 140-2 Level 3)"
+  extra_specs = {
+    "volume_backend_name" = "LVM_NVMe_AZ1"
+  }
+}
+
 # --- Host Aggregates ---
 resource "openstack_compute_aggregate_v2" "az1" {
   name = "az1-general"
@@ -238,10 +332,14 @@ output "router_id" {
 
 output "flavor_ids" {
   value = {
-    "m1.small"  = openstack_compute_flavor_v2.m1_small.id
-    "m1.medium" = openstack_compute_flavor_v2.m1_medium.id
-    "m1.large"  = openstack_compute_flavor_v2.m1_large.id
-    "c1.large"  = openstack_compute_flavor_v2.c1_large.id
-    "hpc.large" = openstack_compute_flavor_v2.hpc_large.id
+    "m1.small"     = openstack_compute_flavor_v2.m1_small.id
+    "m1.medium"    = openstack_compute_flavor_v2.m1_medium.id
+    "m1.large"     = openstack_compute_flavor_v2.m1_large.id
+    "c1.large"     = openstack_compute_flavor_v2.c1_large.id
+    "hpc.large"    = openstack_compute_flavor_v2.hpc_large.id
+    "g1.large"     = openstack_compute_flavor_v2.g1_large.id
+    "g1.xlarge"    = openstack_compute_flavor_v2.g1_xlarge.id
+    "g1.2xlarge"   = openstack_compute_flavor_v2.g1_2xlarge.id
+    "g1.inference" = openstack_compute_flavor_v2.g1_inference.id
   }
 }

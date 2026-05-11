@@ -12,6 +12,8 @@ Projeto de implementação completa de nuvem privada OpenStack enterprise com:
 - **3.4 PB** object storage
 - **276 TB** block storage NVMe
 - **2 tiers de compute**: Shared (1:3 overcommit) e Dedicated (1:1)
+- **GPU Compute**: 9 nós com NVIDIA A100 80GB (36 GPUs, PCI passthrough)
+- **HSM Key Management**: Thales Luna 7 (FIPS 140-2 Level 3), cluster HA 3 AZs
 
 ## Estrutura do Projeto
 
@@ -26,7 +28,9 @@ private-cloud-project/
 │   ├── 06-security.md                 # Zero Trust, TLS, Barbican, RBAC
 │   ├── 07-observability.md            # Ceilometer, Gnocchi, Prometheus
 │   ├── 08-validation-testing.md       # HA tests, DR tests, troubleshooting
-│   └── 09-lab-infrastructure.md       # Lab de desenvolvimento (16 nodes)
+│   ├── 09-lab-infrastructure.md       # Lab de desenvolvimento (16 nodes)
+│   ├── 10-gpu-compute.md             # GPU tier (A100, Cyborg, PCI passthrough)
+│   └── 11-hsm-key-management.md      # HSM cluster (FIPS 140-2 L3, Barbican PKCS#11)
 ├── terraform/                     # Infrastructure as Code
 │   └── main.tf                        # Flavors, networks, aggregates
 ├── ansible/                       # Configuration Management
@@ -63,7 +67,7 @@ private-cloud-project/
 | Block Storage | Cinder (LVM/NVMe) |
 | Monitoring | Prometheus + Grafana + Ceilometer |
 | Logging | Fluentd + Loki |
-| Secrets | Barbican + Vault |
+| Secrets | Barbican + HSM (Thales Luna 7, FIPS 140-2 L3) |
 | IaC | Terraform + Ansible |
 | CI/CD | GitLab CI |
 
@@ -81,6 +85,7 @@ private-cloud-project/
 | Heat | Orchestration | IaC templates |
 | Octavia | Load Balancer | L4/L7 LBaaS |
 | Barbican | Key Management | Secrets, encryption keys |
+| Cyborg | Accelerator | GPU lifecycle, device profiles |
 | Designate | DNS | DNSaaS |
 | Ironic | Bare Metal | Physical server provisioning |
 | Ceilometer | Metering | Usage data collection |

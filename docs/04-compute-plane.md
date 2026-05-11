@@ -108,7 +108,7 @@ cpu_shared_set = 0-3
 
 ## Ofertas de Overcommitment
 
-O compute plane oferece dois tiers de serviço baseados em overcommitment, implementados via Host Aggregates e Placement API.
+O compute plane oferece três tiers de serviço, implementados via Host Aggregates e Placement API.
 
 ### Arquitetura de Tiers
 
@@ -116,20 +116,20 @@ O compute plane oferece dois tiers de serviço baseados em overcommitment, imple
 ┌─────────────────────────────────────────────────────────────────┐
 │                    Compute Plane - Tiers                          │
 │                                                                   │
-│  ┌───────────────────────────────┐  ┌─────────────────────────┐ │
-│  │     SHARED (1:3)              │  │   DEDICATED (1:1)       │ │
-│  │                               │  │                         │ │
-│  │  81 nodes (75% da frota)      │  │  27 nodes (25% da frota)│ │
-│  │  CPU ratio: 3.0               │  │  CPU ratio: 1.0         │ │
-│  │  RAM ratio: 1.5               │  │  RAM ratio: 1.0         │ │
-│  │  Disk ratio: 1.5              │  │  Disk ratio: 1.0        │ │
-│  │                               │  │                         │ │
-│  │  Workloads:                   │  │  Workloads:             │ │
-│  │  - Dev/Test                   │  │  - Bancos de dados      │ │
-│  │  - Web servers                │  │  - Aplicações críticas  │ │
-│  │  - Microservices              │  │  - Latência sensível    │ │
-│  │  - Batch processing           │  │  - Compliance (PCI/SOX) │ │
-│  └───────────────────────────────┘  └─────────────────────────┘ │
+│  ┌──────────────────────┐  ┌──────────────────┐  ┌───────────┐ │
+│  │   SHARED (1:3)       │  │  DEDICATED (1:1) │  │ GPU (1:1) │ │
+│  │                      │  │                  │  │           │ │
+│  │  81 nodes (75%)      │  │  27 nodes (25%) │  │  9 nodes  │ │
+│  │  CPU ratio: 3.0      │  │  CPU ratio: 1.0 │  │  4x A100  │ │
+│  │  RAM ratio: 1.5      │  │  RAM ratio: 1.0 │  │  per node │ │
+│  │                      │  │                  │  │           │ │
+│  │  Workloads:          │  │  Workloads:      │  │ Workloads:│ │
+│  │  - Dev/Test          │  │  - Bancos de dados│  │ - AI/ML   │ │
+│  │  - Web servers       │  │  - Apps críticas │  │ - HPC     │ │
+│  │  - Microservices     │  │  - Compliance    │  │ - Render  │ │
+│  └──────────────────────┘  └──────────────────┘  └───────────┘ │
+│                                                                   │
+│  Ver docs/10-gpu-compute.md para detalhes do tier GPU            │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -468,3 +468,4 @@ cpupower frequency-set -g performance
 7. **Live migration auto-converge**: Garante conclusão mesmo com VMs write-intensive
 8. **Ironic Redfish**: API moderna, suporte a BIOS config, virtual media boot
 9. **AggregateInstanceExtraSpecsFilter**: Garante isolamento entre tiers via scheduler
+10. **GPU tier (PCI passthrough)**: NVIDIA A100 via Cyborg/Nova, sem overcommit, NUMA-aware (ver docs/10-gpu-compute.md)

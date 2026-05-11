@@ -91,16 +91,20 @@ connection = mysql+pymysql://nova:PASS@10.0.200.5/nova?ssl_ca=/etc/pki/ca-trust/
 │  barbican-api (3x) → barbican-worker (3x)        │
 │                           │                        │
 │                    ┌──────┴──────┐                │
-│                    │  Secret     │                │
-│                    │  Store      │                │
+│                    │  PKCS#11    │                │
+│                    │  Crypto     │                │
 │                    └──────┬──────┘                │
 │                           │                        │
 │              ┌────────────┼────────────┐          │
 │              │            │            │          │
 │         ┌────┴───┐  ┌────┴───┐  ┌────┴───┐     │
-│         │  PKCS11│  │  Vault │  │  Simple│     │
-│         │  (HSM) │  │ (prod) │  │ (test) │     │
+│         │ HSM-01 │  │ HSM-02 │  │ HSM-03 │     │
+│         │ (AZ1)  │  │ (AZ2)  │  │ (AZ3)  │     │
+│         │Luna 7  │  │Luna 7  │  │Luna 7  │     │
 │         └────────┘  └────────┘  └────────┘     │
+│                                                    │
+│  FIPS 140-2 Level 3 | Luna HA Group (activeE)    │
+│  Ver: docs/11-hsm-key-management.md              │
 └──────────────────────────────────────────────────┘
 ```
 
@@ -112,19 +116,23 @@ connection = mysql+pymysql://nova:PASS@10.0.200.5/nova?ssl_ca=/etc/pki/ca-trust/
 sql_connection = mysql+pymysql://barbican:PASS@10.0.200.5/barbican
 
 [secretstore]
-enabled_secretstore_plugins = vault_plugin
+enabled_secretstore_plugins = store_crypto
 
-[vault_plugin]
-vault_url = https://vault.cloud.internal:8200
-root_token_id = VAULT_TOKEN
-use_ssl = true
-ssl_ca_certs_file = /etc/pki/ca-trust/source/anchors/vault-ca.pem
+[crypto]
+enabled_crypto_plugins = p11_crypto
+
+[p11_crypto_plugin]
+library_path = /usr/lib/libCryptoki2_64.so
+slot_id = 1
+login = PARTITION_PASSWORD
+mkek_label = barbican-mkek
+mkek_length = 32
+hmac_label = barbican-hmac
+encryption_mechanism = CKM_AES_CBC_PAD
+token_label = barbican-ha
 
 [certificate]
 enabled_certificate_plugins = snakeoil_ca
-
-[crypto]
-enabled_crypto_plugins = simple_crypto
 ```
 
 ### Integração com Serviços
@@ -363,7 +371,7 @@ driver = log
 ## Decisões Arquiteturais
 
 1. **TLS Everywhere**: Zero trust entre serviços, mesmo em rede interna
-2. **Barbican + Vault**: Enterprise KMS com HSM support path
+2. **Barbican + HSM (PKCS#11)**: Chaves mestras protegidas por hardware FIPS 140-2 Level 3, cluster HA 3 AZs
 3. **OIDC Federation**: SSO com corporate IdP, sem password sync
 4. **Fernet tokens**: Sem token persistence, reduz attack surface
 5. **OVN Security Groups**: Distributed firewall, sem bottleneck central

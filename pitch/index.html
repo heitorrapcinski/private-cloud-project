@@ -535,11 +535,11 @@
 
   <div class="cover-footer">
     <div class="stat-pill">R$ 18,3M/ano · 6 contratos</div>
-    <div class="stat-pill">65% mais barato que nuvem pública</div>
+    <div class="stat-pill">21M+ LoC para dominar</div>
     <div class="stat-pill">Lei do Bem: 20–34% retorno fiscal</div>
-    <div class="stat-pill">OpenStack 2026.1 · K8s · PostgreSQL · Kafka</div>
+    <div class="stat-pill">65% mais barato que nuvem pública</div>
   </div>
-  <div class="slide-num">01 / 11</div>
+  <div class="slide-num">01 / 12</div>
 </section>
 
 <!-- ═══ SLIDE 2 — PROBLEMA ═══ -->
@@ -564,7 +564,7 @@
       <p>Uma organização governamental que não controla sua infraestrutura tecnológica está vulnerável a decisões unilaterais de empresas privadas — sobre preços, conformidade, acesso a dados e continuidade de serviço.</p>
     </div>
   </div>
-  <div class="slide-num">02 / 11</div>
+  <div class="slide-num">02 / 12</div>
 </section>
 
 <!-- ═══ SLIDE 3 — EVIDÊNCIA CONTRATUAL ═══ -->
@@ -674,7 +674,119 @@
   <p class="an d4" style="font-size: 12px; color: var(--mist); margin-top: 18px; max-width: 800px; font-weight: 300; line-height: 1.6; font-style: italic;">
     Vigências e fornecedores ilustrativos do padrão de contratação — os valores anuais permanecem como referência da escala atual de dependência.
   </p>
-  <div class="slide-num">03 / 11</div>
+  <div class="slide-num">03 / 12</div>
+</section>
+
+<!-- ═══ SLIDE 4 — MAGNITUDE TÉCNICA (LoC) ═══ -->
+<section class="slide bg-mid" id="s2a">
+  <p class="eyebrow an">A Escala do Desafio</p>
+  <h2 class="stitle an d1">21 milhões de linhas de código —<br>a <em>magnitude real</em> da dependência</h2>
+
+  <p class="an d2" style="font-size: 14px; color: var(--mist); max-width: 820px; line-height: 1.7; font-weight: 300; margin-bottom: 28px;">
+    Dominar tecnicamente cada projeto open source que sustenta a operação significa entender bases de código que somam dezenas de milhões de linhas. Sem IA, nenhum time enxuto absorve essa escala — e é por isso que a dependência de suporte externo se perpetua.
+  </p>
+
+  <!-- TIER 1 -->
+  <div class="an d3" style="max-width: 1100px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px;">
+      <span style="font-size: 18px;">🏔</span>
+      <span style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--brass); font-weight: 600;">Tier 1 · Mega projetos · +3M LoC</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 22px;">
+      <div style="border: 1px solid rgba(184,151,58,0.18); padding: 14px 18px; background: rgba(184,151,58,0.04);">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;">
+          <span style="font-size: 14px; color: var(--white); font-weight: 600;">OpenStack</span>
+          <span style="font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--brass-light); font-weight: 700;">~6,5M</span>
+        </div>
+        <div style="font-size: 11px; color: var(--mist); line-height: 1.5;">Python · IaaS completa · 50+ serviços</div>
+      </div>
+      <div style="border: 1px solid rgba(184,151,58,0.18); padding: 14px 18px; background: rgba(184,151,58,0.04);">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;">
+          <span style="font-size: 14px; color: var(--white); font-weight: 600;">Kubernetes</span>
+          <span style="font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--brass-light); font-weight: 700;">~4,2M</span>
+        </div>
+        <div style="font-size: 11px; color: var(--mist); line-height: 1.5;">Go · Orquestração · apiserver/scheduler/kubelet</div>
+      </div>
+      <div style="border: 1px solid rgba(184,151,58,0.18); padding: 14px 18px; background: rgba(184,151,58,0.04);">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;">
+          <span style="font-size: 14px; color: var(--white); font-weight: 600;">PostgreSQL</span>
+          <span style="font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--brass-light); font-weight: 700;">~4,0M</span>
+        </div>
+        <div style="font-size: 11px; color: var(--mist); line-height: 1.5;">C · RDBMS · 35+ anos de evolução</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIER 2 -->
+  <div class="an d4" style="max-width: 1100px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px;">
+      <span style="font-size: 18px;">⛰</span>
+      <span style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--brass); font-weight: 600;">Tier 2 · Grandes projetos · 500K–3M LoC</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 22px;">
+      <div style="border: 1px solid rgba(184,151,58,0.14); padding: 14px 18px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;">
+          <span style="font-size: 14px; color: var(--white); font-weight: 600;">KVM (QEMU+kernel)</span>
+          <span style="font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--brass-light); font-weight: 700;">~2,5M</span>
+        </div>
+        <div style="font-size: 11px; color: var(--mist); line-height: 1.5;">C · Virtualização · kernel + userspace</div>
+      </div>
+      <div style="border: 1px solid rgba(184,151,58,0.14); padding: 14px 18px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;">
+          <span style="font-size: 14px; color: var(--white); font-weight: 600;">Kafka</span>
+          <span style="font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--brass-light); font-weight: 700;">~1,8M</span>
+        </div>
+        <div style="font-size: 11px; color: var(--mist); line-height: 1.5;">Java/Scala · Streaming · broker+clients+connect</div>
+      </div>
+      <div style="border: 1px solid rgba(184,151,58,0.14); padding: 14px 18px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;">
+          <span style="font-size: 14px; color: var(--white); font-weight: 600;">MongoDB</span>
+          <span style="font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--brass-light); font-weight: 700;">~1,5M</span>
+        </div>
+        <div style="font-size: 11px; color: var(--mist); line-height: 1.5;">C++ · NoSQL · WiredTiger + mongos</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIER 3 -->
+  <div class="an d4" style="max-width: 1100px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px;">
+      <span style="font-size: 18px;">🏕</span>
+      <span style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--brass); font-weight: 600;">Tier 3 · Projetos focados · &lt;500K LoC</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px;">
+      <div style="border: 1px solid rgba(184,151,58,0.1); padding: 12px 18px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;">
+          <span style="font-size: 13px; color: var(--white); font-weight: 600;">Istio</span>
+          <span style="font-family: 'Cormorant Garamond', serif; font-size: 16px; color: var(--brass-light); font-weight: 700;">~450K</span>
+        </div>
+        <div style="font-size: 11px; color: var(--mist); line-height: 1.5;">Go · Service mesh · control + data plane</div>
+      </div>
+      <div style="border: 1px solid rgba(184,151,58,0.1); padding: 12px 18px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;">
+          <span style="font-size: 13px; color: var(--white); font-weight: 600;">KubeVirt</span>
+          <span style="font-family: 'Cormorant Garamond', serif; font-size: 16px; color: var(--brass-light); font-weight: 700;">~320K</span>
+        </div>
+        <div style="font-size: 11px; color: var(--mist); line-height: 1.5;">Go · VMs no K8s · virt-controller/handler</div>
+      </div>
+      <div style="border: 1px solid rgba(184,151,58,0.1); padding: 12px 18px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;">
+          <span style="font-size: 13px; color: var(--white); font-weight: 600;">Calico</span>
+          <span style="font-family: 'Cormorant Garamond', serif; font-size: 16px; color: var(--brass-light); font-weight: 700;">~250K</span>
+        </div>
+        <div style="font-size: 11px; color: var(--mist); line-height: 1.5;">Go · CNI/BGP · Felix+Typha+BIRD</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSIGHT BOX -->
+  <div class="an d5" style="max-width: 1100px; padding: 22px 28px; border-left: 3px solid var(--azure); background: rgba(31,111,235,0.08);">
+    <div style="font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #79b8ff; font-weight: 600; margin-bottom: 10px;">A Oportunidade</div>
+    <p style="font-size: 14px; color: var(--stone); line-height: 1.7; font-weight: 300;">
+      Mais de <strong style="color: var(--white);">21 milhões de linhas de código</strong> em 5 linguagens distintas (Python, Go, C, C++, Java/Scala) — escala humanamente intratável sem IA. O laboratório usa agentes para <strong style="color: #79b8ff;">indexar, navegar e explicar</strong> essas bases de código, transformando o que era barreira intransponível em currículo de capacitação acelerada para um time enxuto.
+    </p>
+  </div>
+  <div class="slide-num">04 / 12</div>
 </section>
 
 <!-- ═══ SLIDE 3 — O QUE É ═══ -->
@@ -717,7 +829,7 @@
       <div class="spec-val">Terraform + Kolla-Ansible + GitLab CI/CD — pipeline ponta a ponta já estruturado</div>
     </div>
   </div>
-  <div class="slide-num">04 / 11</div>
+  <div class="slide-num">05 / 12</div>
 </section>
 
 <!-- ═══ SLIDE 4 — METODOLOGIA ═══ -->
@@ -750,7 +862,7 @@
   <div class="pullquote an d3">
     <p>"Daytime is for judgment, design, and direction. Nighttime is for execution, iteration, and improvement." — The AI Revolution in Software Development</p>
   </div>
-  <div class="slide-num">05 / 11</div>
+  <div class="slide-num">06 / 12</div>
 </section>
 
 <!-- ═══ SLIDE 6 — QA & SUSTENTAÇÃO ═══ -->
@@ -788,7 +900,7 @@
   <div class="pullquote an d3" style="margin-top: 28px;">
     <p>A organização deixa de depender de suporte de fornecedores porque passa a deter o conhecimento técnico profundo — validado, documentado, ensaiado e sustentável internamente.</p>
   </div>
-  <div class="slide-num">06 / 11</div>
+  <div class="slide-num">07 / 12</div>
 </section>
 
 <!-- ═══ SLIDE 6 — LEI DO BEM ═══ -->
@@ -827,7 +939,7 @@
   <p class="an d5" style="font-size: 11px; color: var(--mist); font-style: italic; margin-top: 20px; max-width: 700px;">
     * Aplicável a pessoas jurídicas em regime de Lucro Real com regularidade fiscal. Estatais e empresas públicas que se enquadrem nesse regime podem se beneficiar. Avaliação contábil específica é recomendada.
   </p>
-  <div class="slide-num">07 / 11</div>
+  <div class="slide-num">08 / 12</div>
 </section>
 
 <!-- ═══ SLIDE 6 — P&D CONTÍNUO ═══ -->
@@ -861,7 +973,7 @@
   <div class="pullquote an d3">
     <p>O laboratório não entrega um produto e encerra — ele <strong>é</strong> a capacidade permanente de construir, validar e evoluir infraestrutura tecnológica soberana, ciclo após ciclo.</p>
   </div>
-  <div class="slide-num">08 / 11</div>
+  <div class="slide-num">09 / 12</div>
 </section>
 
 <!-- ═══ SLIDE 8 — 3 HORIZONTES ═══ -->
@@ -892,7 +1004,7 @@
       <div class="hfoot">↓ Soberania tecnológica plena</div>
     </div>
   </div>
-  <div class="slide-num">09 / 11</div>
+  <div class="slide-num">10 / 12</div>
 </section>
 
 <!-- ═══ SLIDE 7 — RESULTADO ═══ -->
@@ -925,7 +1037,7 @@
   <p class="an d4" style="font-size:12px; color:var(--mist); font-style:italic; max-width:560px;">
     Os R$ 18,3M em subscrições anuais já constituem argumento de ROI direto. Combinado ao incentivo da Lei do Bem (20–34% de retorno sobre PD&amp;I) e à economia de 65% vs nuvem pública, o caso de negócio é robusto.
   </p>
-  <div class="slide-num">10 / 11</div>
+  <div class="slide-num">11 / 12</div>
 </section>
 
 <!-- ═══ SLIDE 8 — FECHAMENTO ═══ -->
@@ -934,7 +1046,7 @@
   <div class="divider an d1"></div>
   <p class="close-sub an d2">O Laboratório de Soberania Tecnológica transforma dependência estrutural em autonomia real — com arquitetura enterprise documentada, metodologia agêntica própria e ciclos contínuos de entrega e QA sobre software livre.</p>
   <p class="close-statement an d3">"Quem não domina sua infraestrutura tecnológica não controla plenamente sua soberania digital — e paga por isso, ciclo após ciclo."</p>
-  <div class="slide-num">11 / 11</div>
+  <div class="slide-num">12 / 12</div>
 </section>
 
 <script>

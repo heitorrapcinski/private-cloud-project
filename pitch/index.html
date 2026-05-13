@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laboratório de Soberania Tecnológica — v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0d1117;
+    --ink-mid: #161b22;
+    --ink-soft: #21262d;
+    --brass: #b8973a;
+    --brass-light: #d4b35c;
+    --brass-dim: rgba(184,151,58,0.15);
+    --stone: #e8e3d8;
+    --mist: #6e7681;
+    --azure: #1f6feb;
+    --azure-dim: rgba(31,111,235,0.12);
+    --white: #f0ece3;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Figtree', sans-serif;
+    background: var(--ink);
+    color: var(--stone);
+    line-height: 1.6;
+  }
+
+  .slide {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 72px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide + .slide {
+    border-top: 1px solid rgba(184,151,58,0.12);
+  }
+
+  .slide-num {
+    position: absolute;
+    bottom: 36px;
+    right: 56px;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--brass);
+    opacity: 0.6;
+    font-weight: 500;
+  }
+
+  /* ── SLIDE 1 COVER ── */
+  .s-cover {
+    background: var(--ink);
+    background-image:
+      radial-gradient(ellipse 70% 60% at 90% 10%, rgba(31,111,235,0.1) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 5% 90%, rgba(184,151,58,0.07) 0%, transparent 60%);
+    justify-content: space-between;
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+
+  .cover-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .org-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--brass);
+    font-weight: 600;
+    border-left: 2px solid var(--brass);
+    padding-left: 12px;
+  }
+
+  .version-tag {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--mist);
+    font-weight: 400;
+  }
+
+  .cover-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 860px;
+  }
+
+  .cover-kicker {
+    font-size: 12px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--brass);
+    font-weight: 600;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: rise 0.9s ease 0.3s forwards;
+  }
+
+  h1.cover-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(48px, 6.5vw, 88px);
+    font-weight: 700;
+    line-height: 1.0;
+    color: var(--white);
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: rise 0.9s ease 0.5s forwards;
+  }
+
+  h1.cover-title em {
+    font-style: italic;
+    color: var(--brass-light);
+  }
+
+  .cover-desc {
+    font-size: 17px;
+    color: var(--mist);
+    font-weight: 300;
+    max-width: 580px;
+    line-height: 1.75;
+    opacity: 0;
+    animation: rise 0.9s ease 0.7s forwards;
+  }
+
+  .cover-footer {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    opacity: 0;
+    animation: rise 0.9s ease 0.9s forwards;
+  }
+
+  .stat-pill {
+    padding: 8px 20px;
+    border: 1px solid rgba(184,151,58,0.3);
+    font-size: 12px;
+    color: var(--brass-light);
+    letter-spacing: 1px;
+    font-weight: 500;
+  }
+
+  /* ── LABELS & TITLES ── */
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--brass);
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+
+  h2.stitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(30px, 4vw, 52px);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 40px;
+    max-width: 720px;
+  }
+
+  h2.stitle em { font-style: italic; color: var(--brass-light); }
+
+  /* ── GRID 2 COL ── */
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 960px;
+  }
+
+  .grid3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    max-width: 1020px;
+    border: 1px solid rgba(184,151,58,0.18);
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(184,151,58,0.14);
+    border-left: 3px solid var(--brass);
+    padding: 28px 30px;
+  }
+
+  .card h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--brass-light);
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  .card p {
+    font-size: 14px;
+    color: var(--mist);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* ── HORIZON COLUMNS ── */
+  .hcol {
+    padding: 36px 32px;
+    border-right: 1px solid rgba(184,151,58,0.14);
+    position: relative;
+  }
+
+  .hcol:last-child { border-right: none; }
+
+  .hnum {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 72px;
+    font-weight: 700;
+    color: rgba(184,151,58,0.08);
+    line-height: 1;
+    position: absolute;
+    top: 12px;
+    right: 16px;
+  }
+
+  .htag {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--brass);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .hcol h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 14px;
+    line-height: 1.25;
+  }
+
+  .hcol p {
+    font-size: 14px;
+    color: var(--mist);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .hfoot {
+    margin-top: 20px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(184,151,58,0.15);
+    font-size: 11px;
+    color: var(--brass);
+    letter-spacing: 1px;
+    font-weight: 500;
+  }
+
+  /* ── SPEC BLOCK ── */
+  .spec-table {
+    max-width: 920px;
+    border: 1px solid rgba(184,151,58,0.18);
+    overflow: hidden;
+  }
+
+  .spec-row {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    border-bottom: 1px solid rgba(184,151,58,0.1);
+  }
+
+  .spec-row:last-child { border-bottom: none; }
+
+  .spec-key {
+    padding: 16px 24px;
+    background: rgba(184,151,58,0.06);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--brass-light);
+    text-transform: uppercase;
+    border-right: 1px solid rgba(184,151,58,0.12);
+    display: flex;
+    align-items: center;
+  }
+
+  .spec-val {
+    padding: 16px 24px;
+    font-size: 14px;
+    color: var(--stone);
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag {
+    padding: 3px 12px;
+    border: 1px solid rgba(184,151,58,0.25);
+    font-size: 11px;
+    color: var(--brass-light);
+    letter-spacing: 0.5px;
+    font-weight: 500;
+  }
+
+  /* ── WORKFLOW ── */
+  .wflow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    max-width: 960px;
+  }
+
+  .wblock {
+    padding: 32px;
+    border: 1px solid rgba(31,111,235,0.2);
+    border-top: 3px solid var(--azure);
+    background: var(--azure-dim);
+  }
+
+  .wblock h3 {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #79b8ff;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  .wblock ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .wblock li {
+    font-size: 13px;
+    color: var(--mist);
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  .wblock li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--azure);
+    font-size: 11px;
+    top: 1px;
+  }
+
+  /* ── QUOTE ── */
+  .pullquote {
+    border-left: 3px solid var(--brass);
+    padding: 20px 28px;
+    max-width: 760px;
+    margin-top: 32px;
+    background: var(--brass-dim);
+  }
+
+  .pullquote p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-style: italic;
+    color: var(--white);
+    line-height: 1.55;
+    font-weight: 400;
+  }
+
+  /* ── METRICS ── */
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    max-width: 960px;
+    background: rgba(184,151,58,0.08);
+    margin-bottom: 36px;
+  }
+
+  .metric {
+    background: var(--ink);
+    padding: 28px 20px;
+    text-align: center;
+  }
+
+  .mval {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--brass-light);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .mlabel {
+    font-size: 11px;
+    color: var(--mist);
+    letter-spacing: 0.5px;
+    line-height: 1.4;
+    font-weight: 300;
+  }
+
+  /* ── CLOSING ── */
+  .s-close {
+    text-align: center;
+    align-items: center;
+    background: var(--ink);
+    background-image:
+      radial-gradient(ellipse 60% 50% at 50% 50%, rgba(184,151,58,0.05) 0%, transparent 70%);
+  }
+
+  .close-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 5.5vw, 72px);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 24px;
+    max-width: 780px;
+  }
+
+  .close-title em { font-style: italic; color: var(--brass-light); }
+
+  .divider {
+    width: 48px;
+    height: 2px;
+    background: var(--brass);
+    margin: 0 auto 32px;
+    opacity: 0.5;
+  }
+
+  .close-sub {
+    font-size: 16px;
+    color: var(--mist);
+    font-weight: 300;
+    max-width: 500px;
+    line-height: 1.75;
+    margin-bottom: 40px;
+  }
+
+  .close-statement {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    font-style: italic;
+    color: rgba(212,179,92,0.65);
+    max-width: 520px;
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  .nav {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    z-index: 100;
+  }
+
+  .dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(184,151,58,0.25);
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+
+  .dot.active, .dot:hover {
+    background: var(--brass);
+    transform: scale(1.6);
+  }
+
+  /* ── BG VARIANT ── */
+  .bg-mid { background: var(--ink-mid); }
+
+  /* ── ANIM ── */
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .an { opacity: 0; transform: translateY(18px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .an.in { opacity: 1; transform: none; }
+  .d1 { transition-delay: 0.12s; }
+  .d2 { transition-delay: 0.24s; }
+  .d3 { transition-delay: 0.36s; }
+  .d4 { transition-delay: 0.48s; }
+  .d5 { transition-delay: 0.60s; }
+
+  @media (max-width: 768px) {
+    .slide { padding: 48px 28px; }
+    .grid2, .grid3, .wflow, .metrics { grid-template-columns: 1fr; }
+    .grid3 { border: none; }
+    .hcol { border-right: none; border-bottom: 1px solid rgba(184,151,58,0.14); }
+    .spec-row { grid-template-columns: 1fr; }
+    .metrics { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav"></nav>
+
+<!-- ═══ SLIDE 1 — CAPA ═══ -->
+<section class="slide s-cover" id="s0">
+  <div class="cover-header">
+    <span class="org-label">Iniciativa Estratégica · Governo</span>
+    <span class="version-tag">v2.0 · Mai 2026</span>
+  </div>
+
+  <div class="cover-body">
+    <p class="cover-kicker">Proposta Executiva</p>
+    <h1 class="cover-title">Laboratório de<br><em>Soberania</em><br>Tecnológica</h1>
+    <p class="cover-desc">Plataforma de nuvem privada corporativa com autoserviço — sem dependência de nuvem pública — construída e evoluída por IA sobre software livre, a 65% do custo da nuvem pública equivalente, sem aumentar o time.</p>
+  </div>
+
+  <div class="cover-footer">
+    <div class="stat-pill">OpenStack 2026.1 Gazpacho</div>
+    <div class="stat-pill">150 Servidores · 102 TB RAM</div>
+    <div class="stat-pill">3.4 PB Object Storage</div>
+    <div class="stat-pill">36 GPUs · HSM FIPS 140-2</div>
+  </div>
+  <div class="slide-num">01 / 08</div>
+</section>
+
+<!-- ═══ SLIDE 2 — PROBLEMA ═══ -->
+<section class="slide bg-mid" id="s1">
+  <p class="eyebrow an">O Diagnóstico</p>
+  <h2 class="stitle an d1">A dependência que <em>custa caro</em><br>e compromete a soberania do Estado</h2>
+  <div class="grid2 an d2">
+    <div class="card">
+      <h3>Subscrições perpétuas</h3>
+      <p>Gastos recorrentes com RHEL, Kafka Enterprise, Elastic e outras soluções comerciais — não por necessidade técnica, mas por ausência de capacidade interna para operar e sustentar as versões open source equivalentes.</p>
+    </div>
+    <div class="card">
+      <h3>Dependência estrutural de fornecedor</h3>
+      <p>Cada renovação de contrato é um sinal de vulnerabilidade. A organização paga ao fornecedor pelo suporte que deveria dominar internamente — sem controle sobre roadmap, preços ou descontinuidades.</p>
+    </div>
+    <div class="card">
+      <h3>Escassez de capital humano técnico</h3>
+      <p>Não há recursos suficientes para acompanhar e sustentar stacks complexas de software livre. Com IA integrada ao ciclo de desenvolvimento, um time enxuto opera com profundidade técnica antes reservada a grandes equipes.</p>
+    </div>
+    <div class="card">
+      <h3>Risco real de soberania digital</h3>
+      <p>Uma organização governamental que não controla sua infraestrutura tecnológica está vulnerável a decisões unilaterais de empresas privadas — sobre preços, conformidade, acesso a dados e continuidade de serviço.</p>
+    </div>
+  </div>
+  <div class="slide-num">02 / 08</div>
+</section>
+
+<!-- ═══ SLIDE 3 — O QUE É ═══ -->
+<section class="slide bg-mid" id="s2">
+  <p class="eyebrow an">A Proposta</p>
+  <h2 class="stitle an d1">Um laboratório com <em>blueprint real</em>,<br>não uma prova de conceito</h2>
+
+  <div class="spec-table an d2">
+    <div class="spec-row">
+      <div class="spec-key">Plataforma</div>
+      <div class="spec-val">OpenStack 2026.1 Gazpacho (SLURP) — release de produção, Abr 2026</div>
+    </div>
+    <div class="spec-row">
+      <div class="spec-key">Infraestrutura</div>
+      <div class="spec-val">150 servidores · 1 Região · 3 Availability Zones · 9 Fault Domains</div>
+    </div>
+    <div class="spec-row">
+      <div class="spec-key">Compute</div>
+      <div class="spec-val">102 TB RAM · Shared (1:3) e Dedicated (1:1) · 36 GPUs com PCI passthrough</div>
+    </div>
+    <div class="spec-row">
+      <div class="spec-key">Storage</div>
+      <div class="spec-val">3.4 PB object (Swift) · 276 TB block NVMe (Cinder) · replicação 3x</div>
+    </div>
+    <div class="spec-row">
+      <div class="spec-key">Segurança</div>
+      <div class="spec-val">HSM FIPS 140-2 Level 3 · Zero Trust · TLS everywhere · RBAC granular</div>
+    </div>
+    <div class="spec-row">
+      <div class="spec-key">Stack integrada</div>
+      <div class="spec-val">
+        <span class="tag">OpenStack</span><span class="tag">Kubernetes</span>
+        <span class="tag">PostgreSQL</span><span class="tag">Kafka</span>
+        <span class="tag">MongoDB</span><span class="tag">Terraform</span>
+        <span class="tag">Ansible (Kolla)</span><span class="tag">GitLab CI</span>
+      </div>
+    </div>
+    <div class="spec-row">
+      <div class="spec-key">IaC & Automação</div>
+      <div class="spec-val">Terraform + Kolla-Ansible + GitLab CI/CD — pipeline ponta a ponta já estruturado</div>
+    </div>
+  </div>
+  <div class="slide-num">03 / 08</div>
+</section>
+
+<!-- ═══ SLIDE 4 — METODOLOGIA ═══ -->
+<section class="slide bg-mid" id="s3">
+  <p class="eyebrow an">Metodologia Própria</p>
+  <h2 class="stitle an d1">Agile-Agentic: <em>sprints de 24 horas</em><br>com frota de agentes de IA</h2>
+
+  <div class="wflow an d2">
+    <div class="wblock">
+      <h3>Turno Humano · 1–2h</h3>
+      <ul>
+        <li>Daily Sprint Review: revisão de PRs e flags de risco</li>
+        <li>Spec Refinement: documentos Markdown com intenção e critérios</li>
+        <li>Decisão Rápida: validação e autorização da construção agêntica</li>
+        <li>Squad multidisciplinar: Arquitetura, Produto, Segurança, Engenharia</li>
+      </ul>
+    </div>
+    <div class="wblock">
+      <h3>Turno de Agentes · Automático</h3>
+      <ul>
+        <li>Agentes de Planejamento: decomposição em DAG de tarefas</li>
+        <li>Agentes de Codificação: implementação em branches efêmeras</li>
+        <li>Agentes de QA: testes de carga, regressão, contrato e pentest</li>
+        <li>Agentes de Segurança: SAST, SCA, secrets scanning</li>
+        <li>Agentes de CD: deploy progressivo com rollback automático</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pullquote an d3">
+    <p>"Daytime is for judgment, design, and direction. Nighttime is for execution, iteration, and improvement." — The AI Revolution in Software Development</p>
+  </div>
+  <div class="slide-num">04 / 08</div>
+</section>
+
+<!-- ═══ SLIDE 5 — QA & SUSTENTAÇÃO ═══ -->
+<section class="slide bg-mid" id="s4">
+  <p class="eyebrow an">O Diferencial Operacional</p>
+  <h2 class="stitle an d1">QA estruturado a cada ciclo —<br>a base da <em>autonomia sustentável</em></h2>
+
+  <div class="grid2 an d2">
+    <div class="card">
+      <h3>Testes de Carga & Performance</h3>
+      <p>Benchmarks automatizados a cada entrega detectam regressões de latência, throughput e consumo de recursos antes de qualquer promoção de ambiente. A performance vira critério de aceitação, não verificação posterior.</p>
+    </div>
+    <div class="card">
+      <h3>Testes de Regressão & Contrato</h3>
+      <p>Validação contínua de que interfaces entre serviços permanecem compatíveis — APIs, eventos, schemas. Breaking changes silenciosas são bloqueadas automaticamente no pipeline.</p>
+    </div>
+    <div class="card">
+      <h3>Pentest & Segurança Contínua</h3>
+      <p>SAST, SCA e secrets scanning integrados ao ciclo — não como etapa separada. Conformidade com FIPS 140-2, HSM, Zero Trust e RBAC granular validada a cada PR, não apenas em auditorias anuais.</p>
+    </div>
+    <div class="card">
+      <h3>Documentação & Runbooks Vivos</h3>
+      <p>Agentes mantêm documentação técnica, changelogs e runbooks operacionais sincronizados com o estado real do sistema — eliminando a lacuna entre o que foi construído e o que está documentado.</p>
+    </div>
+  </div>
+
+  <div class="pullquote an d3">
+    <p>A organização deixa de depender de suporte de fornecedores porque passa a deter o conhecimento técnico profundo — validado, documentado e sustentável internamente.</p>
+  </div>
+  <div class="slide-num">05 / 08</div>
+</section>
+
+<!-- ═══ SLIDE 6 — P&D CONTÍNUO ═══ -->
+<section class="slide" id="s5b" style="background: #0d1117;">
+  <p class="eyebrow an">O Motor do Laboratório</p>
+  <h2 class="stitle an d1">Um fluxo permanente de <em>P&D integrado</em> —<br>não um projeto com data de fim</h2>
+
+  <div class="grid2 an d2" style="max-width:960px; gap:28px;">
+    <div style="display:flex; flex-direction:column; gap:20px;">
+      <div class="card" style="border-left-color: var(--azure); background: rgba(31,111,235,0.06);">
+        <h3 style="color:#79b8ff;">Integração contínua de tecnologias</h3>
+        <p>A cada ciclo, novas versões e componentes do ecossistema open source são integrados, testados e validados — OpenStack, Kubernetes, Kafka, PostgreSQL, MongoDB e outros evoluem juntos, no ritmo da comunidade global.</p>
+      </div>
+      <div class="card" style="border-left-color: var(--azure); background: rgba(31,111,235,0.06);">
+        <h3 style="color:#79b8ff;">Conhecimento que se acumula</h3>
+        <p>Cada ciclo gera documentação técnica, runbooks, specs e testes que ficam na organização. O domínio técnico cresce de forma contínua — não depende de pessoas específicas nem de contratos de suporte externos.</p>
+      </div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:20px;">
+      <div class="card" style="background: rgba(184,151,58,0.06);">
+        <h3>Evolução sem aumento de headcount</h3>
+        <p>A frota de agentes de IA executa o trabalho de engenharia pesado — codificação, testes, segurança, documentação, deploy. O time humano foca em direção, arquitetura e decisão. A plataforma evolui rápido com o mesmo time.</p>
+      </div>
+      <div class="card" style="background: rgba(184,151,58,0.06);">
+        <h3>Da dependência ao protagonismo gradual</h3>
+        <p>À medida que o domínio técnico se consolida, a organização reduz subscrições de suporte, passa a operar versões open source com confiança e, em ciclos futuros, contribui diretamente com os projetos que utiliza.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="pullquote an d3">
+    <p>O laboratório não entrega um produto e encerra — ele <strong>é</strong> a capacidade permanente de construir, validar e evoluir infraestrutura tecnológica soberana, ciclo após ciclo.</p>
+  </div>
+  <div class="slide-num">06 / 09</div>
+</section>
+
+<!-- ═══ SLIDE 7 — 3 HORIZONTES ═══ -->
+<section class="slide bg-mid" id="s5">
+  <p class="eyebrow an">Trajetória Realista</p>
+  <h2 class="stitle an d1">Três horizontes honestos —<br>do laboratório ao <em>protagonismo soberano</em></h2>
+
+  <div class="grid3 an d2">
+    <div class="hcol">
+      <div class="hnum">1</div>
+      <p class="htag">Primeiros ciclos</p>
+      <h3>Laboratório e Integração</h3>
+      <p>As tecnologias do ecossistema são integradas progressivamente no laboratório. O foco é dominar o código-fonte, estabelecer o ciclo agêntico de desenvolvimento e QA, e acumular conhecimento técnico interno. <strong style="color:var(--stone)">Ainda não é produção</strong> — é a fundação.</p>
+      <div class="hfoot">↓ Base técnica sólida e time capacitado</div>
+    </div>
+    <div class="hcol">
+      <div class="hnum">2</div>
+      <p class="htag">Ciclos intermediários</p>
+      <h3>Plataforma com Autoserviço</h3>
+      <p>A plataforma atinge maturidade suficiente para oferecer autoserviço real — IaaS e PaaS on-demand, sem nuvem pública, a 65% do custo equivalente. Subscrições de suporte começam a ser substituídas por capacidade interna comprovada.</p>
+      <div class="hfoot">↓ Redução de custo e dependência mensuráveis</div>
+    </div>
+    <div class="hcol">
+      <div class="hnum">3</div>
+      <p class="htag">Longo prazo</p>
+      <h3>Contribuição e Protagonismo</h3>
+      <p>Com domínio técnico consolidado, a organização contribui com pull requests nos projetos open source que sustenta — tornando-se protagonista da comunidade global e referência em soberania tecnológica no setor público.</p>
+      <div class="hfoot">↓ Soberania tecnológica plena</div>
+    </div>
+  </div>
+  <div class="slide-num">07 / 09</div>
+</section>
+
+<!-- ═══ SLIDE 7 — RESULTADO ═══ -->
+<section class="slide bg-mid" id="s6">
+  <p class="eyebrow an">Resultado Esperado</p>
+  <h2 class="stitle an d1">Do gasto recorrente<br>ao <em>ativo estratégico</em></h2>
+
+  <div class="metrics an d2">
+    <div class="metric">
+      <div class="mval">65%</div>
+      <div class="mlabel">Menor custo vs<br>nuvem pública<br>equivalente</div>
+    </div>
+    <div class="metric">
+      <div class="mval">↓</div>
+      <div class="mlabel">Custos de<br>subscrição<br><em style="color:var(--brass);font-size:10px">* a mapear</em></div>
+    </div>
+    <div class="metric">
+      <div class="mval">10×</div>
+      <div class="mlabel">Velocidade de<br>entrega com<br>agentes de IA</div>
+    </div>
+    <div class="metric">
+      <div class="mval">0</div>
+      <div class="mlabel">Aumento de<br>headcount para<br>evoluir a plataforma</div>
+    </div>
+  </div>
+
+  <p class="an d3" style="font-size:16px; color:var(--mist); max-width:800px; line-height:1.75; font-weight:300; margin-bottom:16px;">
+    Ao final dos primeiros ciclos: uma <strong style="color:var(--white)">plataforma de nuvem privada com autoserviço completo</strong> — IaaS, PaaS, GPU compute e segurança FIPS 140-2 — disponível on-demand, a 65% do custo da nuvem pública equivalente, evoluindo continuamente por IA sem necessidade de ampliar o time.
+  </p>
+  <p class="an d4" style="font-size:12px; color:var(--mist); font-style:italic; max-width:560px;">
+    * O mapeamento dos custos atuais de subscrição consolidará o argumento de ROI para aprovação executiva. Mesmo estimativas preliminares são suficientes para quantificar o retorno esperado.
+  </p>
+  <div class="slide-num">08 / 09</div>
+</section>
+
+<!-- ═══ SLIDE 8 — FECHAMENTO ═══ -->
+<section class="slide s-close" id="s7">
+  <h2 class="close-title an">Soberania tecnológica<br>não é opcional.<br>É <em>estratégia de Estado.</em></h2>
+  <div class="divider an d1"></div>
+  <p class="close-sub an d2">O Laboratório de Soberania Tecnológica transforma dependência estrutural em autonomia real — com arquitetura enterprise documentada, metodologia agêntica própria e ciclos contínuos de entrega e QA sobre software livre.</p>
+  <p class="close-statement an d3">"Quem não domina sua infraestrutura tecnológica não controla plenamente sua soberania digital — e paga por isso, ciclo após ciclo."</p>
+  <div class="slide-num">09 / 09</div>
+</section>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const nav = document.getElementById('nav');
+
+  // build dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => slides[i].scrollIntoView({ behavior: 'smooth' });
+    nav.appendChild(d);
+  });
+
+  const dots = nav.querySelectorAll('.dot');
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const i = [...slides].indexOf(e.target);
+      dots.forEach(d => d.classList.remove('active'));
+      dots[i]?.classList.add('active');
+      e.target.querySelectorAll('.an').forEach(el => el.classList.add('in'));
+    });
+  }, { threshold: 0.25 });
+
+  slides.forEach(s => io.observe(s));
+</script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Laboratório de Soberania Tecnológica — v2</title>
+<title>Laboratório de Ensaios em Engenharia de Plataforma — v3</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -38,11 +38,12 @@
     padding: 72px 80px;
     position: relative;
     overflow: hidden;
+    background: var(--ink);
   }
 
-  .slide + .slide {
-    border-top: 1px solid rgba(184,151,58,0.12);
-  }
+  .slide.bg-mid { background: var(--ink-mid); }
+
+  .slide + .slide { border-top: 1px solid rgba(184,151,58,0.12); }
 
   .slide-num {
     position: absolute;
@@ -55,9 +56,8 @@
     font-weight: 500;
   }
 
-  /* ── SLIDE 1 COVER ── */
+  /* ── COVER ── */
   .s-cover {
-    background: var(--ink);
     background-image:
       radial-gradient(ellipse 70% 60% at 90% 10%, rgba(31,111,235,0.1) 0%, transparent 70%),
       radial-gradient(ellipse 50% 40% at 5% 90%, rgba(184,151,58,0.07) 0%, transparent 60%);
@@ -66,11 +66,7 @@
     padding-bottom: 56px;
   }
 
-  .cover-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+  .cover-header { display: flex; align-items: center; justify-content: space-between; }
 
   .org-label {
     font-size: 11px;
@@ -82,19 +78,14 @@
     padding-left: 12px;
   }
 
-  .version-tag {
-    font-size: 11px;
-    letter-spacing: 2px;
-    color: var(--mist);
-    font-weight: 400;
-  }
+  .version-tag { font-size: 11px; letter-spacing: 2px; color: var(--mist); font-weight: 400; }
 
   .cover-body {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    max-width: 860px;
+    max-width: 900px;
   }
 
   .cover-kicker {
@@ -110,25 +101,22 @@
 
   h1.cover-title {
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(48px, 6.5vw, 88px);
+    font-size: clamp(44px, 6vw, 82px);
     font-weight: 700;
-    line-height: 1.0;
+    line-height: 1.04;
     color: var(--white);
     margin-bottom: 36px;
     opacity: 0;
     animation: rise 0.9s ease 0.5s forwards;
   }
 
-  h1.cover-title em {
-    font-style: italic;
-    color: var(--brass-light);
-  }
+  h1.cover-title em { font-style: italic; color: var(--brass-light); }
 
   .cover-desc {
     font-size: 17px;
     color: var(--mist);
     font-weight: 300;
-    max-width: 580px;
+    max-width: 620px;
     line-height: 1.75;
     opacity: 0;
     animation: rise 0.9s ease 0.7s forwards;
@@ -137,7 +125,8 @@
   .cover-footer {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 14px;
+    flex-wrap: wrap;
     opacity: 0;
     animation: rise 0.9s ease 0.9s forwards;
   }
@@ -151,7 +140,7 @@
     font-weight: 500;
   }
 
-  /* ── LABELS & TITLES ── */
+  /* ── COMMON ── */
   .eyebrow {
     font-size: 11px;
     letter-spacing: 4px;
@@ -168,28 +157,26 @@
     color: var(--white);
     line-height: 1.15;
     margin-bottom: 40px;
-    max-width: 720px;
+    max-width: 820px;
   }
 
   h2.stitle em { font-style: italic; color: var(--brass-light); }
 
-  /* ── GRID 2 COL ── */
-  .grid2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    max-width: 960px;
+  .lead-paragraph {
+    font-size: 16px;
+    color: var(--mist);
+    max-width: 820px;
+    line-height: 1.75;
+    font-weight: 300;
+    margin-bottom: 28px;
   }
 
-  .grid3 {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 0;
-    max-width: 1020px;
-    border: 1px solid rgba(184,151,58,0.18);
-  }
+  .lead-paragraph strong { color: var(--stone); font-weight: 500; }
 
   /* ── CARDS ── */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 980px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; max-width: 1100px; }
+
   .card {
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(184,151,58,0.14);
@@ -206,14 +193,64 @@
     text-transform: uppercase;
   }
 
-  .card p {
-    font-size: 14px;
-    color: var(--mist);
+  .card p { font-size: 14px; color: var(--mist); line-height: 1.7; font-weight: 300; }
+  .card p strong { color: var(--stone); font-weight: 500; }
+
+  /* ── HIGHLIGHT BOX ── */
+  .highlight-box {
+    max-width: 1080px;
+    padding: 22px 28px;
+    border-left: 3px solid var(--azure);
+    background: rgba(31,111,235,0.08);
+  }
+
+  .highlight-box .hbox-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #79b8ff;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .highlight-box p {
+    font-size: 15px;
+    color: var(--stone);
     line-height: 1.7;
     font-weight: 300;
   }
 
+  .highlight-box p strong { color: var(--white); font-weight: 500; }
+  .highlight-box p .azure { color: #79b8ff; font-weight: 500; }
+
+  /* ── PULLQUOTE ── */
+  .pullquote {
+    border-left: 3px solid var(--brass);
+    padding: 20px 28px;
+    max-width: 820px;
+    margin-top: 32px;
+    background: var(--brass-dim);
+  }
+
+  .pullquote p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-style: italic;
+    color: var(--white);
+    line-height: 1.55;
+    font-weight: 400;
+  }
+
+  .pullquote p strong { font-style: normal; color: var(--brass-light); font-weight: 700; }
+
   /* ── HORIZON COLUMNS ── */
+  .horizons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 1020px;
+    border: 1px solid rgba(184,151,58,0.18);
+  }
+
   .hcol {
     padding: 36px 32px;
     border-right: 1px solid rgba(184,151,58,0.14);
@@ -251,12 +288,7 @@
     line-height: 1.25;
   }
 
-  .hcol p {
-    font-size: 14px;
-    color: var(--mist);
-    line-height: 1.7;
-    font-weight: 300;
-  }
+  .hcol p { font-size: 14px; color: var(--mist); line-height: 1.7; font-weight: 300; }
 
   .hfoot {
     margin-top: 20px;
@@ -268,60 +300,257 @@
     font-weight: 500;
   }
 
-  /* ── SPEC BLOCK ── */
-  .spec-table {
-    max-width: 920px;
-    border: 1px solid rgba(184,151,58,0.18);
-    overflow: hidden;
-  }
-
-  .spec-row {
+  /* ── INDUSTRY ANALOGY ── */
+  .analogy-grid {
     display: grid;
-    grid-template-columns: 220px 1fr;
-    border-bottom: 1px solid rgba(184,151,58,0.1);
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    max-width: 1000px;
+    margin-bottom: 32px;
   }
 
-  .spec-row:last-child { border-bottom: none; }
-
-  .spec-key {
-    padding: 16px 24px;
-    background: rgba(184,151,58,0.06);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    color: var(--brass-light);
-    text-transform: uppercase;
-    border-right: 1px solid rgba(184,151,58,0.12);
-    display: flex;
-    align-items: center;
+  .analogy-side {
+    padding: 32px;
+    border: 1px solid rgba(184,151,58,0.18);
   }
 
-  .spec-val {
-    padding: 16px 24px;
+  .analogy-side h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 18px;
+  }
+
+  .analogy-side p {
     font-size: 14px;
-    color: var(--stone);
+    color: var(--mist);
+    line-height: 1.7;
     font-weight: 300;
+    margin-bottom: 16px;
+  }
+
+  .analogy-side ul {
+    list-style: none;
     display: flex;
-    align-items: center;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 8px;
   }
 
-  .tag {
-    padding: 3px 12px;
-    border: 1px solid rgba(184,151,58,0.25);
-    font-size: 11px;
-    color: var(--brass-light);
-    letter-spacing: 0.5px;
-    font-weight: 500;
+  .analogy-side li {
+    font-size: 13px;
+    color: var(--stone);
+    padding-left: 18px;
+    position: relative;
+    line-height: 1.5;
+    font-weight: 300;
   }
 
-  /* ── WORKFLOW ── */
+  .analogy-side li::before {
+    content: '·';
+    position: absolute;
+    left: 4px;
+    color: var(--brass);
+    font-size: 18px;
+    top: -3px;
+  }
+
+  /* ── STACK PYRAMID ── */
+  .stack-pyramid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 900px;
+  }
+
+  .stack-layer {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    align-items: center;
+    border: 1px solid rgba(184,151,58,0.18);
+    background: rgba(255,255,255,0.02);
+  }
+
+  .stack-layer-name {
+    padding: 18px 24px;
+    background: rgba(184,151,58,0.08);
+    border-right: 1px solid rgba(184,151,58,0.18);
+  }
+
+  .stack-layer-name .layer-tag {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--brass);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .stack-layer-name .layer-title {
+    font-size: 15px;
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  .stack-layer-content {
+    padding: 18px 24px;
+    font-size: 13px;
+    color: var(--mist);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .stack-layer-content strong { color: var(--stone); font-weight: 500; }
+
+  /* ── LoC ── */
+  .loc-tier-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .loc-tier-icon { font-size: 18px; }
+
+  .loc-tier-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--brass);
+    font-weight: 600;
+  }
+
+  .loc-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+
+  .loc-card {
+    border: 1px solid rgba(184,151,58,0.14);
+    padding: 14px 18px;
+  }
+
+  .loc-card.tier1 { background: rgba(184,151,58,0.04); border-color: rgba(184,151,58,0.18); }
+
+  .loc-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+  }
+
+  .loc-name { font-size: 14px; color: var(--white); font-weight: 600; }
+  .loc-tier3 .loc-name { font-size: 13px; }
+  .loc-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    color: var(--brass-light);
+    font-weight: 700;
+  }
+  .loc-tier2 .loc-value { font-size: 18px; }
+  .loc-tier3 .loc-value { font-size: 16px; }
+
+  .loc-desc { font-size: 11px; color: var(--mist); line-height: 1.5; }
+
+  /* ── FLOWS ── */
+  .flows-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 1020px;
+  }
+
+  .flow-card {
+    padding: 32px;
+    border: 1px solid rgba(184,151,58,0.18);
+    background: rgba(255,255,255,0.02);
+  }
+
+  .flow-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--brass-light);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .flow-tag {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--brass);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .flow-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 14px;
+    line-height: 1.3;
+  }
+
+  .flow-card p {
+    font-size: 14px;
+    color: var(--mist);
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 16px;
+  }
+
+  .flow-card p strong { color: var(--stone); font-weight: 500; }
+
+  .flow-examples {
+    border-top: 1px solid rgba(184,151,58,0.15);
+    padding-top: 14px;
+    margin-top: 14px;
+  }
+
+  .flow-examples-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--brass);
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .flow-examples ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .flow-examples li {
+    font-size: 12px;
+    color: var(--stone);
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  .flow-examples li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--brass);
+    font-size: 11px;
+    top: 2px;
+  }
+
+  /* ── METHODOLOGY (AGILE-AGENTIC) ── */
   .wflow {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 28px;
-    max-width: 960px;
+    max-width: 1000px;
   }
 
   .wblock {
@@ -365,74 +594,21 @@
     top: 1px;
   }
 
-  /* ── QUOTE ── */
-  .pullquote {
-    border-left: 3px solid var(--brass);
-    padding: 20px 28px;
-    max-width: 760px;
-    margin-top: 32px;
-    background: var(--brass-dim);
-  }
-
-  .pullquote p {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-style: italic;
-    color: var(--white);
-    line-height: 1.55;
-    font-weight: 400;
-  }
-
-  /* ── METRICS ── */
-  .metrics {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2px;
-    max-width: 960px;
-    background: rgba(184,151,58,0.08);
-    margin-bottom: 36px;
-  }
-
-  .metric {
-    background: var(--ink);
-    padding: 28px 20px;
-    text-align: center;
-  }
-
-  .mval {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 40px;
-    font-weight: 700;
-    color: var(--brass-light);
-    line-height: 1;
-    margin-bottom: 8px;
-  }
-
-  .mlabel {
-    font-size: 11px;
-    color: var(--mist);
-    letter-spacing: 0.5px;
-    line-height: 1.4;
-    font-weight: 300;
-  }
-
   /* ── CLOSING ── */
   .s-close {
     text-align: center;
     align-items: center;
-    background: var(--ink);
-    background-image:
-      radial-gradient(ellipse 60% 50% at 50% 50%, rgba(184,151,58,0.05) 0%, transparent 70%);
+    background-image: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(184,151,58,0.05) 0%, transparent 70%);
   }
 
   .close-title {
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(36px, 5.5vw, 72px);
+    font-size: clamp(36px, 5vw, 68px);
     font-weight: 700;
     color: var(--white);
     line-height: 1.1;
     margin-bottom: 24px;
-    max-width: 780px;
+    max-width: 820px;
   }
 
   .close-title em { font-style: italic; color: var(--brass-light); }
@@ -449,7 +625,7 @@
     font-size: 16px;
     color: var(--mist);
     font-weight: 300;
-    max-width: 500px;
+    max-width: 560px;
     line-height: 1.75;
     margin-bottom: 40px;
   }
@@ -459,7 +635,7 @@
     font-size: 19px;
     font-style: italic;
     color: rgba(212,179,92,0.65);
-    max-width: 520px;
+    max-width: 560px;
     line-height: 1.6;
   }
 
@@ -489,9 +665,6 @@
     transform: scale(1.6);
   }
 
-  /* ── BG VARIANT ── */
-  .bg-mid { background: var(--ink-mid); }
-
   /* ── ANIM ── */
   @keyframes rise {
     from { opacity: 0; transform: translateY(20px); }
@@ -508,11 +681,11 @@
 
   @media (max-width: 768px) {
     .slide { padding: 48px 28px; }
-    .grid2, .grid3, .wflow, .metrics { grid-template-columns: 1fr; }
-    .grid3 { border: none; }
+    .grid2, .grid3, .horizons, .analogy-grid, .flows-grid, .wflow, .loc-grid { grid-template-columns: 1fr; }
+    .horizons { border: none; }
     .hcol { border-right: none; border-bottom: 1px solid rgba(184,151,58,0.14); }
-    .spec-row { grid-template-columns: 1fr; }
-    .metrics { grid-template-columns: 1fr 1fr; }
+    .stack-layer { grid-template-columns: 1fr; }
+    .stack-layer-name { border-right: none; border-bottom: 1px solid rgba(184,151,58,0.18); }
   }
 </style>
 </head>
@@ -523,546 +696,439 @@
 <!-- ═══ SLIDE 1 — CAPA ═══ -->
 <section class="slide s-cover" id="s0">
   <div class="cover-header">
-    <span class="org-label">Iniciativa Estratégica · Governo</span>
-    <span class="version-tag">v2.0 · Mai 2026</span>
+    <span class="org-label">Iniciativa de P&amp;D · Engenharia de Plataforma</span>
+    <span class="version-tag">v3.0 · Mai 2026</span>
   </div>
 
   <div class="cover-body">
     <p class="cover-kicker">Proposta Executiva</p>
-    <h1 class="cover-title">Laboratório de<br><em>Soberania</em><br>Tecnológica</h1>
-    <p class="cover-desc">A organização gasta <strong style="color:var(--brass-light)">R$ 18,3 milhões/ano</strong> em subscrições de software livre — distribuídos em 6 contratos com Red Hat, Hadoop, Zimbra e WSO2. Esta proposta cria a capacidade interna de operar, evoluir e sustentar essa infraestrutura — com IA, sobre código aberto, a 65% do custo da nuvem pública equivalente.</p>
+    <h1 class="cover-title">Laboratório de<br><em>Ensaios</em> em<br>Engenharia de Plataforma</h1>
+    <p class="cover-desc">Uma infraestrutura permanente de P&amp;D para submeter a pilha tecnológica que sustenta nossos produtos — hardware, nuvem privada, PaaS, bancos — a ensaios exaustivos sob condições extremas. Como faz a indústria com seus produtos físicos, agora para engenharia de software.</p>
   </div>
 
   <div class="cover-footer">
-    <div class="stat-pill">R$ 18,3M/ano · 6 contratos</div>
-    <div class="stat-pill">21M+ LoC para dominar</div>
-    <div class="stat-pill">Lei do Bem: 20–34% retorno fiscal</div>
-    <div class="stat-pill">65% mais barato que nuvem pública</div>
+    <div class="stat-pill">P&amp;D em engenharia de plataforma</div>
+    <div class="stat-pill">Ensaios automatizados ponta a ponta</div>
+    <div class="stat-pill">21M+ LoC sob domínio com IA</div>
+    <div class="stat-pill">Financiável por Lei do Bem + FINEP</div>
   </div>
   <div class="slide-num">01 / 12</div>
 </section>
 
-<!-- ═══ SLIDE 2 — PROBLEMA ═══ -->
+<!-- ═══ SLIDE 2 — ANALOGIA INDUSTRIAL ═══ -->
 <section class="slide bg-mid" id="s1">
-  <p class="eyebrow an">O Diagnóstico</p>
-  <h2 class="stitle an d1">A dependência que <em>custa caro</em><br>e compromete a soberania do Estado</h2>
-  <div class="grid2 an d2">
-    <div class="card">
-      <h3>R$ 18,3 milhões/ano em subscrições</h3>
-      <p>Seis contratos ativos somam esse gasto anual com soluções de software livre: Red Hat, Apache Hadoop, Zimbra, WSO2. Pagamos pelo suporte de tecnologias open source porque não temos capacidade interna de operá-las. Além disso, milhares de outras soluções livres rodam sem qualquer suporte estruturado.</p>
+  <p class="eyebrow an">A Inspiração</p>
+  <h2 class="stitle an d1">Indústrias maduras ensaiam<br>seus produtos. <em>Software ainda não.</em></h2>
+
+  <div class="analogy-grid an d2">
+    <div class="analogy-side">
+      <h3>Indústria física</h3>
+      <p>Todo produto físico crítico passa por laboratórios de ensaios antes de chegar ao mercado. A indústria amadureceu protocolos rigorosos para detectar falhas antes do uso real:</p>
+      <ul>
+        <li>Crash tests e fadiga estrutural (automotiva)</li>
+        <li>Túneis de vento e ciclos térmicos (aeroespacial)</li>
+        <li>Ensaios de durabilidade e estresse (civil)</li>
+        <li>Validação clínica em fases (farmacêutica)</li>
+        <li>Câmaras anecoicas e EMC (eletroeletrônica)</li>
+      </ul>
     </div>
-    <div class="card">
-      <h3>Dependência estrutural de fornecedor</h3>
-      <p>Cada renovação de contrato é um sinal de vulnerabilidade. A organização paga pelo suporte que deveria dominar internamente — sem controle sobre roadmap, preços ou descontinuidades de produto definidas por empresas privadas.</p>
+    <div class="analogy-side">
+      <h3>Engenharia de plataforma</h3>
+      <p>A pilha tecnológica que sustenta nossos produtos de software raramente passa por ensaios sistemáticos. Falhas só aparecem quando a aplicação real já está em produção:</p>
+      <ul>
+        <li>Cargas extremas descobertas em incidente</li>
+        <li>Falhas de cluster em horário comercial</li>
+        <li>Limites de escala desconhecidos até quebrar</li>
+        <li>Bugs upstream herdados sem validação</li>
+        <li>Comportamento sob estresse não documentado</li>
+      </ul>
     </div>
-    <div class="card">
-      <h3>Escassez de capital humano técnico</h3>
-      <p>Não há recursos suficientes para acompanhar e sustentar stacks complexas de software livre. Com IA integrada ao ciclo de desenvolvimento, um time enxuto opera com profundidade técnica antes reservada a grandes equipes.</p>
-    </div>
-    <div class="card">
-      <h3>Risco real de soberania digital</h3>
-      <p>Uma organização governamental que não controla sua infraestrutura tecnológica está vulnerável a decisões unilaterais de empresas privadas — sobre preços, conformidade, acesso a dados e continuidade de serviço.</p>
-    </div>
+  </div>
+
+  <div class="pullquote an d3">
+    <p>O que a indústria física aprendeu há décadas — ensaiar antes de liberar — a engenharia de software ainda trata como exceção. O laboratório fecha esse gap, com método e <strong>IA como motor</strong>.</p>
   </div>
   <div class="slide-num">02 / 12</div>
 </section>
 
-<!-- ═══ SLIDE 3 — EVIDÊNCIA CONTRATUAL ═══ -->
-<section class="slide" id="s2b" style="background: #0d1117;">
-  <p class="eyebrow an">A Evidência</p>
-  <h2 class="stitle an d1">Seis contratos,<br><em>R$ 46,6 milhões globais</em>,<br>R$ 18,3M/ano recorrentes</h2>
+<!-- ═══ SLIDE 3 — O PROBLEMA ═══ -->
+<section class="slide" id="s2">
+  <p class="eyebrow an">O Problema</p>
+  <h2 class="stitle an d1">A qualidade dos produtos<br>depende da <em>maturidade da pilha</em></h2>
 
-  <div class="an d2" style="max-width: 1080px; border: 1px solid rgba(184,151,58,0.2);">
-    <!-- Header -->
-    <div style="display:grid; grid-template-columns: 2fr 2.5fr 1.5fr 1.2fr 1.2fr; background: rgba(184,151,58,0.1); border-bottom: 1px solid rgba(184,151,58,0.25);">
-      <div style="padding: 12px 18px; font-size: 10px; letter-spacing: 1.5px; color: var(--brass-light); font-weight: 600; text-transform: uppercase;">Contrato</div>
-      <div style="padding: 12px 18px; font-size: 10px; letter-spacing: 1.5px; color: var(--brass-light); font-weight: 600; text-transform: uppercase;">Fornecedor</div>
-      <div style="padding: 12px 18px; font-size: 10px; letter-spacing: 1.5px; color: var(--brass-light); font-weight: 600; text-transform: uppercase;">Vigência</div>
-      <div style="padding: 12px 18px; font-size: 10px; letter-spacing: 1.5px; color: var(--brass-light); font-weight: 600; text-transform: uppercase; text-align: right;">Global</div>
-      <div style="padding: 12px 18px; font-size: 10px; letter-spacing: 1.5px; color: var(--brass-light); font-weight: 600; text-transform: uppercase; text-align: right;">Anual</div>
+  <div class="grid2 an d2">
+    <div class="card">
+      <h3>Risco silencioso na base</h3>
+      <p>Cada produto que sai da esteira herda os limites da pilha que o sustenta. Bugs, gargalos de escala e fragilidades de configuração da camada de infraestrutura aparecem como incidentes da aplicação — sem que se saiba que a origem é a base.</p>
     </div>
-
-    <!-- Row 1: 85791/2020 Red Hat -->
-    <div style="display:grid; grid-template-columns: 2fr 2.5fr 1.5fr 1.2fr 1.2fr; border-bottom: 1px solid rgba(184,151,58,0.1); align-items: center;">
-      <div style="padding: 14px 18px;">
-        <div style="font-size: 13px; color: var(--white); font-weight: 600;">85791/2020</div>
-        <div style="font-size: 11px; color: var(--mist); margin-top: 2px;">Subscrição Red Hat</div>
-      </div>
-      <div style="padding: 14px 18px; font-size: 12px; color: var(--stone);">Red Hat Brasil Ltda</div>
-      <div style="padding: 14px 18px; font-size: 11px; color: var(--mist);">nov/20 – nov/21<br><span style="color: var(--brass); font-size: 10px;">1 ano</span></div>
-      <div style="padding: 14px 18px; font-size: 12px; color: var(--stone); text-align: right; font-variant-numeric: tabular-nums;">R$ 4.684.018</div>
-      <div style="padding: 14px 18px; font-size: 13px; color: var(--brass-light); text-align: right; font-weight: 600; font-variant-numeric: tabular-nums;">R$ 4.696.886</div>
+    <div class="card">
+      <h3>Falhas descobertas em produção</h3>
+      <p>Sem ensaios sistemáticos, comportamentos sob carga, falha e escala só ficam claros quando o impacto já é real — usuários afetados, dados em risco, SLAs comprometidos. O custo de um defeito cresce em ordens de magnitude do desenvolvimento à produção.</p>
     </div>
-
-    <!-- Row 2: 58664/2017 Zimbra -->
-    <div style="display:grid; grid-template-columns: 2fr 2.5fr 1.5fr 1.2fr 1.2fr; border-bottom: 1px solid rgba(184,151,58,0.1); align-items: center;">
-      <div style="padding: 14px 18px;">
-        <div style="font-size: 13px; color: var(--white); font-weight: 600;">58664/2017</div>
-        <div style="font-size: 11px; color: var(--mist); margin-top: 2px;">Zimbra Collaboration</div>
-      </div>
-      <div style="padding: 14px 18px; font-size: 12px; color: var(--stone);">Ingram Micro Brasil</div>
-      <div style="padding: 14px 18px; font-size: 11px; color: var(--mist);">mai/17 – mai/21<br><span style="color: var(--brass); font-size: 10px;">4 anos</span></div>
-      <div style="padding: 14px 18px; font-size: 12px; color: var(--stone); text-align: right; font-variant-numeric: tabular-nums;">R$ 16.057.152</div>
-      <div style="padding: 14px 18px; font-size: 13px; color: var(--brass-light); text-align: right; font-weight: 600; font-variant-numeric: tabular-nums;">R$ 4.014.288</div>
+    <div class="card">
+      <h3>Hipóteses de melhoria sem validação</h3>
+      <p>Ideias para evoluir a base — ajustes de configuração, novos plugins, mudanças no código upstream, migrações de versão — esbarram na ausência de um ambiente para testá-las com rigor antes de qualquer adoção.</p>
     </div>
-
-    <!-- Row 3: 63289/2018 Hadoop -->
-    <div style="display:grid; grid-template-columns: 2fr 2.5fr 1.5fr 1.2fr 1.2fr; border-bottom: 1px solid rgba(184,151,58,0.1); align-items: center;">
-      <div style="padding: 14px 18px;">
-        <div style="font-size: 13px; color: var(--white); font-weight: 600;">63289/2018</div>
-        <div style="font-size: 11px; color: var(--mist); margin-top: 2px;">Apache Hadoop · serviços</div>
-      </div>
-      <div style="padding: 14px 18px; font-size: 12px; color: var(--stone);">Compwire Informática</div>
-      <div style="padding: 14px 18px; font-size: 11px; color: var(--mist);">ago/18 – ago/21<br><span style="color: var(--brass); font-size: 10px;">3 anos</span></div>
-      <div style="padding: 14px 18px; font-size: 12px; color: var(--stone); text-align: right; font-variant-numeric: tabular-nums;">R$ 10.428.950</div>
-      <div style="padding: 14px 18px; font-size: 13px; color: var(--brass-light); text-align: right; font-weight: 600; font-variant-numeric: tabular-nums;">R$ 3.476.317</div>
-    </div>
-
-    <!-- Row 4: 65405/2018 Hadoop -->
-    <div style="display:grid; grid-template-columns: 2fr 2.5fr 1.5fr 1.2fr 1.2fr; border-bottom: 1px solid rgba(184,151,58,0.1); align-items: center;">
-      <div style="padding: 14px 18px;">
-        <div style="font-size: 13px; color: var(--white); font-weight: 600;">65405/2018</div>
-        <div style="font-size: 11px; color: var(--mist); margin-top: 2px;">Apache Hadoop · config</div>
-      </div>
-      <div style="padding: 14px 18px; font-size: 12px; color: var(--stone);">Compwire Informática</div>
-      <div style="padding: 14px 18px; font-size: 11px; color: var(--mist);">dez/18 – dez/21<br><span style="color: var(--brass); font-size: 10px;">3 anos</span></div>
-      <div style="padding: 14px 18px; font-size: 12px; color: var(--stone); text-align: right; font-variant-numeric: tabular-nums;">R$ 9.562.700</div>
-      <div style="padding: 14px 18px; font-size: 13px; color: var(--brass-light); text-align: right; font-weight: 600; font-variant-numeric: tabular-nums;">R$ 3.187.567</div>
-    </div>
-
-    <!-- Row 5: 60303/2017 Red Hat -->
-    <div style="display:grid; grid-template-columns: 2fr 2.5fr 1.5fr 1.2fr 1.2fr; border-bottom: 1px solid rgba(184,151,58,0.1); align-items: center;">
-      <div style="padding: 14px 18px;">
-        <div style="font-size: 13px; color: var(--white); font-weight: 600;">60303/2017</div>
-        <div style="font-size: 11px; color: var(--mist); margin-top: 2px;">Subscrição Red Hat</div>
-      </div>
-      <div style="padding: 14px 18px; font-size: 12px; color: var(--stone);">Red Hat Brasil Ltda</div>
-      <div style="padding: 14px 18px; font-size: 11px; color: var(--mist);">nov/17 – nov/20<br><span style="color: var(--brass); font-size: 10px;">3 anos</span></div>
-      <div style="padding: 14px 18px; font-size: 12px; color: var(--stone); text-align: right; font-variant-numeric: tabular-nums;">R$ 4.440.380</div>
-      <div style="padding: 14px 18px; font-size: 13px; color: var(--brass-light); text-align: right; font-weight: 600; font-variant-numeric: tabular-nums;">R$ 1.480.127</div>
-    </div>
-
-    <!-- Row 6: 72690/2020 WSO2 -->
-    <div style="display:grid; grid-template-columns: 2fr 2.5fr 1.5fr 1.2fr 1.2fr; align-items: center;">
-      <div style="padding: 14px 18px;">
-        <div style="font-size: 13px; color: var(--white); font-weight: 600;">72690/2020</div>
-        <div style="font-size: 11px; color: var(--mist); margin-top: 2px;">WSO2 API Manager</div>
-      </div>
-      <div style="padding: 14px 18px; font-size: 12px; color: var(--stone);">Heiliger Tecnologia</div>
-      <div style="padding: 14px 18px; font-size: 11px; color: var(--mist);">jan/20 – jan/21<br><span style="color: var(--brass); font-size: 10px;">1 ano</span></div>
-      <div style="padding: 14px 18px; font-size: 12px; color: var(--stone); text-align: right; font-variant-numeric: tabular-nums;">R$ 1.446.936</div>
-      <div style="padding: 14px 18px; font-size: 13px; color: var(--brass-light); text-align: right; font-weight: 600; font-variant-numeric: tabular-nums;">R$ 1.446.936</div>
-    </div>
-
-    <!-- TOTAL -->
-    <div style="display:grid; grid-template-columns: 2fr 2.5fr 1.5fr 1.2fr 1.2fr; background: rgba(184,151,58,0.12); border-top: 2px solid var(--brass);">
-      <div style="padding: 16px 18px; font-size: 11px; letter-spacing: 2px; color: var(--brass-light); font-weight: 700; text-transform: uppercase;">Total</div>
-      <div style="padding: 16px 18px; font-size: 12px; color: var(--mist); font-style: italic;">6 contratos · 4 fornecedores</div>
-      <div></div>
-      <div style="padding: 16px 18px; font-size: 13px; color: var(--white); text-align: right; font-weight: 700; font-variant-numeric: tabular-nums;">R$ 46.620.136</div>
-      <div style="padding: 16px 18px; font-size: 16px; color: var(--brass-light); text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; font-family: 'Cormorant Garamond', serif;">R$ 18.302.121</div>
+    <div class="card">
+      <h3>Capacidade técnica fragmentada</h3>
+      <p>O domínio profundo sobre as tecnologias da pilha está concentrado em poucas pessoas ou terceirizado. Sem um ambiente estruturado de prática e validação, esse conhecimento não se acumula nem se transfere de forma sistemática.</p>
     </div>
   </div>
-
-  <div class="an d3" style="margin-top: 28px; max-width: 1080px; padding: 22px 28px; border-left: 3px solid var(--azure); background: rgba(31,111,235,0.08);">
-    <div style="font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #79b8ff; font-weight: 600; margin-bottom: 10px;">Leitura Estratégica</div>
-    <p style="font-size: 15px; color: var(--stone); line-height: 1.7; font-weight: 300;">
-      Esses 6 contratos não refletem a demanda real — refletem onde está concentrado o <strong style="color: var(--white);">maior risco operacional</strong> e o <strong style="color: var(--white);">menor conhecimento técnico interno</strong>. São a ponta visível de um portfólio com milhares de soluções de software livre rodando sem suporte estruturado. <strong style="color: #79b8ff;">O laboratório ataca todas essas tecnologias simultaneamente</strong> — não uma a uma — desenvolvendo capacidade transversal de operação, evolução e contribuição.
-    </p>
-  </div>
-
-  <p class="an d4" style="font-size: 12px; color: var(--mist); margin-top: 18px; max-width: 800px; font-weight: 300; line-height: 1.6; font-style: italic;">
-    Vigências e fornecedores ilustrativos do padrão de contratação — os valores anuais permanecem como referência da escala atual de dependência.
-  </p>
   <div class="slide-num">03 / 12</div>
 </section>
 
-<!-- ═══ SLIDE 4 — MAGNITUDE TÉCNICA (LoC) ═══ -->
-<section class="slide bg-mid" id="s2a">
-  <p class="eyebrow an">A Escala do Desafio</p>
-  <h2 class="stitle an d1">21 milhões de linhas de código —<br>a <em>magnitude real</em> da dependência</h2>
+<!-- ═══ SLIDE 4 — A PROPOSTA ═══ -->
+<section class="slide bg-mid" id="s3">
+  <p class="eyebrow an">A Proposta</p>
+  <h2 class="stitle an d1">Um laboratório permanente<br>para <em>ensaiar a pilha</em><br>antes que ela ensaie nossos produtos</h2>
 
-  <p class="an d2" style="font-size: 14px; color: var(--mist); max-width: 820px; line-height: 1.7; font-weight: 300; margin-bottom: 28px;">
-    Dominar tecnicamente cada projeto open source que sustenta a operação significa entender bases de código que somam dezenas de milhões de linhas. Sem IA, nenhum time enxuto absorve essa escala — e é por isso que a dependência de suporte externo se perpetua.
+  <p class="lead-paragraph an d2">
+    Um ambiente dedicado e instrumentado para construir, integrar e submeter a <strong>pilha tecnológica que sustenta nossa esteira de software</strong> — hardware, nuvem privada, PaaS, bancos, mensageria — a ensaios exaustivos. Sobre softwares livres consagrados, com automação por agentes de IA, e um fluxo contínuo de P&amp;D.
   </p>
 
-  <!-- TIER 1 -->
-  <div class="an d3" style="max-width: 1100px;">
-    <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px;">
-      <span style="font-size: 18px;">🏔</span>
-      <span style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--brass); font-weight: 600;">Tier 1 · Mega projetos · +3M LoC</span>
+  <div class="grid3 an d3">
+    <div class="card">
+      <h3>Pilha integrada</h3>
+      <p>OpenStack, Kubernetes, PostgreSQL, Kafka, MongoDB, KVM, Istio e outros — montados como um sistema, não como peças isoladas. A integração é parte do que se ensaia.</p>
     </div>
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 22px;">
-      <div style="border: 1px solid rgba(184,151,58,0.18); padding: 14px 18px; background: rgba(184,151,58,0.04);">
-        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;">
-          <span style="font-size: 14px; color: var(--white); font-weight: 600;">OpenStack</span>
-          <span style="font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--brass-light); font-weight: 700;">~6,5M</span>
-        </div>
-        <div style="font-size: 11px; color: var(--mist); line-height: 1.5;">Python · IaaS completa · 50+ serviços</div>
-      </div>
-      <div style="border: 1px solid rgba(184,151,58,0.18); padding: 14px 18px; background: rgba(184,151,58,0.04);">
-        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;">
-          <span style="font-size: 14px; color: var(--white); font-weight: 600;">Kubernetes</span>
-          <span style="font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--brass-light); font-weight: 700;">~4,2M</span>
-        </div>
-        <div style="font-size: 11px; color: var(--mist); line-height: 1.5;">Go · Orquestração · apiserver/scheduler/kubelet</div>
-      </div>
-      <div style="border: 1px solid rgba(184,151,58,0.18); padding: 14px 18px; background: rgba(184,151,58,0.04);">
-        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;">
-          <span style="font-size: 14px; color: var(--white); font-weight: 600;">PostgreSQL</span>
-          <span style="font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--brass-light); font-weight: 700;">~4,0M</span>
-        </div>
-        <div style="font-size: 11px; color: var(--mist); line-height: 1.5;">C · RDBMS · 35+ anos de evolução</div>
-      </div>
+    <div class="card">
+      <h3>Ensaios automatizados</h3>
+      <p>Carga, falhas, regressão, durabilidade, segurança, escala. Cada ensaio é código, repetível, versionado e auditável — não procedimento manual ou pontual.</p>
+    </div>
+    <div class="card">
+      <h3>IA como motor</h3>
+      <p>Agentes constroem, executam ensaios, interpretam resultados, geram documentação e propõem hipóteses. Um time enxuto opera com profundidade técnica que antes exigiria equipes muito maiores.</p>
     </div>
   </div>
 
-  <!-- TIER 2 -->
-  <div class="an d4" style="max-width: 1100px;">
-    <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px;">
-      <span style="font-size: 18px;">⛰</span>
-      <span style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--brass); font-weight: 600;">Tier 2 · Grandes projetos · 500K–3M LoC</span>
-    </div>
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 22px;">
-      <div style="border: 1px solid rgba(184,151,58,0.14); padding: 14px 18px;">
-        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;">
-          <span style="font-size: 14px; color: var(--white); font-weight: 600;">KVM (QEMU+kernel)</span>
-          <span style="font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--brass-light); font-weight: 700;">~2,5M</span>
-        </div>
-        <div style="font-size: 11px; color: var(--mist); line-height: 1.5;">C · Virtualização · kernel + userspace</div>
-      </div>
-      <div style="border: 1px solid rgba(184,151,58,0.14); padding: 14px 18px;">
-        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;">
-          <span style="font-size: 14px; color: var(--white); font-weight: 600;">Kafka</span>
-          <span style="font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--brass-light); font-weight: 700;">~1,8M</span>
-        </div>
-        <div style="font-size: 11px; color: var(--mist); line-height: 1.5;">Java/Scala · Streaming · broker+clients+connect</div>
-      </div>
-      <div style="border: 1px solid rgba(184,151,58,0.14); padding: 14px 18px;">
-        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;">
-          <span style="font-size: 14px; color: var(--white); font-weight: 600;">MongoDB</span>
-          <span style="font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--brass-light); font-weight: 700;">~1,5M</span>
-        </div>
-        <div style="font-size: 11px; color: var(--mist); line-height: 1.5;">C++ · NoSQL · WiredTiger + mongos</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- TIER 3 -->
-  <div class="an d4" style="max-width: 1100px;">
-    <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px;">
-      <span style="font-size: 18px;">🏕</span>
-      <span style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--brass); font-weight: 600;">Tier 3 · Projetos focados · &lt;500K LoC</span>
-    </div>
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px;">
-      <div style="border: 1px solid rgba(184,151,58,0.1); padding: 12px 18px;">
-        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;">
-          <span style="font-size: 13px; color: var(--white); font-weight: 600;">Istio</span>
-          <span style="font-family: 'Cormorant Garamond', serif; font-size: 16px; color: var(--brass-light); font-weight: 700;">~450K</span>
-        </div>
-        <div style="font-size: 11px; color: var(--mist); line-height: 1.5;">Go · Service mesh · control + data plane</div>
-      </div>
-      <div style="border: 1px solid rgba(184,151,58,0.1); padding: 12px 18px;">
-        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;">
-          <span style="font-size: 13px; color: var(--white); font-weight: 600;">KubeVirt</span>
-          <span style="font-family: 'Cormorant Garamond', serif; font-size: 16px; color: var(--brass-light); font-weight: 700;">~320K</span>
-        </div>
-        <div style="font-size: 11px; color: var(--mist); line-height: 1.5;">Go · VMs no K8s · virt-controller/handler</div>
-      </div>
-      <div style="border: 1px solid rgba(184,151,58,0.1); padding: 12px 18px;">
-        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;">
-          <span style="font-size: 13px; color: var(--white); font-weight: 600;">Calico</span>
-          <span style="font-family: 'Cormorant Garamond', serif; font-size: 16px; color: var(--brass-light); font-weight: 700;">~250K</span>
-        </div>
-        <div style="font-size: 11px; color: var(--mist); line-height: 1.5;">Go · CNI/BGP · Felix+Typha+BIRD</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- INSIGHT BOX -->
-  <div class="an d5" style="max-width: 1100px; padding: 22px 28px; border-left: 3px solid var(--azure); background: rgba(31,111,235,0.08);">
-    <div style="font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #79b8ff; font-weight: 600; margin-bottom: 10px;">A Oportunidade</div>
-    <p style="font-size: 14px; color: var(--stone); line-height: 1.7; font-weight: 300;">
-      Mais de <strong style="color: var(--white);">21 milhões de linhas de código</strong> em 5 linguagens distintas (Python, Go, C, C++, Java/Scala) — escala humanamente intratável sem IA. O laboratório usa agentes para <strong style="color: #79b8ff;">indexar, navegar e explicar</strong> essas bases de código, transformando o que era barreira intransponível em currículo de capacitação acelerada para um time enxuto.
-    </p>
+  <div class="pullquote an d4">
+    <p>O laboratório não entrega um produto único e encerra — ele <strong>é</strong> a capacidade permanente de construir, ensaiar e evoluir a engenharia de plataforma da organização.</p>
   </div>
   <div class="slide-num">04 / 12</div>
 </section>
 
-<!-- ═══ SLIDE 3 — O QUE É ═══ -->
-<section class="slide bg-mid" id="s2">
-  <p class="eyebrow an">A Proposta</p>
-  <h2 class="stitle an d1">Um laboratório com <em>blueprint real</em>,<br>não uma prova de conceito</h2>
+<!-- ═══ SLIDE 5 — A PILHA ═══ -->
+<section class="slide" id="s4">
+  <p class="eyebrow an">A Pilha sob Ensaio</p>
+  <h2 class="stitle an d1">Quatro camadas integradas,<br><em>uma engenharia única</em></h2>
 
-  <div class="spec-table an d2">
-    <div class="spec-row">
-      <div class="spec-key">Plataforma</div>
-      <div class="spec-val">OpenStack 2026.1 Gazpacho (SLURP) — release de produção, Abr 2026</div>
-    </div>
-    <div class="spec-row">
-      <div class="spec-key">Infraestrutura</div>
-      <div class="spec-val">150 servidores · 1 Região · 3 Availability Zones · 9 Fault Domains</div>
-    </div>
-    <div class="spec-row">
-      <div class="spec-key">Compute</div>
-      <div class="spec-val">102 TB RAM · Shared (1:3) e Dedicated (1:1) · 36 GPUs com PCI passthrough</div>
-    </div>
-    <div class="spec-row">
-      <div class="spec-key">Storage</div>
-      <div class="spec-val">3.4 PB object (Swift) · 276 TB block NVMe (Cinder) · replicação 3x</div>
-    </div>
-    <div class="spec-row">
-      <div class="spec-key">Segurança</div>
-      <div class="spec-val">HSM FIPS 140-2 Level 3 · Zero Trust · TLS everywhere · RBAC granular</div>
-    </div>
-    <div class="spec-row">
-      <div class="spec-key">Stack integrada</div>
-      <div class="spec-val">
-        <span class="tag">OpenStack</span><span class="tag">Kubernetes</span>
-        <span class="tag">PostgreSQL</span><span class="tag">Kafka</span>
-        <span class="tag">MongoDB</span><span class="tag">Terraform</span>
-        <span class="tag">Ansible (Kolla)</span><span class="tag">GitLab CI</span>
+  <div class="stack-pyramid an d2">
+    <div class="stack-layer">
+      <div class="stack-layer-name">
+        <div class="layer-tag">Camada 4</div>
+        <div class="layer-title">Aplicação</div>
+      </div>
+      <div class="stack-layer-content">
+        <strong>Produtos da esteira</strong> — submetidos a ensaios na pilha já validada. Cargas reais, falhas injetadas, cenários extremos antes da produção real.
       </div>
     </div>
-    <div class="spec-row">
-      <div class="spec-key">IaC & Automação</div>
-      <div class="spec-val">Terraform + Kolla-Ansible + GitLab CI/CD — pipeline ponta a ponta já estruturado</div>
+    <div class="stack-layer">
+      <div class="stack-layer-name">
+        <div class="layer-tag">Camada 3</div>
+        <div class="layer-title">PaaS &amp; Dados</div>
+      </div>
+      <div class="stack-layer-content">
+        <strong>PostgreSQL, Kafka, MongoDB, Istio</strong>, observabilidade, secrets, identidade — serviços gerenciados validados em integração contínua.
+      </div>
+    </div>
+    <div class="stack-layer">
+      <div class="stack-layer-name">
+        <div class="layer-tag">Camada 2</div>
+        <div class="layer-title">Nuvem Privada</div>
+      </div>
+      <div class="stack-layer-content">
+        <strong>OpenStack + Kubernetes</strong> — IaaS e orquestração com autoserviço, multi-tenant, multi-AZ. Plano de controle e plano de dados ensaiados em conjunto.
+      </div>
+    </div>
+    <div class="stack-layer">
+      <div class="stack-layer-name">
+        <div class="layer-tag">Camada 1</div>
+        <div class="layer-title">Hardware</div>
+      </div>
+      <div class="stack-layer-content">
+        <strong>Servidores, rede, storage, GPU, HSM</strong> — instrumentados, com benchmarks de baseline, falhas injetáveis e telemetria detalhada.
+      </div>
     </div>
   </div>
+
+  <p class="an d3" style="font-size: 13px; color: var(--mist); margin-top: 28px; max-width: 820px; line-height: 1.6; font-weight: 300; font-style: italic;">
+    A integração entre camadas é tão importante quanto cada camada isolada. O laboratório ensaia <strong style="color: var(--stone); font-style: normal;">a pilha como sistema</strong> — descobrindo interações que só aparecem na composição.
+  </p>
   <div class="slide-num">05 / 12</div>
 </section>
 
-<!-- ═══ SLIDE 4 — METODOLOGIA ═══ -->
-<section class="slide bg-mid" id="s3">
-  <p class="eyebrow an">Metodologia Própria</p>
-  <h2 class="stitle an d1">Agile-Agentic: <em>sprints de 24 horas</em><br>com frota de agentes de IA</h2>
+<!-- ═══ SLIDE 6 — MAGNITUDE (LoC) ═══ -->
+<section class="slide bg-mid" id="s5">
+  <p class="eyebrow an">A Escala do Domínio</p>
+  <h2 class="stitle an d1">21 milhões de linhas de código —<br><em>escala que só a IA viabiliza</em></h2>
+
+  <p class="lead-paragraph an d2">
+    Ensaiar e dominar tecnicamente cada projeto open source da pilha significa entender bases de código que somam dezenas de milhões de linhas, em cinco linguagens distintas. Sem IA, nenhum time enxuto absorve essa escala. Com IA, ela vira currículo de capacitação acelerada.
+  </p>
+
+  <div class="an d3" style="max-width: 1100px;">
+    <div class="loc-tier-header">
+      <span class="loc-tier-icon">🏔</span>
+      <span class="loc-tier-label">Tier 1 · Mega projetos · +3M LoC</span>
+    </div>
+    <div class="loc-grid">
+      <div class="loc-card tier1 loc-tier1">
+        <div class="loc-card-head"><span class="loc-name">OpenStack</span><span class="loc-value">~6,5M</span></div>
+        <div class="loc-desc">Python · IaaS completa · 50+ serviços</div>
+      </div>
+      <div class="loc-card tier1 loc-tier1">
+        <div class="loc-card-head"><span class="loc-name">Kubernetes</span><span class="loc-value">~4,2M</span></div>
+        <div class="loc-desc">Go · Orquestração · apiserver/scheduler/kubelet</div>
+      </div>
+      <div class="loc-card tier1 loc-tier1">
+        <div class="loc-card-head"><span class="loc-name">PostgreSQL</span><span class="loc-value">~4,0M</span></div>
+        <div class="loc-desc">C · RDBMS · 35+ anos de evolução</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="an d4" style="max-width: 1100px;">
+    <div class="loc-tier-header">
+      <span class="loc-tier-icon">⛰</span>
+      <span class="loc-tier-label">Tier 2 · Grandes projetos · 500K–3M LoC</span>
+    </div>
+    <div class="loc-grid">
+      <div class="loc-card loc-tier2">
+        <div class="loc-card-head"><span class="loc-name">KVM (QEMU+kernel)</span><span class="loc-value">~2,5M</span></div>
+        <div class="loc-desc">C · Virtualização · kernel + userspace</div>
+      </div>
+      <div class="loc-card loc-tier2">
+        <div class="loc-card-head"><span class="loc-name">Kafka</span><span class="loc-value">~1,8M</span></div>
+        <div class="loc-desc">Java/Scala · Streaming · broker+clients+connect</div>
+      </div>
+      <div class="loc-card loc-tier2">
+        <div class="loc-card-head"><span class="loc-name">MongoDB</span><span class="loc-value">~1,5M</span></div>
+        <div class="loc-desc">C++ · NoSQL · WiredTiger + mongos</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="an d4" style="max-width: 1100px;">
+    <div class="loc-tier-header">
+      <span class="loc-tier-icon">🏕</span>
+      <span class="loc-tier-label">Tier 3 · Projetos focados · &lt;500K LoC</span>
+    </div>
+    <div class="loc-grid">
+      <div class="loc-card loc-tier3">
+        <div class="loc-card-head"><span class="loc-name">Istio</span><span class="loc-value">~450K</span></div>
+        <div class="loc-desc">Go · Service mesh · control + data plane</div>
+      </div>
+      <div class="loc-card loc-tier3">
+        <div class="loc-card-head"><span class="loc-name">KubeVirt</span><span class="loc-value">~320K</span></div>
+        <div class="loc-desc">Go · VMs no K8s · virt-controller/handler</div>
+      </div>
+      <div class="loc-card loc-tier3">
+        <div class="loc-card-head"><span class="loc-name">Calico</span><span class="loc-value">~250K</span></div>
+        <div class="loc-desc">Go · CNI/BGP · Felix+Typha+BIRD</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box an d5" style="margin-top: 12px;">
+    <div class="hbox-label">A Oportunidade</div>
+    <p>Agentes de IA <span class="azure">indexam, navegam e explicam</span> essas bases de código em ritmo humanamente impossível. O que era barreira intransponível vira currículo de capacitação acelerada para um time enxuto.</p>
+  </div>
+  <div class="slide-num">06 / 12</div>
+</section>
+
+<!-- ═══ SLIDE 7 — TIPOS DE ENSAIOS ═══ -->
+<section class="slide" id="s6">
+  <p class="eyebrow an">O Catálogo de Ensaios</p>
+  <h2 class="stitle an d1">Seis dimensões de ensaio,<br><em>aplicadas a cada ciclo</em></h2>
+
+  <div class="grid3 an d2">
+    <div class="card">
+      <h3>Carga &amp; Performance</h3>
+      <p>Benchmarks automatizados detectam regressões de latência, throughput e consumo. Performance vira critério de aceitação — não verificação posterior.</p>
+    </div>
+    <div class="card">
+      <h3>Regressão &amp; Contrato</h3>
+      <p>Validação contínua de que APIs, eventos e schemas permanecem compatíveis. Breaking changes silenciosas são bloqueadas no pipeline.</p>
+    </div>
+    <div class="card">
+      <h3>HA &amp; Chaos Engineering</h3>
+      <p>Simulação de desastres em todas as camadas — host, AZ, rede, storage, banco — com aferição de <strong>disponibilidade (SLO)</strong> e <strong>durabilidade (perda zero de dados)</strong>. Resiliência comprovada, não presumida.</p>
+    </div>
+    <div class="card">
+      <h3>Pentest &amp; Segurança Contínua</h3>
+      <p>SAST, SCA e secrets scanning integrados ao ciclo. Conformidade com FIPS, HSM, Zero Trust e RBAC validada a cada PR — não apenas em auditorias anuais.</p>
+    </div>
+    <div class="card">
+      <h3>Game Days &amp; Failure Drills</h3>
+      <p>Exercícios programados de falha real em ambiente controlado, com toda a equipe técnica envolvida. Resposta a incidentes vira <strong>músculo treinado</strong>.</p>
+    </div>
+    <div class="card">
+      <h3>Documentação &amp; Runbooks Vivos</h3>
+      <p>Agentes mantêm documentação técnica, changelogs e runbooks sincronizados com o estado real do sistema — eliminando a lacuna entre construído e documentado.</p>
+    </div>
+  </div>
+  <div class="slide-num">07 / 12</div>
+</section>
+
+<!-- ═══ SLIDE 8 — METODOLOGIA AGILE-AGENTIC ═══ -->
+<section class="slide bg-mid" id="s7">
+  <p class="eyebrow an">Metodologia</p>
+  <h2 class="stitle an d1">Agile-Agentic:<br><em>sprints de 24h</em> com frota de agentes</h2>
 
   <div class="wflow an d2">
     <div class="wblock">
       <h3>Turno Humano · 1–2h</h3>
       <ul>
-        <li>Daily Sprint Review: revisão de PRs e flags de risco</li>
-        <li>Spec Refinement: documentos Markdown com intenção e critérios</li>
-        <li>Decisão Rápida: validação e autorização da construção agêntica</li>
-        <li>Squad multidisciplinar: Arquitetura, Produto, Segurança, Engenharia</li>
+        <li>Daily Sprint Review: revisão de resultados de ensaios e PRs</li>
+        <li>Spec Refinement: descrição da intenção, hipótese e critérios de aceitação</li>
+        <li>Decisão técnica: validação e autorização do próximo ciclo agêntico</li>
+        <li>Squad multidisciplinar: Arquitetura, SRE, Segurança, P&amp;D</li>
       </ul>
     </div>
     <div class="wblock">
       <h3>Turno de Agentes · Automático</h3>
       <ul>
-        <li>Agentes de Planejamento: decomposição em DAG de tarefas</li>
-        <li>Agentes de Codificação: implementação em branches efêmeras</li>
-        <li>Agentes de QA: testes de carga, regressão, contrato e pentest</li>
-        <li>Agentes de Segurança: SAST, SCA, secrets scanning</li>
-        <li>Agentes de CD: deploy progressivo com rollback automático</li>
+        <li>Planejamento: decomposição em DAG de tarefas e ensaios</li>
+        <li>Construção: implementação em ambientes efêmeros</li>
+        <li>Ensaios: execução de carga, falha, regressão, segurança, durabilidade</li>
+        <li>Análise: interpretação de resultados, comparação com baselines, alertas</li>
+        <li>Documentação: relatórios técnicos e runbooks atualizados</li>
       </ul>
     </div>
   </div>
 
   <div class="pullquote an d3">
-    <p>"Daytime is for judgment, design, and direction. Nighttime is for execution, iteration, and improvement." — The AI Revolution in Software Development</p>
+    <p>"Daytime is for judgment, design, and direction. <strong>Nighttime is for execution, iteration, and improvement.</strong>" — referência ao modelo de agent factory para engenharia de software.</p>
   </div>
-  <div class="slide-num">06 / 12</div>
-</section>
-
-<!-- ═══ SLIDE 6 — QA & SUSTENTAÇÃO ═══ -->
-<section class="slide bg-mid" id="s4">
-  <p class="eyebrow an">O Diferencial Operacional</p>
-  <h2 class="stitle an d1">QA estruturado a cada ciclo —<br>a base da <em>autonomia sustentável</em></h2>
-
-  <div class="an d2" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; max-width: 1100px;">
-    <div class="card">
-      <h3>Carga & Performance</h3>
-      <p>Benchmarks automatizados detectam regressões de latência, throughput e consumo antes de qualquer promoção. Performance vira critério de aceitação.</p>
-    </div>
-    <div class="card">
-      <h3>Regressão & Contrato</h3>
-      <p>Validação contínua de que APIs, eventos e schemas permanecem compatíveis. Breaking changes silenciosas são bloqueadas no pipeline.</p>
-    </div>
-    <div class="card">
-      <h3>HA & Chaos Engineering</h3>
-      <p>Simulação de desastres em todas as camadas — falha de host, AZ, rede, storage, banco — com aferição contínua de <strong style="color:var(--stone)">disponibilidade (SLO de uptime)</strong> e <strong style="color:var(--stone)">durabilidade (perda zero de dados)</strong>. Resiliência comprovada, não presumida.</p>
-    </div>
-    <div class="card">
-      <h3>Pentest & Segurança Contínua</h3>
-      <p>SAST, SCA e secrets scanning integrados ao ciclo. Conformidade com FIPS 140-2, HSM, Zero Trust e RBAC validada a cada PR — não apenas em auditorias anuais.</p>
-    </div>
-    <div class="card">
-      <h3>Documentação & Runbooks Vivos</h3>
-      <p>Agentes mantêm documentação técnica, changelogs e runbooks sincronizados com o estado real do sistema — eliminando a lacuna entre o construído e o documentado.</p>
-    </div>
-    <div class="card">
-      <h3>Game Days & Failure Drills</h3>
-      <p>Exercícios programados de falha real em produção controlada, com toda a equipe técnica envolvida. A capacidade de resposta a incidentes vira <strong style="color:var(--stone)">músculo treinado</strong>, não plano de contingência teórico.</p>
-    </div>
-  </div>
-
-  <div class="pullquote an d3" style="margin-top: 28px;">
-    <p>A organização deixa de depender de suporte de fornecedores porque passa a deter o conhecimento técnico profundo — validado, documentado, ensaiado e sustentável internamente.</p>
-  </div>
-  <div class="slide-num">07 / 12</div>
-</section>
-
-<!-- ═══ SLIDE 6 — LEI DO BEM ═══ -->
-<section class="slide" id="s5c" style="background: #0d1117;">
-  <p class="eyebrow an">Alavanca Fiscal</p>
-  <h2 class="stitle an d1">Lei do Bem: o projeto<br><em>se financia em parte</em><br>por incentivo fiscal</h2>
-
-  <div style="display:grid; grid-template-columns: 1.1fr 1fr; gap:32px; max-width:1000px;">
-    <div class="an d2" style="display:flex; flex-direction:column; gap:20px;">
-      <div class="card">
-        <h3>O que é a Lei do Bem</h3>
-        <p>Lei nº 11.196/2005 — principal mecanismo federal de incentivo à inovação tecnológica no Brasil. Permite dedução fiscal automática de gastos com Pesquisa, Desenvolvimento e Inovação (PD&amp;I) do IRPJ e da CSLL, com retorno estimado entre <strong style="color:var(--brass-light)">20,4% e 34%</strong> das despesas operacionais elegíveis.</p>
-      </div>
-      <div class="card">
-        <h3>Por que o laboratório se qualifica</h3>
-        <p>A integração contínua de tecnologias open source, o desenvolvimento de capacidade interna de engenharia, a contribuição com pull requests upstream e o desenvolvimento da plataforma de autoserviço são — por definição legal — atividades de PD&amp;I tecnológica elegíveis ao benefício.</p>
-      </div>
-    </div>
-
-    <div class="an d3" style="display:flex; flex-direction:column; gap:20px;">
-      <div class="card">
-        <h3>Como funciona na prática</h3>
-        <p>Aplicação automática via lançamentos contábeis. A empresa envia anualmente o FORMP&amp;D ao MCTI até 31 de julho do ano subsequente, descrevendo projetos e dispêndios. Sem necessidade de aprovação prévia.</p>
-      </div>
-      <div class="card">
-        <h3>Escala nacional do benefício</h3>
-        <p>Em 2024, mais de 4.200 empresas direcionaram R$ 51,6 bilhões a projetos de PD&amp;I via Lei do Bem, com R$ 12 bilhões em renúncia fiscal. O TCU classificou o programa como o de menor risco entre 14 benefícios fiscais federais avaliados.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="pullquote an d4">
-    <p>O laboratório não é apenas uma iniciativa de soberania — é um projeto que pode ser <strong>parcialmente financiado pelo próprio Estado</strong>, via incentivo fiscal federal, desde que a empresa opere em regime de Lucro Real.</p>
-  </div>
-
-  <p class="an d5" style="font-size: 11px; color: var(--mist); font-style: italic; margin-top: 20px; max-width: 700px;">
-    * Aplicável a pessoas jurídicas em regime de Lucro Real com regularidade fiscal. Estatais e empresas públicas que se enquadrem nesse regime podem se beneficiar. Avaliação contábil específica é recomendada.
-  </p>
   <div class="slide-num">08 / 12</div>
 </section>
 
-<!-- ═══ SLIDE 6 — P&D CONTÍNUO ═══ -->
-<section class="slide" id="s5b" style="background: #0d1117;">
-  <p class="eyebrow an">O Motor do Laboratório</p>
-  <h2 class="stitle an d1">Um fluxo permanente de <em>P&D integrado</em> —<br>não um projeto com data de fim</h2>
+<!-- ═══ SLIDE 9 — DOIS FLUXOS DE USO ═══ -->
+<section class="slide" id="s8">
+  <p class="eyebrow an">Os Dois Fluxos de Uso</p>
+  <h2 class="stitle an d1">Uma mesma pilha,<br><em>dois propósitos de ensaio</em></h2>
 
-  <div class="grid2 an d2" style="max-width:960px; gap:28px;">
-    <div style="display:flex; flex-direction:column; gap:20px;">
-      <div class="card">
-        <h3>Integração contínua de tecnologias</h3>
-        <p>A cada ciclo, novas versões e componentes do ecossistema open source são integrados, testados e validados — OpenStack, Kubernetes, Kafka, PostgreSQL, MongoDB e outros evoluem juntos, no ritmo da comunidade global.</p>
-      </div>
-      <div class="card">
-        <h3>Conhecimento que se acumula</h3>
-        <p>Cada ciclo gera documentação técnica, runbooks, specs e testes que ficam na organização. O domínio técnico cresce de forma contínua — não depende de pessoas específicas nem de contratos de suporte externos.</p>
+  <div class="flows-grid an d2">
+    <div class="flow-card">
+      <div class="flow-number">01</div>
+      <div class="flow-tag">Ensaios da pilha</div>
+      <h3>Hipóteses sobre as tecnologias de base</h3>
+      <p>Testar mudanças, ajustes e contribuições nas próprias tecnologias que sustentam a pilha — desde configurações até alterações de código upstream. <strong>A pilha é o produto sob ensaio</strong>.</p>
+      <div class="flow-examples">
+        <div class="flow-examples-label">Exemplos de hipóteses</div>
+        <ul>
+          <li>Impacto de uma flag de configuração do PostgreSQL em workloads reais</li>
+          <li>Comparação de drivers de storage no OpenStack Cinder</li>
+          <li>Mudança em scheduler do Kubernetes sob carga assimétrica</li>
+          <li>Patch upstream candidato a contribuição via pull request</li>
+        </ul>
       </div>
     </div>
-    <div style="display:flex; flex-direction:column; gap:20px;">
-      <div class="card">
-        <h3>Evolução sem aumento de headcount</h3>
-        <p>A frota de agentes de IA executa o trabalho de engenharia pesado — codificação, testes, segurança, documentação, deploy. O time humano foca em direção, arquitetura e decisão. A plataforma evolui rápido com o mesmo time.</p>
-      </div>
-      <div class="card">
-        <h3>Da dependência ao protagonismo gradual</h3>
-        <p>À medida que o domínio técnico se consolida, a organização reduz subscrições de suporte, passa a operar versões open source com confiança e, em ciclos futuros, contribui diretamente com os projetos que utiliza.</p>
+    <div class="flow-card">
+      <div class="flow-number">02</div>
+      <div class="flow-tag">Ensaios de aplicação</div>
+      <h3>Aplicações em cenários extremos</h3>
+      <p>Usar a pilha já validada como banco de provas para submeter aplicações da esteira a ensaios antes da produção — em condições mais agressivas do que o ambiente real costuma impor. <strong>A pilha é o ambiente de ensaio</strong>.</p>
+      <div class="flow-examples">
+        <div class="flow-examples-label">Exemplos de ensaios</div>
+        <ul>
+          <li>Picos de carga 10× acima do pico histórico observado</li>
+          <li>Falhas combinadas: rede + banco + cache simultâneos</li>
+          <li>Degradação progressiva de latência e timeout cascateados</li>
+          <li>Pentest dirigido contra a aplicação no contexto integrado</li>
+        </ul>
       </div>
     </div>
   </div>
 
-  <div class="pullquote an d3">
-    <p>O laboratório não entrega um produto e encerra — ele <strong>é</strong> a capacidade permanente de construir, validar e evoluir infraestrutura tecnológica soberana, ciclo após ciclo.</p>
+  <div class="highlight-box an d3" style="margin-top: 28px;">
+    <div class="hbox-label">A Sinergia</div>
+    <p>Os dois fluxos se reforçam: o fluxo 1 produz uma pilha cada vez mais robusta e bem-entendida; o fluxo 2 expõe a pilha a casos de uso reais que <span class="azure">geram novas hipóteses</span> para o fluxo 1. P&amp;D contínuo em ciclo fechado.</p>
   </div>
   <div class="slide-num">09 / 12</div>
 </section>
 
-<!-- ═══ SLIDE 8 — 3 HORIZONTES ═══ -->
-<section class="slide bg-mid" id="s5">
-  <p class="eyebrow an">Trajetória Realista</p>
-  <h2 class="stitle an d1">Três horizontes honestos —<br>do laboratório ao <em>protagonismo soberano</em></h2>
+<!-- ═══ SLIDE 10 — FINANCIAMENTO ═══ -->
+<section class="slide bg-mid" id="s9">
+  <p class="eyebrow an">As Alavancas de Financiamento</p>
+  <h2 class="stitle an d1">P&amp;D em engenharia de plataforma<br>tem <em>caminhos próprios de financiamento</em></h2>
 
-  <div class="grid3 an d2">
-    <div class="hcol">
-      <div class="hnum">1</div>
-      <p class="htag">Primeiros ciclos</p>
-      <h3>Laboratório e Integração</h3>
-      <p>As tecnologias do ecossistema são integradas progressivamente no laboratório. O foco é dominar o código-fonte, estabelecer o ciclo agêntico de desenvolvimento e QA, e acumular conhecimento técnico interno. <strong style="color:var(--stone)">Ainda não é produção</strong> — é a fundação.</p>
-      <div class="hfoot">↓ Base técnica sólida e time capacitado</div>
+  <div class="grid2 an d2" style="max-width: 1020px;">
+    <div class="card">
+      <h3>Lei do Bem (Lei nº 11.196/2005)</h3>
+      <p>Principal mecanismo federal de incentivo à inovação tecnológica. Permite dedução fiscal automática de gastos com PD&amp;I do IRPJ e da CSLL, com retorno estimado entre <strong>20,4% e 34%</strong> das despesas operacionais elegíveis. Aplicação contábil, sem aprovação prévia. Aplicável a empresas em regime de Lucro Real.</p>
     </div>
-    <div class="hcol">
-      <div class="hnum">2</div>
-      <p class="htag">Ciclos intermediários</p>
-      <h3>Plataforma com Autoserviço</h3>
-      <p>A plataforma atinge maturidade suficiente para oferecer autoserviço real — IaaS e PaaS on-demand, sem nuvem pública, a 65% do custo equivalente. Subscrições de suporte começam a ser substituídas por capacidade interna comprovada.</p>
-      <div class="hfoot">↓ Redução de custo e dependência mensuráveis</div>
+    <div class="card">
+      <h3>Financiamento Não Reembolsável (FINEP)</h3>
+      <p>Recursos do FNDCT operados pela FINEP via chamadas públicas — destinados a ICTs e a parcerias entre empresas e ICTs. Itens financiáveis incluem equipamentos, equipe própria, treinamento, software e serviços técnicos. <strong>Não há reembolso</strong>: são recursos a fundo perdido para projetos qualificados.</p>
     </div>
-    <div class="hcol">
-      <div class="hnum">3</div>
-      <p class="htag">Longo prazo</p>
-      <h3>Contribuição e Protagonismo</h3>
-      <p>Com domínio técnico consolidado, a organização contribui com pull requests nos projetos open source que sustenta — tornando-se protagonista da comunidade global e referência em soberania tecnológica no setor público.</p>
-      <div class="hfoot">↓ Soberania tecnológica plena</div>
+    <div class="card">
+      <h3>Subvenção Econômica à Inovação</h3>
+      <p>Modalidade não reembolsável da FINEP para empresas brasileiras públicas ou privadas que executem projetos de inovação com risco tecnológico. Marco Legal de CT&amp;I (Lei 13.243/2016) reforça o instrumento. Selecionada por chamada pública alinhada a temas estratégicos do Governo Federal.</p>
     </div>
+    <div class="card">
+      <h3>Parcerias com ICTs</h3>
+      <p>O projeto naturalmente se qualifica para parcerias com Instituições Científicas, Tecnológicas e de Inovação (universidades, institutos públicos de pesquisa), tanto para acessar bonificações em linhas FINEP quanto para colaborações de pesquisa formalizadas via Marco Legal de CT&amp;I.</p>
+    </div>
+  </div>
+
+  <div class="highlight-box an d3" style="margin-top: 28px;">
+    <div class="hbox-label">A Estratégia</div>
+    <p>Por se enquadrar genuinamente como <strong>P&amp;D em engenharia de software</strong> — com hipóteses, ensaios, métricas e contribuições upstream — o projeto se posiciona para <span class="azure">composição de múltiplas fontes de financiamento</span>, reduzindo o impacto no orçamento operacional regular.</p>
   </div>
   <div class="slide-num">10 / 12</div>
 </section>
 
-<!-- ═══ SLIDE 7 — RESULTADO ═══ -->
-<section class="slide bg-mid" id="s6">
-  <p class="eyebrow an">Resultado Esperado</p>
-  <h2 class="stitle an d1">Do gasto recorrente<br>ao <em>ativo estratégico</em></h2>
+<!-- ═══ SLIDE 11 — HORIZONTES ═══ -->
+<section class="slide" id="s10">
+  <p class="eyebrow an">Trajetória Realista</p>
+  <h2 class="stitle an d1">Três horizontes,<br>uma <em>capacidade permanente</em></h2>
 
-  <div class="metrics an d2">
-    <div class="metric">
-      <div class="mval">R$18,3M</div>
-      <div class="mlabel">Gasto anual atual<br>com subscrições<br>(6 contratos)</div>
+  <div class="horizons an d2">
+    <div class="hcol">
+      <div class="hnum">1</div>
+      <p class="htag">Primeiros ciclos</p>
+      <h3>Pilha base e primeiros ensaios</h3>
+      <p>Integração das tecnologias da pilha no laboratório. Estabelecimento do ciclo agêntico e dos primeiros ensaios automatizados — carga, regressão, falhas básicas. Construção da base de conhecimento técnico e dos baselines de comparação.</p>
+      <div class="hfoot">↓ Base instrumentada e time capacitado</div>
     </div>
-    <div class="metric">
-      <div class="mval">65%</div>
-      <div class="mlabel">Menor custo vs<br>nuvem pública<br>equivalente</div>
+    <div class="hcol">
+      <div class="hnum">2</div>
+      <p class="htag">Ciclos intermediários</p>
+      <h3>Catálogo completo + aplicações</h3>
+      <p>Catálogo de ensaios maduro nas seis dimensões. Início do fluxo 2: aplicações reais da esteira passam pela pilha sob condições extremas antes da produção. Primeiras hipóteses validadas no fluxo 1 começam a ser propostas como melhorias upstream.</p>
+      <div class="hfoot">↓ Produtos chegam mais maduros à produção</div>
     </div>
-    <div class="metric">
-      <div class="mval">20–34%</div>
-      <div class="mlabel">Retorno fiscal<br>via Lei do Bem<br>sobre PD&I</div>
-    </div>
-    <div class="metric">
-      <div class="mval">0</div>
-      <div class="mlabel">Aumento de<br>headcount para<br>evoluir a plataforma</div>
+    <div class="hcol">
+      <div class="hnum">3</div>
+      <p class="htag">Longo prazo</p>
+      <h3>Contribuição e referência</h3>
+      <p>Pull requests aceitos em projetos open source da pilha. Laboratório se torna referência interna e externa — fonte de boas práticas, treinamento e validação para outras iniciativas da organização e do setor público.</p>
+      <div class="hfoot">↓ Protagonismo técnico consolidado</div>
     </div>
   </div>
-
-  <p class="an d3" style="font-size:16px; color:var(--mist); max-width:800px; line-height:1.75; font-weight:300; margin-bottom:16px;">
-    Ao final dos primeiros ciclos: uma <strong style="color:var(--white)">plataforma de nuvem privada com autoserviço completo</strong> — IaaS, PaaS, GPU compute e segurança FIPS 140-2 — disponível on-demand, a 65% do custo da nuvem pública equivalente. Os R$ 18,3 milhões anuais em subscrições passam a ser progressivamente substituídos por capacidade interna, enquanto o investimento em PD&amp;I gera retorno fiscal via Lei do Bem.
-  </p>
-  <p class="an d4" style="font-size:12px; color:var(--mist); font-style:italic; max-width:560px;">
-    Os R$ 18,3M em subscrições anuais já constituem argumento de ROI direto. Combinado ao incentivo da Lei do Bem (20–34% de retorno sobre PD&amp;I) e à economia de 65% vs nuvem pública, o caso de negócio é robusto.
-  </p>
   <div class="slide-num">11 / 12</div>
 </section>
 
-<!-- ═══ SLIDE 8 — FECHAMENTO ═══ -->
-<section class="slide s-close" id="s7">
-  <h2 class="close-title an">Soberania tecnológica<br>não é opcional.<br>É <em>estratégia de Estado.</em></h2>
+<!-- ═══ SLIDE 12 — FECHAMENTO ═══ -->
+<section class="slide s-close" id="s11">
+  <h2 class="close-title an">A indústria ensaia<br>antes de liberar.<br><em>Agora também a nossa.</em></h2>
   <div class="divider an d1"></div>
-  <p class="close-sub an d2">O Laboratório de Soberania Tecnológica transforma dependência estrutural em autonomia real — com arquitetura enterprise documentada, metodologia agêntica própria e ciclos contínuos de entrega e QA sobre software livre.</p>
-  <p class="close-statement an d3">"Quem não domina sua infraestrutura tecnológica não controla plenamente sua soberania digital — e paga por isso, ciclo após ciclo."</p>
+  <p class="close-sub an d2">O Laboratório de Ensaios em Engenharia de Plataforma é a capacidade permanente que falta para que a qualidade dos nossos produtos seja construída desde a base — com método, IA e financiamento adequado para P&amp;D real.</p>
+  <p class="close-statement an d3">"Qualidade de software não é o que se descobre em produção. É o que se ensaia antes."</p>
   <div class="slide-num">12 / 12</div>
 </section>
 
 <script>
   const slides = document.querySelectorAll('.slide');
   const nav = document.getElementById('nav');
-
-  // build dots
   slides.forEach((_, i) => {
     const d = document.createElement('div');
     d.className = 'dot' + (i === 0 ? ' active' : '');
     d.onclick = () => slides[i].scrollIntoView({ behavior: 'smooth' });
     nav.appendChild(d);
   });
-
   const dots = nav.querySelectorAll('.dot');
-
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (!e.isIntersecting) return;
@@ -1072,7 +1138,6 @@
       e.target.querySelectorAll('.an').forEach(el => el.classList.add('in'));
     });
   }, { threshold: 0.25 });
-
   slides.forEach(s => io.observe(s));
 </script>
 </body>

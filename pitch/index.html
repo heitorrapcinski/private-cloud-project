@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -20,682 +21,684 @@
     --white: #f0ece3;
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+- { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
 
-  body {
-    font-family: 'Figtree', sans-serif;
-    background: var(--ink);
-    color: var(--stone);
-    line-height: 1.6;
-  }
-
-  .slide {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 72px 80px;
-    position: relative;
-    overflow: hidden;
-    background: var(--ink);
-  }
-
-  .slide.bg-mid { background: var(--ink-mid); }
-
-  .slide + .slide { border-top: 1px solid rgba(184,151,58,0.12); }
-
-  .slide-num {
-    position: absolute;
-    bottom: 36px;
-    right: 56px;
-    font-size: 11px;
-    letter-spacing: 3px;
-    color: var(--brass);
-    opacity: 0.6;
-    font-weight: 500;
-  }
-
-  /* ── COVER ── */
-  .s-cover {
-    background-image:
-      radial-gradient(ellipse 70% 60% at 90% 10%, rgba(31,111,235,0.1) 0%, transparent 70%),
-      radial-gradient(ellipse 50% 40% at 5% 90%, rgba(184,151,58,0.07) 0%, transparent 60%);
-    justify-content: space-between;
-    padding-top: 56px;
-    padding-bottom: 56px;
-  }
-
-  .cover-header { display: flex; align-items: center; justify-content: space-between; }
-
-  .org-label {
-    font-size: 11px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--brass);
-    font-weight: 600;
-    border-left: 2px solid var(--brass);
-    padding-left: 12px;
-  }
-
-  .version-tag { font-size: 11px; letter-spacing: 2px; color: var(--mist); font-weight: 400; }
-
-  .cover-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    max-width: 900px;
-  }
-
-  .cover-kicker {
-    font-size: 12px;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    color: var(--brass);
-    font-weight: 600;
-    margin-bottom: 28px;
-    opacity: 0;
-    animation: rise 0.9s ease 0.3s forwards;
-  }
-
-  h1.cover-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(44px, 6vw, 82px);
-    font-weight: 700;
-    line-height: 1.04;
-    color: var(--white);
-    margin-bottom: 36px;
-    opacity: 0;
-    animation: rise 0.9s ease 0.5s forwards;
-  }
-
-  h1.cover-title em { font-style: italic; color: var(--brass-light); }
-
-  .cover-desc {
-    font-size: 17px;
-    color: var(--mist);
-    font-weight: 300;
-    max-width: 620px;
-    line-height: 1.75;
-    opacity: 0;
-    animation: rise 0.9s ease 0.7s forwards;
-  }
-
-  .cover-footer {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    flex-wrap: wrap;
-    opacity: 0;
-    animation: rise 0.9s ease 0.9s forwards;
-  }
-
-  .stat-pill {
-    padding: 8px 20px;
-    border: 1px solid rgba(184,151,58,0.3);
-    font-size: 12px;
-    color: var(--brass-light);
-    letter-spacing: 1px;
-    font-weight: 500;
-  }
-
-  /* ── COMMON ── */
-  .eyebrow {
-    font-size: 11px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--brass);
-    font-weight: 600;
-    margin-bottom: 14px;
-  }
-
-  h2.stitle {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(30px, 4vw, 52px);
-    font-weight: 700;
-    color: var(--white);
-    line-height: 1.15;
-    margin-bottom: 40px;
-    max-width: 820px;
-  }
-
-  h2.stitle em { font-style: italic; color: var(--brass-light); }
-
-  .lead-paragraph {
-    font-size: 16px;
-    color: var(--mist);
-    max-width: 820px;
-    line-height: 1.75;
-    font-weight: 300;
-    margin-bottom: 28px;
-  }
-
-  .lead-paragraph strong { color: var(--stone); font-weight: 500; }
-
-  /* ── CARDS ── */
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 980px; }
-  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; max-width: 1100px; }
-
-  .card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(184,151,58,0.14);
-    border-left: 3px solid var(--brass);
-    padding: 28px 30px;
-  }
-
-  .card h3 {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--brass-light);
-    letter-spacing: 0.5px;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-  }
-
-  .card p { font-size: 14px; color: var(--mist); line-height: 1.7; font-weight: 300; }
-  .card p strong { color: var(--stone); font-weight: 500; }
-
-  /* ── HIGHLIGHT BOX ── */
-  .highlight-box {
-    max-width: 1080px;
-    padding: 22px 28px;
-    border-left: 3px solid var(--azure);
-    background: rgba(31,111,235,0.08);
-  }
-
-  .highlight-box .hbox-label {
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: #79b8ff;
-    font-weight: 600;
-    margin-bottom: 10px;
-  }
-
-  .highlight-box p {
-    font-size: 15px;
-    color: var(--stone);
-    line-height: 1.7;
-    font-weight: 300;
-  }
-
-  .highlight-box p strong { color: var(--white); font-weight: 500; }
-  .highlight-box p .azure { color: #79b8ff; font-weight: 500; }
-
-  /* ── PULLQUOTE ── */
-  .pullquote {
-    border-left: 3px solid var(--brass);
-    padding: 20px 28px;
-    max-width: 820px;
-    margin-top: 32px;
-    background: var(--brass-dim);
-  }
-
-  .pullquote p {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-style: italic;
-    color: var(--white);
-    line-height: 1.55;
-    font-weight: 400;
-  }
-
-  .pullquote p strong { font-style: normal; color: var(--brass-light); font-weight: 700; }
-
-  /* ── HORIZON COLUMNS ── */
-  .horizons {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    max-width: 1020px;
-    border: 1px solid rgba(184,151,58,0.18);
-  }
-
-  .hcol {
-    padding: 36px 32px;
-    border-right: 1px solid rgba(184,151,58,0.14);
-    position: relative;
-  }
-
-  .hcol:last-child { border-right: none; }
-
-  .hnum {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 72px;
-    font-weight: 700;
-    color: rgba(184,151,58,0.08);
-    line-height: 1;
-    position: absolute;
-    top: 12px;
-    right: 16px;
-  }
-
-  .htag {
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--brass);
-    font-weight: 600;
-    margin-bottom: 10px;
-  }
-
-  .hcol h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--white);
-    margin-bottom: 14px;
-    line-height: 1.25;
-  }
-
-  .hcol p { font-size: 14px; color: var(--mist); line-height: 1.7; font-weight: 300; }
-
-  .hfoot {
-    margin-top: 20px;
-    padding-top: 14px;
-    border-top: 1px solid rgba(184,151,58,0.15);
-    font-size: 11px;
-    color: var(--brass);
-    letter-spacing: 1px;
-    font-weight: 500;
-  }
-
-  /* ── INDUSTRY ANALOGY ── */
-  .analogy-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-    max-width: 1000px;
-    margin-bottom: 32px;
-  }
-
-  .analogy-side {
-    padding: 32px;
-    border: 1px solid rgba(184,151,58,0.18);
-  }
-
-  .analogy-side h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--white);
-    margin-bottom: 18px;
-  }
-
-  .analogy-side p {
-    font-size: 14px;
-    color: var(--mist);
-    line-height: 1.7;
-    font-weight: 300;
-    margin-bottom: 16px;
-  }
-
-  .analogy-side ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .analogy-side li {
-    font-size: 13px;
-    color: var(--stone);
-    padding-left: 18px;
-    position: relative;
-    line-height: 1.5;
-    font-weight: 300;
-  }
-
-  .analogy-side li::before {
-    content: '·';
-    position: absolute;
-    left: 4px;
-    color: var(--brass);
-    font-size: 18px;
-    top: -3px;
-  }
-
-  /* ── STACK PYRAMID ── */
-  .stack-pyramid {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    max-width: 900px;
-  }
-
-  .stack-layer {
-    display: grid;
-    grid-template-columns: 180px 1fr;
-    align-items: center;
-    border: 1px solid rgba(184,151,58,0.18);
-    background: rgba(255,255,255,0.02);
-  }
-
-  .stack-layer-name {
-    padding: 18px 24px;
-    background: rgba(184,151,58,0.08);
-    border-right: 1px solid rgba(184,151,58,0.18);
-  }
-
-  .stack-layer-name .layer-tag {
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--brass);
-    text-transform: uppercase;
-    font-weight: 600;
-    margin-bottom: 2px;
-  }
-
-  .stack-layer-name .layer-title {
-    font-size: 15px;
-    color: var(--white);
-    font-weight: 600;
-  }
-
-  .stack-layer-content {
-    padding: 18px 24px;
-    font-size: 13px;
-    color: var(--mist);
-    line-height: 1.6;
-    font-weight: 300;
-  }
-
-  .stack-layer-content strong { color: var(--stone); font-weight: 500; }
-
-  /* ── LoC ── */
-  .loc-tier-header {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    margin-bottom: 12px;
-  }
-
-  .loc-tier-icon { font-size: 18px; }
-
-  .loc-tier-label {
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--brass);
-    font-weight: 600;
-  }
-
-  .loc-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 22px;
-  }
-
-  .loc-card {
-    border: 1px solid rgba(184,151,58,0.14);
-    padding: 14px 18px;
-  }
-
-  .loc-card.tier1 { background: rgba(184,151,58,0.04); border-color: rgba(184,151,58,0.18); }
-
-  .loc-card-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 4px;
-  }
-
-  .loc-name { font-size: 14px; color: var(--white); font-weight: 600; }
-  .loc-tier3 .loc-name { font-size: 13px; }
-  .loc-value {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    color: var(--brass-light);
-    font-weight: 700;
-  }
-  .loc-tier2 .loc-value { font-size: 18px; }
-  .loc-tier3 .loc-value { font-size: 16px; }
-
-  .loc-desc { font-size: 11px; color: var(--mist); line-height: 1.5; }
-
-  /* ── FLOWS ── */
-  .flows-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    max-width: 1020px;
-  }
-
-  .flow-card {
-    padding: 32px;
-    border: 1px solid rgba(184,151,58,0.18);
-    background: rgba(255,255,255,0.02);
-  }
-
-  .flow-number {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 38px;
-    font-weight: 700;
-    color: var(--brass-light);
-    line-height: 1;
-    margin-bottom: 8px;
-  }
-
-  .flow-tag {
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--brass);
-    font-weight: 600;
-    margin-bottom: 12px;
-  }
-
-  .flow-card h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--white);
-    margin-bottom: 14px;
-    line-height: 1.3;
-  }
-
-  .flow-card p {
-    font-size: 14px;
-    color: var(--mist);
-    line-height: 1.7;
-    font-weight: 300;
-    margin-bottom: 16px;
-  }
-
-  .flow-card p strong { color: var(--stone); font-weight: 500; }
-
-  .flow-examples {
-    border-top: 1px solid rgba(184,151,58,0.15);
-    padding-top: 14px;
-    margin-top: 14px;
-  }
-
-  .flow-examples-label {
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--brass);
-    font-weight: 600;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-
-  .flow-examples ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .flow-examples li {
-    font-size: 12px;
-    color: var(--stone);
-    padding-left: 16px;
-    position: relative;
-    line-height: 1.5;
-    font-weight: 300;
-  }
-
-  .flow-examples li::before {
-    content: '→';
-    position: absolute;
-    left: 0;
-    color: var(--brass);
-    font-size: 11px;
-    top: 2px;
-  }
-
-  /* ── METHODOLOGY (AGILE-AGENTIC) ── */
-  .wflow {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 28px;
-    max-width: 1000px;
-  }
-
-  .wblock {
-    padding: 32px;
-    border: 1px solid rgba(31,111,235,0.2);
-    border-top: 3px solid var(--azure);
-    background: var(--azure-dim);
-  }
-
-  .wblock h3 {
-    font-size: 11px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: #79b8ff;
-    margin-bottom: 16px;
-    font-weight: 600;
-  }
-
-  .wblock ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-  }
-
-  .wblock li {
-    font-size: 13px;
-    color: var(--mist);
-    padding-left: 16px;
-    position: relative;
-    line-height: 1.5;
-    font-weight: 300;
-  }
-
-  .wblock li::before {
-    content: '→';
-    position: absolute;
-    left: 0;
-    color: var(--azure);
-    font-size: 11px;
-    top: 1px;
-  }
-
-  /* ── CLOSING ── */
-  .s-close {
-    text-align: center;
-    align-items: center;
-    background-image: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(184,151,58,0.05) 0%, transparent 70%);
-  }
-
-  .close-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(36px, 5vw, 68px);
-    font-weight: 700;
-    color: var(--white);
-    line-height: 1.1;
-    margin-bottom: 24px;
-    max-width: 820px;
-  }
-
-  .close-title em { font-style: italic; color: var(--brass-light); }
-
-  .divider {
-    width: 48px;
-    height: 2px;
-    background: var(--brass);
-    margin: 0 auto 32px;
-    opacity: 0.5;
-  }
-
-  .close-sub {
-    font-size: 16px;
-    color: var(--mist);
-    font-weight: 300;
-    max-width: 560px;
-    line-height: 1.75;
-    margin-bottom: 40px;
-  }
-
-  .close-statement {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 19px;
-    font-style: italic;
-    color: rgba(212,179,92,0.65);
-    max-width: 560px;
-    line-height: 1.6;
-  }
-
-  /* ── NAV ── */
-  .nav {
-    position: fixed;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-    z-index: 100;
-  }
-
-  .dot {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: rgba(184,151,58,0.25);
-    cursor: pointer;
-    transition: all 0.25s;
-  }
-
-  .dot.active, .dot:hover {
-    background: var(--brass);
-    transform: scale(1.6);
-  }
-
-  /* ── ANIM ── */
-  @keyframes rise {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .an { opacity: 0; transform: translateY(18px); transition: opacity 0.65s ease, transform 0.65s ease; }
-  .an.in { opacity: 1; transform: none; }
-  .d1 { transition-delay: 0.12s; }
-  .d2 { transition-delay: 0.24s; }
-  .d3 { transition-delay: 0.36s; }
-  .d4 { transition-delay: 0.48s; }
-  .d5 { transition-delay: 0.60s; }
-
-  @media (max-width: 768px) {
-    .slide { padding: 48px 28px; }
-    .grid2, .grid3, .horizons, .analogy-grid, .flows-grid, .wflow, .loc-grid { grid-template-columns: 1fr; }
-    .horizons { border: none; }
-    .hcol { border-right: none; border-bottom: 1px solid rgba(184,151,58,0.14); }
-    .stack-layer { grid-template-columns: 1fr; }
-    .stack-layer-name { border-right: none; border-bottom: 1px solid rgba(184,151,58,0.18); }
-    /* specs grid on slide 5 */
-    .slide div[style*="grid-template-columns: repeat(4, 1fr)"] { grid-template-columns: 1fr 1fr !important; }
-  }
+body {
+font-family: ‘Figtree’, sans-serif;
+background: var(–ink);
+color: var(–stone);
+line-height: 1.6;
+}
+
+.slide {
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+justify-content: center;
+padding: 72px 80px;
+position: relative;
+overflow: hidden;
+background: var(–ink);
+}
+
+.slide.bg-mid { background: var(–ink-mid); }
+
+.slide + .slide { border-top: 1px solid rgba(184,151,58,0.12); }
+
+.slide-num {
+position: absolute;
+bottom: 36px;
+right: 56px;
+font-size: 11px;
+letter-spacing: 3px;
+color: var(–brass);
+opacity: 0.6;
+font-weight: 500;
+}
+
+/* ── COVER ── */
+.s-cover {
+background-image:
+radial-gradient(ellipse 70% 60% at 90% 10%, rgba(31,111,235,0.1) 0%, transparent 70%),
+radial-gradient(ellipse 50% 40% at 5% 90%, rgba(184,151,58,0.07) 0%, transparent 60%);
+justify-content: space-between;
+padding-top: 56px;
+padding-bottom: 56px;
+}
+
+.cover-header { display: flex; align-items: center; justify-content: space-between; }
+
+.org-label {
+font-size: 11px;
+letter-spacing: 3px;
+text-transform: uppercase;
+color: var(–brass);
+font-weight: 600;
+border-left: 2px solid var(–brass);
+padding-left: 12px;
+}
+
+.version-tag { font-size: 11px; letter-spacing: 2px; color: var(–mist); font-weight: 400; }
+
+.cover-body {
+flex: 1;
+display: flex;
+flex-direction: column;
+justify-content: center;
+max-width: 900px;
+}
+
+.cover-kicker {
+font-size: 12px;
+letter-spacing: 5px;
+text-transform: uppercase;
+color: var(–brass);
+font-weight: 600;
+margin-bottom: 28px;
+opacity: 0;
+animation: rise 0.9s ease 0.3s forwards;
+}
+
+h1.cover-title {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: clamp(44px, 6vw, 82px);
+font-weight: 700;
+line-height: 1.04;
+color: var(–white);
+margin-bottom: 36px;
+opacity: 0;
+animation: rise 0.9s ease 0.5s forwards;
+}
+
+h1.cover-title em { font-style: italic; color: var(–brass-light); }
+
+.cover-desc {
+font-size: 17px;
+color: var(–mist);
+font-weight: 300;
+max-width: 620px;
+line-height: 1.75;
+opacity: 0;
+animation: rise 0.9s ease 0.7s forwards;
+}
+
+.cover-footer {
+display: flex;
+align-items: center;
+gap: 14px;
+flex-wrap: wrap;
+opacity: 0;
+animation: rise 0.9s ease 0.9s forwards;
+}
+
+.stat-pill {
+padding: 8px 20px;
+border: 1px solid rgba(184,151,58,0.3);
+font-size: 12px;
+color: var(–brass-light);
+letter-spacing: 1px;
+font-weight: 500;
+}
+
+/* ── COMMON ── */
+.eyebrow {
+font-size: 11px;
+letter-spacing: 4px;
+text-transform: uppercase;
+color: var(–brass);
+font-weight: 600;
+margin-bottom: 14px;
+}
+
+h2.stitle {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: clamp(30px, 4vw, 52px);
+font-weight: 700;
+color: var(–white);
+line-height: 1.15;
+margin-bottom: 40px;
+max-width: 820px;
+}
+
+h2.stitle em { font-style: italic; color: var(–brass-light); }
+
+.lead-paragraph {
+font-size: 16px;
+color: var(–mist);
+max-width: 820px;
+line-height: 1.75;
+font-weight: 300;
+margin-bottom: 28px;
+}
+
+.lead-paragraph strong { color: var(–stone); font-weight: 500; }
+
+/* ── CARDS ── */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 980px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; max-width: 1100px; }
+
+.card {
+background: rgba(255,255,255,0.03);
+border: 1px solid rgba(184,151,58,0.14);
+border-left: 3px solid var(–brass);
+padding: 28px 30px;
+}
+
+.card h3 {
+font-size: 13px;
+font-weight: 600;
+color: var(–brass-light);
+letter-spacing: 0.5px;
+margin-bottom: 10px;
+text-transform: uppercase;
+}
+
+.card p { font-size: 14px; color: var(–mist); line-height: 1.7; font-weight: 300; }
+.card p strong { color: var(–stone); font-weight: 500; }
+
+/* ── HIGHLIGHT BOX ── */
+.highlight-box {
+max-width: 1080px;
+padding: 22px 28px;
+border-left: 3px solid var(–azure);
+background: rgba(31,111,235,0.08);
+}
+
+.highlight-box .hbox-label {
+font-size: 10px;
+letter-spacing: 3px;
+text-transform: uppercase;
+color: #79b8ff;
+font-weight: 600;
+margin-bottom: 10px;
+}
+
+.highlight-box p {
+font-size: 15px;
+color: var(–stone);
+line-height: 1.7;
+font-weight: 300;
+}
+
+.highlight-box p strong { color: var(–white); font-weight: 500; }
+.highlight-box p .azure { color: #79b8ff; font-weight: 500; }
+
+/* ── PULLQUOTE ── */
+.pullquote {
+border-left: 3px solid var(–brass);
+padding: 20px 28px;
+max-width: 820px;
+margin-top: 32px;
+background: var(–brass-dim);
+}
+
+.pullquote p {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 20px;
+font-style: italic;
+color: var(–white);
+line-height: 1.55;
+font-weight: 400;
+}
+
+.pullquote p strong { font-style: normal; color: var(–brass-light); font-weight: 700; }
+
+/* ── HORIZON COLUMNS ── */
+.horizons {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+max-width: 1020px;
+border: 1px solid rgba(184,151,58,0.18);
+}
+
+.hcol {
+padding: 36px 32px;
+border-right: 1px solid rgba(184,151,58,0.14);
+position: relative;
+}
+
+.hcol:last-child { border-right: none; }
+
+.hnum {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 72px;
+font-weight: 700;
+color: rgba(184,151,58,0.08);
+line-height: 1;
+position: absolute;
+top: 12px;
+right: 16px;
+}
+
+.htag {
+font-size: 10px;
+letter-spacing: 3px;
+text-transform: uppercase;
+color: var(–brass);
+font-weight: 600;
+margin-bottom: 10px;
+}
+
+.hcol h3 {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 22px;
+font-weight: 700;
+color: var(–white);
+margin-bottom: 14px;
+line-height: 1.25;
+}
+
+.hcol p { font-size: 14px; color: var(–mist); line-height: 1.7; font-weight: 300; }
+
+.hfoot {
+margin-top: 20px;
+padding-top: 14px;
+border-top: 1px solid rgba(184,151,58,0.15);
+font-size: 11px;
+color: var(–brass);
+letter-spacing: 1px;
+font-weight: 500;
+}
+
+/* ── INDUSTRY ANALOGY ── */
+.analogy-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 32px;
+max-width: 1000px;
+margin-bottom: 32px;
+}
+
+.analogy-side {
+padding: 32px;
+border: 1px solid rgba(184,151,58,0.18);
+}
+
+.analogy-side h3 {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 26px;
+font-weight: 700;
+color: var(–white);
+margin-bottom: 18px;
+}
+
+.analogy-side p {
+font-size: 14px;
+color: var(–mist);
+line-height: 1.7;
+font-weight: 300;
+margin-bottom: 16px;
+}
+
+.analogy-side ul {
+list-style: none;
+display: flex;
+flex-direction: column;
+gap: 8px;
+}
+
+.analogy-side li {
+font-size: 13px;
+color: var(–stone);
+padding-left: 18px;
+position: relative;
+line-height: 1.5;
+font-weight: 300;
+}
+
+.analogy-side li::before {
+content: ‘·’;
+position: absolute;
+left: 4px;
+color: var(–brass);
+font-size: 18px;
+top: -3px;
+}
+
+/* ── STACK PYRAMID ── */
+.stack-pyramid {
+display: flex;
+flex-direction: column;
+gap: 8px;
+max-width: 900px;
+}
+
+.stack-layer {
+display: grid;
+grid-template-columns: 180px 1fr;
+align-items: center;
+border: 1px solid rgba(184,151,58,0.18);
+background: rgba(255,255,255,0.02);
+}
+
+.stack-layer-name {
+padding: 18px 24px;
+background: rgba(184,151,58,0.08);
+border-right: 1px solid rgba(184,151,58,0.18);
+}
+
+.stack-layer-name .layer-tag {
+font-size: 10px;
+letter-spacing: 2px;
+color: var(–brass);
+text-transform: uppercase;
+font-weight: 600;
+margin-bottom: 2px;
+}
+
+.stack-layer-name .layer-title {
+font-size: 15px;
+color: var(–white);
+font-weight: 600;
+}
+
+.stack-layer-content {
+padding: 18px 24px;
+font-size: 13px;
+color: var(–mist);
+line-height: 1.6;
+font-weight: 300;
+}
+
+.stack-layer-content strong { color: var(–stone); font-weight: 500; }
+
+/* ── LoC ── */
+.loc-tier-header {
+display: flex;
+align-items: baseline;
+gap: 12px;
+margin-bottom: 12px;
+}
+
+.loc-tier-icon { font-size: 18px; }
+
+.loc-tier-label {
+font-size: 11px;
+letter-spacing: 2px;
+text-transform: uppercase;
+color: var(–brass);
+font-weight: 600;
+}
+
+.loc-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 12px;
+margin-bottom: 22px;
+}
+
+.loc-card {
+border: 1px solid rgba(184,151,58,0.14);
+padding: 14px 18px;
+}
+
+.loc-card.tier1 { background: rgba(184,151,58,0.04); border-color: rgba(184,151,58,0.18); }
+
+.loc-card-head {
+display: flex;
+justify-content: space-between;
+align-items: baseline;
+margin-bottom: 4px;
+}
+
+.loc-name { font-size: 14px; color: var(–white); font-weight: 600; }
+.loc-tier3 .loc-name { font-size: 13px; }
+.loc-value {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 20px;
+color: var(–brass-light);
+font-weight: 700;
+}
+.loc-tier2 .loc-value { font-size: 18px; }
+.loc-tier3 .loc-value { font-size: 16px; }
+
+.loc-desc { font-size: 11px; color: var(–mist); line-height: 1.5; }
+
+/* ── FLOWS ── */
+.flows-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 24px;
+max-width: 1020px;
+}
+
+.flow-card {
+padding: 32px;
+border: 1px solid rgba(184,151,58,0.18);
+background: rgba(255,255,255,0.02);
+}
+
+.flow-number {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 38px;
+font-weight: 700;
+color: var(–brass-light);
+line-height: 1;
+margin-bottom: 8px;
+}
+
+.flow-tag {
+font-size: 10px;
+letter-spacing: 3px;
+text-transform: uppercase;
+color: var(–brass);
+font-weight: 600;
+margin-bottom: 12px;
+}
+
+.flow-card h3 {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 22px;
+font-weight: 700;
+color: var(–white);
+margin-bottom: 14px;
+line-height: 1.3;
+}
+
+.flow-card p {
+font-size: 14px;
+color: var(–mist);
+line-height: 1.7;
+font-weight: 300;
+margin-bottom: 16px;
+}
+
+.flow-card p strong { color: var(–stone); font-weight: 500; }
+
+.flow-examples {
+border-top: 1px solid rgba(184,151,58,0.15);
+padding-top: 14px;
+margin-top: 14px;
+}
+
+.flow-examples-label {
+font-size: 10px;
+letter-spacing: 2px;
+color: var(–brass);
+font-weight: 600;
+text-transform: uppercase;
+margin-bottom: 8px;
+}
+
+.flow-examples ul {
+list-style: none;
+display: flex;
+flex-direction: column;
+gap: 6px;
+}
+
+.flow-examples li {
+font-size: 12px;
+color: var(–stone);
+padding-left: 16px;
+position: relative;
+line-height: 1.5;
+font-weight: 300;
+}
+
+.flow-examples li::before {
+content: ‘→’;
+position: absolute;
+left: 0;
+color: var(–brass);
+font-size: 11px;
+top: 2px;
+}
+
+/* ── METHODOLOGY (AGILE-AGENTIC) ── */
+.wflow {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 28px;
+max-width: 1000px;
+}
+
+.wblock {
+padding: 32px;
+border: 1px solid rgba(31,111,235,0.2);
+border-top: 3px solid var(–azure);
+background: var(–azure-dim);
+}
+
+.wblock h3 {
+font-size: 11px;
+letter-spacing: 3px;
+text-transform: uppercase;
+color: #79b8ff;
+margin-bottom: 16px;
+font-weight: 600;
+}
+
+.wblock ul {
+list-style: none;
+display: flex;
+flex-direction: column;
+gap: 9px;
+}
+
+.wblock li {
+font-size: 13px;
+color: var(–mist);
+padding-left: 16px;
+position: relative;
+line-height: 1.5;
+font-weight: 300;
+}
+
+.wblock li::before {
+content: ‘→’;
+position: absolute;
+left: 0;
+color: var(–azure);
+font-size: 11px;
+top: 1px;
+}
+
+/* ── CLOSING ── */
+.s-close {
+text-align: center;
+align-items: center;
+background-image: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(184,151,58,0.05) 0%, transparent 70%);
+}
+
+.close-title {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: clamp(36px, 5vw, 68px);
+font-weight: 700;
+color: var(–white);
+line-height: 1.1;
+margin-bottom: 24px;
+max-width: 820px;
+}
+
+.close-title em { font-style: italic; color: var(–brass-light); }
+
+.divider {
+width: 48px;
+height: 2px;
+background: var(–brass);
+margin: 0 auto 32px;
+opacity: 0.5;
+}
+
+.close-sub {
+font-size: 16px;
+color: var(–mist);
+font-weight: 300;
+max-width: 560px;
+line-height: 1.75;
+margin-bottom: 40px;
+}
+
+.close-statement {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 19px;
+font-style: italic;
+color: rgba(212,179,92,0.65);
+max-width: 560px;
+line-height: 1.6;
+}
+
+/* ── NAV ── */
+.nav {
+position: fixed;
+right: 20px;
+top: 50%;
+transform: translateY(-50%);
+display: flex;
+flex-direction: column;
+gap: 9px;
+z-index: 100;
+}
+
+.dot {
+width: 5px;
+height: 5px;
+border-radius: 50%;
+background: rgba(184,151,58,0.25);
+cursor: pointer;
+transition: all 0.25s;
+}
+
+.dot.active, .dot:hover {
+background: var(–brass);
+transform: scale(1.6);
+}
+
+/* ── ANIM ── */
+@keyframes rise {
+from { opacity: 0; transform: translateY(20px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+.an { opacity: 0; transform: translateY(18px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.an.in { opacity: 1; transform: none; }
+.d1 { transition-delay: 0.12s; }
+.d2 { transition-delay: 0.24s; }
+.d3 { transition-delay: 0.36s; }
+.d4 { transition-delay: 0.48s; }
+.d5 { transition-delay: 0.60s; }
+
+@media (max-width: 768px) {
+.slide { padding: 48px 28px; }
+.grid2, .grid3, .horizons, .analogy-grid, .flows-grid, .wflow, .loc-grid { grid-template-columns: 1fr; }
+.horizons { border: none; }
+.hcol { border-right: none; border-bottom: 1px solid rgba(184,151,58,0.14); }
+.stack-layer { grid-template-columns: 1fr; }
+.stack-layer-name { border-right: none; border-bottom: 1px solid rgba(184,151,58,0.18); }
+/* specs grid on slide 5 */
+.slide div[style*=“grid-template-columns: repeat(4, 1fr)”] { grid-template-columns: 1fr 1fr !important; }
+}
 </style>
+
 </head>
 <body>
 
 <nav class="nav" id="nav"></nav>
 
 <!-- ═══ SLIDE 1 — CAPA ═══ -->
+
 <section class="slide s-cover" id="s0">
   <div class="cover-header">
     <span class="org-label">Iniciativa de P&amp;D · Engenharia de Plataforma</span>
@@ -705,7 +708,7 @@
   <div class="cover-body">
     <p class="cover-kicker">Proposta Executiva</p>
     <h1 class="cover-title">Laboratório de<br><em>Ensaios</em> em<br>Engenharia de Plataforma</h1>
-    <p class="cover-desc">Uma infraestrutura permanente de P&amp;D para submeter a pilha tecnológica que sustenta nossos produtos — hardware, nuvem privada, PaaS, bancos — a ensaios exaustivos sob condições extremas. Como faz a indústria com seus produtos físicos, agora para engenharia de software.</p>
+    <p class="cover-desc">Uma infraestrutura permanente de P&amp;D para submeter a pilha tecnológica que sustenta nossos produtos (hardware, nuvem privada, PaaS e bancos) a ensaios sistemáticos em condições extremas. Como faz a indústria com seus produtos físicos, agora para engenharia de software.</p>
   </div>
 
   <div class="cover-footer">
@@ -718,9 +721,10 @@
 </section>
 
 <!-- ═══ SLIDE 2 — ANALOGIA INDUSTRIAL ═══ -->
+
 <section class="slide bg-mid" id="s1">
   <p class="eyebrow an">A Inspiração</p>
-  <h2 class="stitle an d1">Indústrias maduras ensaiam<br>seus produtos. <em>Software ainda não.</em></h2>
+  <h2 class="stitle an d1">Ensaios sistemáticos antes da liberação:<br><em>prática consolidada na indústria,</em> ainda incipiente em engenharia de plataforma</h2>
 
   <div class="analogy-grid an d2">
     <div class="analogy-side">
@@ -748,12 +752,13 @@
   </div>
 
   <div class="pullquote an d3">
-    <p>O que a indústria física aprendeu há décadas — ensaiar antes de liberar — a engenharia de software ainda trata como exceção. O laboratório fecha esse gap, com método e <strong>IA como motor</strong>.</p>
+    <p>Ensaiar a base antes de operar é princípio consolidado em setores críticos da indústria. O laboratório aplica esse mesmo princípio à engenharia de plataforma, com automação e suporte de agentes de IA.</p>
   </div>
   <div class="slide-num">02 / 12</div>
 </section>
 
 <!-- ═══ SLIDE 3 — O PROBLEMA ═══ -->
+
 <section class="slide" id="s2">
   <p class="eyebrow an">O Problema</p>
   <h2 class="stitle an d1">A qualidade dos produtos<br>depende da <em>maturidade da pilha</em></h2>
@@ -761,15 +766,15 @@
   <div class="grid2 an d2">
     <div class="card">
       <h3>Risco silencioso na base</h3>
-      <p>Cada produto que sai da esteira herda os limites da pilha que o sustenta. Bugs, gargalos de escala e fragilidades de configuração da camada de infraestrutura aparecem como incidentes da aplicação — sem que se saiba que a origem é a base.</p>
+      <p>Cada produto que sai da esteira herda os limites da pilha que o sustenta. Bugs, gargalos de escala e fragilidades de configuração da camada de infraestrutura aparecem como incidentes da aplicação, sem que a origem na base seja identificada.</p>
     </div>
     <div class="card">
       <h3>Falhas descobertas em produção</h3>
-      <p>Sem ensaios sistemáticos, comportamentos sob carga, falha e escala só ficam claros quando o impacto já é real — usuários afetados, dados em risco, SLAs comprometidos. O custo de um defeito cresce em ordens de magnitude do desenvolvimento à produção.</p>
+      <p>Sem ensaios sistemáticos, comportamentos sob carga, falha e escala só ficam claros quando o impacto já é real: usuários afetados, dados em risco e SLAs comprometidos. O custo de um defeito cresce em ordens de magnitude do desenvolvimento à produção.</p>
     </div>
     <div class="card">
       <h3>Hipóteses de melhoria sem validação</h3>
-      <p>Ideias para evoluir a base — ajustes de configuração, novos plugins, mudanças no código upstream, migrações de versão — esbarram na ausência de um ambiente para testá-las com rigor antes de qualquer adoção.</p>
+      <p>Ajustes de configuração, novos plugins, mudanças no código upstream e migrações de versão esbarram na ausência de um ambiente para validá-los com rigor antes de qualquer adoção.</p>
     </div>
     <div class="card">
       <h3>Capacidade técnica fragmentada</h3>
@@ -780,22 +785,23 @@
 </section>
 
 <!-- ═══ SLIDE 4 — A PROPOSTA ═══ -->
+
 <section class="slide bg-mid" id="s3">
   <p class="eyebrow an">A Proposta</p>
-  <h2 class="stitle an d1">Um laboratório permanente<br>para <em>ensaiar a pilha</em><br>antes que ela ensaie nossos produtos</h2>
+  <h2 class="stitle an d1">Um laboratório permanente<br>de ensaios para a <em>pilha tecnológica</em><br>da organização</h2>
 
   <p class="lead-paragraph an d2">
-    Um ambiente dedicado e instrumentado para construir, integrar e submeter a <strong>pilha tecnológica que sustenta nossa esteira de software</strong> — hardware, nuvem privada, PaaS, bancos, mensageria — a ensaios exaustivos. Sobre softwares livres consagrados, com automação por agentes de IA, e um fluxo contínuo de P&amp;D.
+    Um ambiente dedicado e instrumentado para construir, integrar e submeter a <strong>pilha tecnológica que sustenta nossa esteira de software</strong> (hardware, nuvem privada, PaaS, bancos e mensageria) a ensaios sistemáticos. Sobre softwares livres consagrados, com automação por agentes de IA, e um fluxo contínuo de P&amp;D.
   </p>
 
   <div class="grid3 an d3">
     <div class="card">
       <h3>Pilha integrada</h3>
-      <p>OpenStack, Kubernetes, PostgreSQL, Kafka, MongoDB, KVM, Istio e outros — montados como um sistema, não como peças isoladas. A integração é parte do que se ensaia.</p>
+      <p>OpenStack, Kubernetes, PostgreSQL, Kafka, MongoDB, KVM, Istio e outros, integrados como um sistema e não como peças isoladas. A integração é parte do que se ensaia.</p>
     </div>
     <div class="card">
       <h3>Ensaios automatizados</h3>
-      <p>Carga, falhas, regressão, durabilidade, segurança, escala. Cada ensaio é código, repetível, versionado e auditável — não procedimento manual ou pontual.</p>
+      <p>Carga, falhas, regressão, durabilidade, segurança, escala. Cada ensaio é código, repetível, versionado e auditável. Não procedimento manual ou pontual.</p>
     </div>
     <div class="card">
       <h3>IA como motor</h3>
@@ -804,15 +810,16 @@
   </div>
 
   <div class="pullquote an d4">
-    <p>O laboratório não entrega um produto único e encerra — ele <strong>é</strong> a capacidade permanente de construir, ensaiar e evoluir a engenharia de plataforma da organização.</p>
+    <p>O laboratório não é um projeto com data de encerramento. É uma infraestrutura contínua de construção, ensaio e evolução da engenharia de plataforma, operada em ciclos com apoio de agentes de IA.</p>
   </div>
   <div class="slide-num">04 / 12</div>
 </section>
 
 <!-- ═══ SLIDE 5 — A PILHA ═══ -->
+
 <section class="slide" id="s4">
   <p class="eyebrow an">A Pilha sob Ensaio</p>
-  <h2 class="stitle an d1">Quatro camadas integradas,<br><em>uma engenharia única</em></h2>
+  <h2 class="stitle an d1">Quatro camadas integradas,<br><em>ensaiadas como sistema</em></h2>
 
   <div class="stack-pyramid an d2">
     <div class="stack-layer">
@@ -821,7 +828,7 @@
         <div class="layer-title">Aplicação</div>
       </div>
       <div class="stack-layer-content">
-        <strong>Produtos da esteira</strong> — submetidos a ensaios na pilha já validada. Cargas reais, falhas injetadas, cenários extremos antes da produção real.
+        <strong>Produtos da esteira</strong>, submetidos a ensaios na pilha já validada. Cargas reais, falhas injetadas, cenários extremos antes da produção real.
       </div>
     </div>
     <div class="stack-layer">
@@ -830,7 +837,7 @@
         <div class="layer-title">PaaS &amp; Dados</div>
       </div>
       <div class="stack-layer-content">
-        <strong>PostgreSQL, Kafka, MongoDB, Istio</strong>, observabilidade, secrets, identidade — serviços gerenciados validados em integração contínua.
+        <strong>PostgreSQL, Kafka, MongoDB, Istio</strong>, observabilidade, secrets e identidade: serviços gerenciados validados em integração contínua.
       </div>
     </div>
     <div class="stack-layer">
@@ -839,7 +846,7 @@
         <div class="layer-title">Nuvem Privada</div>
       </div>
       <div class="stack-layer-content">
-        <strong>OpenStack + Kubernetes</strong> — IaaS e orquestração com autoserviço, multi-tenant, multi-AZ. Plano de controle e plano de dados ensaiados em conjunto.
+        <strong>OpenStack + Kubernetes</strong>: IaaS e orquestração com autoserviço, multi-tenant, multi-AZ. Plano de controle e plano de dados ensaiados em conjunto.
       </div>
     </div>
     <div class="stack-layer">
@@ -848,7 +855,7 @@
         <div class="layer-title">Hardware</div>
       </div>
       <div class="stack-layer-content">
-        <strong>Servidores, rede, storage, GPU, HSM</strong> — instrumentados, com benchmarks de baseline, falhas injetáveis e telemetria detalhada.
+        <strong>Servidores, rede, storage, GPU, HSM</strong>, instrumentados com benchmarks de baseline, falhas injetáveis e telemetria detalhada.
       </div>
     </div>
   </div>
@@ -882,9 +889,10 @@
 </section>
 
 <!-- ═══ SLIDE 6 — MAGNITUDE (LoC) ═══ -->
+
 <section class="slide bg-mid" id="s5">
   <p class="eyebrow an">A Escala do Domínio</p>
-  <h2 class="stitle an d1">21 milhões de linhas de código —<br><em>escala que só a IA viabiliza</em></h2>
+  <h2 class="stitle an d1">21 milhões de linhas de código:<br><em>a escala que fundamenta</em> o uso de IA</h2>
 
   <p class="lead-paragraph an d2">
     Ensaiar e dominar tecnicamente cada projeto open source da pilha significa entender bases de código que somam dezenas de milhões de linhas, em cinco linguagens distintas. Sem IA, nenhum time enxuto absorve essa escala. Com IA, ela vira currículo de capacitação acelerada.
@@ -961,6 +969,7 @@
 </section>
 
 <!-- ═══ SLIDE 7 — TIPOS DE ENSAIOS ═══ -->
+
 <section class="slide" id="s6">
   <p class="eyebrow an">O Catálogo de Ensaios</p>
   <h2 class="stitle an d1">Seis dimensões de ensaio,<br><em>aplicadas a cada ciclo</em></h2>
@@ -968,7 +977,7 @@
   <div class="grid3 an d2">
     <div class="card">
       <h3>Carga &amp; Performance</h3>
-      <p>Benchmarks automatizados detectam regressões de latência, throughput e consumo. Performance vira critério de aceitação — não verificação posterior.</p>
+      <p>Benchmarks automatizados detectam regressões de latência, throughput e consumo. Performance vira critério de aceitação, não verificação posterior.</p>
     </div>
     <div class="card">
       <h3>Regressão &amp; Contrato</h3>
@@ -976,11 +985,11 @@
     </div>
     <div class="card">
       <h3>HA &amp; Chaos Engineering</h3>
-      <p>Simulação de desastres em todas as camadas — host, AZ, rede, storage, banco — com aferição de <strong>disponibilidade (SLO)</strong> e <strong>durabilidade (perda zero de dados)</strong>. Resiliência comprovada, não presumida.</p>
+      <p>Simulação de desastres em todas as camadas (host, AZ, rede, storage e banco), com aferição de <strong>disponibilidade (SLO)</strong> e <strong>durabilidade (perda zero de dados)</strong>. Resiliência comprovada, não presumida.</p>
     </div>
     <div class="card">
       <h3>Pentest &amp; Segurança Contínua</h3>
-      <p>SAST, SCA e secrets scanning integrados ao ciclo. Conformidade com FIPS, HSM, Zero Trust e RBAC validada a cada PR — não apenas em auditorias anuais.</p>
+      <p>SAST, SCA e secrets scanning integrados ao ciclo. Conformidade com FIPS, HSM, Zero Trust e RBAC validada a cada PR, não apenas em auditorias anuais.</p>
     </div>
     <div class="card">
       <h3>Game Days &amp; Failure Drills</h3>
@@ -988,13 +997,14 @@
     </div>
     <div class="card">
       <h3>Documentação &amp; Runbooks Vivos</h3>
-      <p>Agentes mantêm documentação técnica, changelogs e runbooks sincronizados com o estado real do sistema — eliminando a lacuna entre construído e documentado.</p>
+      <p>Agentes mantêm documentação técnica, changelogs e runbooks sincronizados com o estado real do sistema, eliminando a lacuna entre o que foi construído e o que está documentado.</p>
     </div>
   </div>
   <div class="slide-num">07 / 12</div>
 </section>
 
 <!-- ═══ SLIDE 8 — METODOLOGIA AGILE-AGENTIC ═══ -->
+
 <section class="slide bg-mid" id="s7">
   <p class="eyebrow an">Metodologia</p>
   <h2 class="stitle an d1">Agile-Agentic:<br><em>sprints de 24h</em> com frota de agentes</h2>
@@ -1022,12 +1032,13 @@
   </div>
 
   <div class="pullquote an d3">
-    <p>"Daytime is for judgment, design, and direction. <strong>Nighttime is for execution, iteration, and improvement.</strong>" — referência ao modelo de agent factory para engenharia de software.</p>
+    <p>"Daytime is for judgment, design, and direction. <strong>Nighttime is for execution, iteration, and improvement.</strong>" (referência ao modelo de agent factory para engenharia de software).</p>
   </div>
   <div class="slide-num">08 / 12</div>
 </section>
 
 <!-- ═══ SLIDE 9 — DOIS FLUXOS DE USO ═══ -->
+
 <section class="slide" id="s8">
   <p class="eyebrow an">Os Dois Fluxos de Uso</p>
   <h2 class="stitle an d1">Uma mesma pilha,<br><em>dois propósitos de ensaio</em></h2>
@@ -1037,7 +1048,7 @@
       <div class="flow-number">01</div>
       <div class="flow-tag">Ensaios da pilha</div>
       <h3>Hipóteses sobre as tecnologias de base</h3>
-      <p>Testar mudanças, ajustes e contribuições nas próprias tecnologias que sustentam a pilha — desde configurações até alterações de código upstream. <strong>A pilha é o produto sob ensaio</strong>.</p>
+      <p>Testar mudanças, ajustes e contribuições nas próprias tecnologias que sustentam a pilha, desde configurações até alterações de código upstream. <strong>A pilha é o produto sob ensaio</strong>.</p>
       <div class="flow-examples">
         <div class="flow-examples-label">Exemplos de hipóteses</div>
         <ul>
@@ -1052,7 +1063,7 @@
       <div class="flow-number">02</div>
       <div class="flow-tag">Ensaios de aplicação</div>
       <h3>Aplicações em cenários extremos</h3>
-      <p>Usar a pilha já validada como banco de provas para submeter aplicações da esteira a ensaios antes da produção — em condições mais agressivas do que o ambiente real costuma impor. <strong>A pilha é o ambiente de ensaio</strong>.</p>
+      <p>Usar a pilha já validada como banco de provas para submeter aplicações da esteira a ensaios antes da produção, em condições mais agressivas do que o ambiente real costuma impor. <strong>A pilha é o ambiente de ensaio</strong>.</p>
       <div class="flow-examples">
         <div class="flow-examples-label">Exemplos de ensaios</div>
         <ul>
@@ -1073,6 +1084,7 @@
 </section>
 
 <!-- ═══ SLIDE 10 — FINANCIAMENTO ═══ -->
+
 <section class="slide bg-mid" id="s9">
   <p class="eyebrow an">As Alavancas de Financiamento</p>
   <h2 class="stitle an d1">P&amp;D em engenharia de plataforma<br>tem <em>caminhos próprios de financiamento</em></h2>
@@ -1084,7 +1096,7 @@
     </div>
     <div class="card">
       <h3>Financiamento Não Reembolsável (FINEP)</h3>
-      <p>Recursos do FNDCT operados pela FINEP via chamadas públicas — destinados a ICTs e a parcerias entre empresas e ICTs. Itens financiáveis incluem equipamentos, equipe própria, treinamento, software e serviços técnicos. <strong>Não há reembolso</strong>: são recursos a fundo perdido para projetos qualificados.</p>
+      <p>Recursos do FNDCT operados pela FINEP via chamadas públicas, destinados a ICTs e a parcerias entre empresas e ICTs. Itens financiáveis incluem equipamentos, equipe própria, treinamento, software e serviços técnicos. <strong>Não há reembolso</strong>: são recursos a fundo perdido para projetos qualificados.</p>
     </div>
     <div class="card">
       <h3>Subvenção Econômica à Inovação</h3>
@@ -1104,6 +1116,7 @@
 </section>
 
 <!-- ═══ SLIDE 11 — HORIZONTES ═══ -->
+
 <section class="slide" id="s10">
   <p class="eyebrow an">Trajetória Realista</p>
   <h2 class="stitle an d1">Três horizontes,<br>uma <em>capacidade permanente</em></h2>
@@ -1113,7 +1126,7 @@
       <div class="hnum">1</div>
       <p class="htag">Primeiros ciclos</p>
       <h3>Pilha base e primeiros ensaios</h3>
-      <p>Integração das tecnologias da pilha no laboratório. Estabelecimento do ciclo agêntico e dos primeiros ensaios automatizados — carga, regressão, falhas básicas. Construção da base de conhecimento técnico e dos baselines de comparação.</p>
+      <p>Integração das tecnologias da pilha no laboratório. Estabelecimento do ciclo agêntico e dos primeiros ensaios automatizados: carga, regressão e falhas básicas. Construção da base de conhecimento técnico e dos baselines de comparação.</p>
       <div class="hfoot">↓ Base instrumentada e time capacitado</div>
     </div>
     <div class="hcol">
@@ -1135,11 +1148,12 @@
 </section>
 
 <!-- ═══ SLIDE 12 — FECHAMENTO ═══ -->
+
 <section class="slide s-close" id="s11">
-  <h2 class="close-title an">Da <em>reação</em> ao método.<br>Do incidente à <em>hipótese.</em></h2>
+  <h2 class="close-title an">Hipóteses validadas.<br><em>Riscos antecipados.</em></h2>
   <div class="divider an d1"></div>
-  <p class="close-sub an d2">O Laboratório de Ensaios em Engenharia de Plataforma é a capacidade permanente que falta para que a qualidade dos nossos produtos seja construída desde a base — com método, IA e financiamento adequado para P&amp;D real.</p>
-  <p class="close-statement an d3">"Qualidade de software não é o que se descobre em produção. É o que se ensaia antes."</p>
+  <p class="close-sub an d2">O Laboratório de Ensaios em Engenharia de Plataforma é a infraestrutura de P&amp;D que permite construir qualidade desde a base, com ciclos sistemáticos de ensaio, agentes de IA integrados e caminhos estruturados de financiamento.</p>
+  <p class="close-statement an d3">Qualidade de plataforma resulta de ensaios sistemáticos aplicados antes da produção, não de diagnósticos feitos após incidentes.</p>
   <div class="slide-num">12 / 12</div>
 </section>
 
@@ -1164,5 +1178,6 @@
   }, { threshold: 0.25 });
   slides.forEach(s => io.observe(s));
 </script>
+
 </body>
 </html>

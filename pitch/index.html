@@ -711,7 +711,7 @@
   <div class="cover-footer">
     <div class="stat-pill">P&amp;D em engenharia de plataforma</div>
     <div class="stat-pill">Ensaios automatizados ponta a ponta</div>
-    <div class="stat-pill">21M+ LoC sob domínio com IA</div>
+    <div class="stat-pill">~50M LoC sob domínio com IA</div>
     <div class="stat-pill">Financiável por Lei do Bem + FINEP</div>
   </div>
   <div class="slide-num">01 / 13</div>
@@ -876,7 +876,7 @@
   </div>
 
   <p class="an d4" style="font-size: 13px; color: var(--mist); margin-top: 28px; max-width: 820px; line-height: 1.6; font-weight: 300; font-style: italic;">
-    A integração entre camadas é tão importante quanto cada camada isolada. O laboratório ensaia <strong style="color: var(--stone); font-style: normal;">a pilha como sistema</strong> — descobrindo interações que só aparecem na composição.
+    A integração entre camadas é tão importante quanto cada camada isolada. O laboratório ensaia <strong style="color: var(--stone); font-style: normal;">a pilha como sistema</strong>, descobrindo interações que só aparecem na composição.
   </p>
   <div class="slide-num">05 / 13</div>
 </section>
@@ -884,10 +884,10 @@
 <!-- ═══ SLIDE 6 — MAGNITUDE (LoC) ═══ -->
 <section class="slide bg-mid" id="s5">
   <p class="eyebrow an">A Escala do Domínio</p>
-  <h2 class="stitle an d1">21 milhões de linhas de código:<br><em>a escala que fundamenta</em> o uso de IA</h2>
+  <h2 class="stitle an d1">Cerca de 50 milhões de linhas de código:<br><em>a escala que fundamenta</em> o uso de IA</h2>
 
   <p class="lead-paragraph an d2">
-    Ensaiar e dominar tecnicamente cada projeto open source da pilha significa entender bases de código que somam dezenas de milhões de linhas, em cinco linguagens distintas. Sem IA, nenhum time enxuto absorve essa escala. Com IA, ela vira currículo de capacitação acelerada.
+    Ensaiar e dominar tecnicamente cada projeto open source da pilha significa entender bases de código que somam cerca de 50 milhões de linhas, em seis linguagens distintas. Sem IA, nenhum time enxuto absorve essa escala. Com IA, ela vira currículo de capacitação acelerada.
   </p>
 
   <div class="an d3" style="max-width: 1100px;">
@@ -895,7 +895,11 @@
       <span class="loc-tier-icon">🏔</span>
       <span class="loc-tier-label">Tier 1 · Mega projetos · +3M LoC</span>
     </div>
-    <div class="loc-grid">
+    <div class="loc-grid" style="grid-template-columns: repeat(4, 1fr);">
+      <div class="loc-card tier1 loc-tier1">
+        <div class="loc-card-head"><span class="loc-name">Linux</span><span class="loc-value">~27M</span></div>
+        <div class="loc-desc">C/Assembly · Kernel · drivers, subsistemas, arquiteturas</div>
+      </div>
       <div class="loc-card tier1 loc-tier1">
         <div class="loc-card-head"><span class="loc-name">OpenStack</span><span class="loc-value">~6,5M</span></div>
         <div class="loc-desc">Python · IaaS completa · 50+ serviços</div>
@@ -929,6 +933,14 @@
         <div class="loc-card-head"><span class="loc-name">MongoDB</span><span class="loc-value">~1,5M</span></div>
         <div class="loc-desc">C++ · NoSQL · WiredTiger + mongos</div>
       </div>
+      <div class="loc-card loc-tier2">
+        <div class="loc-card-head"><span class="loc-name">Ansible</span><span class="loc-value">~700K</span></div>
+        <div class="loc-desc">Python · Automação · core + módulos</div>
+      </div>
+      <div class="loc-card loc-tier2">
+        <div class="loc-card-head"><span class="loc-name">Terraform (OpenTofu)</span><span class="loc-value">~600K</span></div>
+        <div class="loc-desc">Go · IaC · provider framework + core</div>
+      </div>
     </div>
   </div>
 
@@ -937,7 +949,7 @@
       <span class="loc-tier-icon">🏕</span>
       <span class="loc-tier-label">Tier 3 · Projetos focados · &lt;500K LoC</span>
     </div>
-    <div class="loc-grid">
+    <div class="loc-grid" style="grid-template-columns: repeat(4, 1fr);">
       <div class="loc-card loc-tier3">
         <div class="loc-card-head"><span class="loc-name">Istio</span><span class="loc-value">~450K</span></div>
         <div class="loc-desc">Go · Service mesh · control + data plane</div>
@@ -950,12 +962,16 @@
         <div class="loc-card-head"><span class="loc-name">Calico</span><span class="loc-value">~250K</span></div>
         <div class="loc-desc">Go · CNI/BGP · Felix+Typha+BIRD</div>
       </div>
+      <div class="loc-card loc-tier3">
+        <div class="loc-card-head"><span class="loc-name">containerd</span><span class="loc-value">~150K</span></div>
+        <div class="loc-desc">Go · Container runtime · OCI + snapshotter</div>
+      </div>
     </div>
   </div>
 
   <div class="highlight-box an d5" style="margin-top: 12px;">
     <div class="hbox-label">A Oportunidade</div>
-    <p>Agentes de IA <span class="azure">indexam, navegam e explicam</span> essas bases de código em ritmo humanamente impossível. O que era barreira intransponível vira currículo de capacitação acelerada para um time enxuto.</p>
+    <p>Cerca de 50 milhões de linhas em seis linguagens (C, Go, Python, Java/Scala, C++, Assembly). Agentes de IA <span class="azure">indexam, navegam e explicam</span> essas bases de código em ritmo humanamente impossível. O que seria uma barreira de capacitação vira um processo contínuo e sustentável para um time enxuto.</p>
   </div>
   <div class="slide-num">06 / 13</div>
 </section>

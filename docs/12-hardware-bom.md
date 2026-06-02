@@ -13,10 +13,10 @@
 | Role | Modelo Dell Recomendado | Qtd | Preço Base Unitário | Observação |
 |---|---|---:|---|---|
 | Control Plane | PowerEdge **R670** | 12 | R$ 75.890 | 1U dual-socket Intel Xeon 6 |
-| Compute | PowerEdge **R770** | 102 | USD 30.899 | 2U dual-socket Intel Xeon 6 |
+| Compute | PowerEdge **R770** | 102 | R$ 82.819 | 2U dual-socket Intel Xeon 6 |
 | GPU Compute | PowerEdge **XE8640** | 9 | Consultar Dell | 4U, 4× H100 SXM5 NVLink |
 | Swift Storage | PowerEdge **R760xd2** | 18 | R$ 84.221 | 2U, até 24× LFF 3.5" |
-| Cinder Storage | PowerEdge **R770** (all-NVMe) | 3 | USD 30.899 | 2U, até 40× E3.S NVMe Gen5 |
+| Cinder Storage | PowerEdge **R770** (all-NVMe) | 3 | R$ 82.819 | 2U, até 40× E3.S NVMe Gen5 |
 | Network Node | PowerEdge **R670** | 6 | R$ 75.890 | 1U dual-socket, NIC quad 25GbE |
 | Leaf Switch (ToR) | PowerSwitch **Z9264F-ON** | 18 | Consultar Dell | 64× 100GbE QSFP28 |
 | Spine Switch | PowerSwitch **Z9664DX-ON** | 3 | Consultar Dell | 64× 400GbE QSFP-DD |
@@ -59,7 +59,9 @@ iDRAC: iDRAC9 Enterprise (Redfish, vConsole, vMedia)
 ```
 
 **Preço base:** R$ 75.890 (site pt-br — configuração mínima)
-**URL:** [dell.com/pt-br — PowerEdge R670](https://www.dell.com/pt-br/shop/servidores-de-data-center/servidor-poweredge-r670/spd/poweredge-r670)
+**Produto BR:** [dell.com/pt-br — PowerEdge R670](https://www.dell.com/pt-br/shop/servidores-de-data-center/servidor-poweredge-r670/spd/poweredge-r670)
+**Spec Sheet:** [poweredge-r670-spec-sheet.pdf](https://www.delltechnologies.com/asset/en-us/products/servers/technical-support/poweredge-r670-spec-sheet.pdf) (en-us — versão pt-br não disponível)
+**Guia Técnico pt-br:** [poweredge-r670-technical-guide.pdf](https://www.delltechnologies.com/asset/pt-br/products/servers/technical-support/poweredge-r670-technical-guide.pdf)
 
 ---
 
@@ -97,9 +99,13 @@ PSU  : Dual 1+1 1600W ou 2000W Titanium hot-swap
 iDRAC: iDRAC9 Enterprise
 ```
 
-**Preço base:** USD 30.899 (site global — configuração mínima)
-**Alternativa AMD:** PowerEdge **R7725** (AMD EPYC 9965, 192C/socket, a partir de USD 17.899) —
-recomendado se requisito de densidade de vCPU for prioritário sobre compatibilidade Intel.
+**Preço base:** R$ 82.819 (site pt-br — configuração mínima)
+**Produto BR:** [dell.com/pt-br — PowerEdge R770](https://www.dell.com/pt-br/shop/servidores-de-data-center/servidor-poweredge-r770/spd/poweredge-r770)
+**Spec Sheet pt-br:** [poweredge-r770-spec-sheet.pdf](https://www.delltechnologies.com/asset/pt-br/products/servers/technical-support/poweredge-r770-spec-sheet.pdf)
+**Guia Técnico pt-br:** [poweredge-r770-technical-guide.pdf](https://www.delltechnologies.com/asset/pt-br/products/servers/technical-support/poweredge-r770-technical-guide.pdf)
+**Alternativa AMD:** PowerEdge **R7725** (AMD EPYC 9965, 192C/socket, a partir de R$ 78.017)
+— [Spec Sheet pt-br](https://www.delltechnologies.com/asset/pt-br/products/servers/technical-support/poweredge-r7725-spec-sheet.pdf)
+— recomendado se densidade máxima de vCPU for prioritária sobre compatibilidade Intel.
 
 > **Nota KVM:** O Xeon 6 suporta VT-x, VT-d/IOMMU, EPT, e até 86 cores por socket com
 > hardware multithreading — ideal para o perfil de overcommit 3:1 definido em `04-compute-plane.md`.
@@ -151,6 +157,8 @@ iDRAC: iDRAC9 Enterprise
 ```
 
 **Preço:** Consultar Dell diretamente (sistemas XE não têm preço público — são vendidos por proposta).
+**Produto BR:** [dell.com/pt-br — PowerEdge XE8640](https://www.dell.com/pt-br/shop/servidores-de-data-center/servidor-poweredge-xe8640/spd/poweredge-xe8640)
+**Spec Sheet:** [poweredge-xe8640-spec-sheet.pdf](https://www.delltechnologies.com/asset/en-us/products/servers/technical-support/poweredge-xe8640-spec-sheet.pdf) (en-us — versão pt-br não disponível)
 
 > **PCI Vendor/Product ID:** Após recebimento do hardware, executar:
 > ```bash
@@ -196,7 +204,9 @@ iDRAC: iDRAC9 Enterprise
 ```
 
 **Preço base:** R$ 84.221 (site pt-br — configuração mínima)
-**URL:** [dell.com/pt-br — PowerEdge R760xd2](https://www.dell.com/pt-br/shop/servidores-de-data-center/servidor-poweredge-r760xd2/spd/poweredge-r760xd2)
+**Produto BR:** [dell.com/pt-br — PowerEdge R760xd2](https://www.dell.com/pt-br/shop/servidores-de-data-center/servidor-poweredge-r760xd2/spd/poweredge-r760xd2)
+**Spec Sheet pt-br:** [poweredge-r760xd2-spec-sheet.pdf](https://www.delltechnologies.com/asset/pt-br/products/servers/technical-support/poweredge-r760xd2-spec-sheet.pdf)
+**Guia Técnico:** [poweredge-r760xd2-technical-guide.pdf](https://www.delltechnologies.com/asset/en-us/products/servers/technical-support/poweredge-r760xd2-technical-guide.pdf)
 
 > **Capacidade por nó:** 12× 16 TB = **192 TB raw**. Com replicação 3× do Swift:
 > **64 TB úteis por nó**, **1.152 TB úteis totais** (18 nós).
@@ -237,7 +247,9 @@ PSU  : Dual 1+1 1600W Titanium hot-swap
 iDRAC: iDRAC9 Enterprise
 ```
 
-**Preço base:** USD 30.899 (configuração mínima — configuração all-NVMe substancialmente superior)
+**Preço base:** R$ 82.819 (site pt-br — configuração mínima; all-NVMe substancialmente superior)
+**Produto BR:** [dell.com/pt-br — PowerEdge R770](https://www.dell.com/pt-br/shop/servidores-de-data-center/servidor-poweredge-r770/spd/poweredge-r770)
+**Spec Sheet pt-br:** [poweredge-r770-spec-sheet.pdf](https://www.delltechnologies.com/asset/pt-br/products/servers/technical-support/poweredge-r770-spec-sheet.pdf)
 
 > ⚠️ **Form factor de NVMe:** A arquitetura especifica U.2 (SFF-8639). O R770 usa E3.S (EDSFF).
 > Ambos são NVMe PCIe Gen5, mas os conectores e suportes físicos diferem.
@@ -269,6 +281,8 @@ iDRAC: iDRAC9 Enterprise
 ```
 
 **Preço base:** R$ 75.890 (mesmo SKU do control plane — diferencia-se na configuração)
+**Produto BR:** [dell.com/pt-br — PowerEdge R670](https://www.dell.com/pt-br/shop/servidores-de-data-center/servidor-poweredge-r670/spd/poweredge-r670)
+**Spec Sheet:** [poweredge-r670-spec-sheet.pdf](https://www.delltechnologies.com/asset/en-us/products/servers/technical-support/poweredge-r670-spec-sheet.pdf) (en-us)
 
 ---
 
@@ -402,8 +416,8 @@ Solicitar: datasheet técnico completo + proposta para 3 unidades + SLA de supor
 |---|---|---:|---|---|---|
 | PowerEdge R670 | Control Plane | 12 | R$ 75.890 | ~R$ 910.680 | dell.com/pt-br |
 | PowerEdge R670 | Network Node | 6 | R$ 75.890 | ~R$ 455.340 | dell.com/pt-br |
-| PowerEdge R770 | Compute | 102 | USD 30.899 | ~USD 3.151.698 | dell.com global |
-| PowerEdge R770 | Cinder (all-NVMe) | 3 | USD 30.899 | ~USD 92.697 | dell.com global |
+| PowerEdge R770 | Compute | 102 | R$ 82.819 | ~R$ 8.447.538 | dell.com/pt-br |
+| PowerEdge R770 | Cinder (all-NVMe) | 3 | R$ 82.819 | ~R$ 248.457 | dell.com/pt-br |
 | PowerEdge R760xd2 | Swift | 18 | R$ 84.221 | ~R$ 1.515.978 | dell.com/pt-br |
 | PowerEdge XE8640 | GPU | 9 | Consultar Dell | — | sob proposta |
 | Kryptus ASI-HSM AHX5 KNET | HSM | 3 | R$ 256.000 | ~R$ 768.000 | contrato público 2024 |

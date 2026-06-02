@@ -140,6 +140,16 @@ iDRAC: iDRAC9 Enterprise
 **Fonte do preço (primária):** Contrato SERPRO 263505 — Lenovo Tecnologia (Brasil), jan/2026,
 **R$ 1.260.000/un**, 4× NVIDIA H200 SXM5 141 GB HBM3e. ARP PE 91031/2025 (UASG 803080) aderível.
 **Fonte do preço (alternativa):** Dell PowerEdge XE8640 — consultar proposta (sem preço público).
+**Modelo inferido:** Lenovo ThinkSystem **SR680a V3** (configuração 4× H200 SXM5)
+**Datasheet:** [ds0180 — ThinkSystem SR680a V3 Datasheet](https://lenovopress.lenovo.com/datasheet/ds0180-lenovo-thinksystem-sr680a-v3)
+**Product Guide:** [lp1909 — ThinkSystem SR680a V3 Server Product Guide](https://lenovopress.lenovo.com/lp1909-thinksystem-sr680a-v3-server)
+**GPU Guide:** [lp1944 — ThinkSystem NVIDIA H200 141GB GPUs Product Guide](https://lenovopress.lenovo.com/lp1944-nvidia-h200-141gb-gpu)
+**Technical Specs:** [pubs.lenovo.com — SR680a V3 Specifications](https://pubs.lenovo.com/sr680a-v3/server_specifications_technical)
+
+> ℹ️ O modelo exato entregue pela Lenovo no Contrato 263505 não está explicitado no edital —
+> o SR680a V3 é inferido por ser o único ThinkSystem com 4–8× H200 SXM5 e 2× Intel Xeon 5ª Ger.
+> O SR680a V3 é **8U** (vs 4U do XE8640) — verificar impacto no layout de rack se este modelo
+> for adquirido. Com 8U por GPU node, os racks FD1/FD2/FD3 precisariam ser revisados.
 
 ### Referência primária de preço: SERPRO PE 91031/2025, Configuração 7
 

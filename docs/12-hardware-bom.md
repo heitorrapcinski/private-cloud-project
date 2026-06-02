@@ -103,9 +103,7 @@ iDRAC: iDRAC9 Enterprise
 **Produto BR:** [dell.com/pt-br — PowerEdge R770](https://www.dell.com/pt-br/shop/servidores-de-data-center/servidor-poweredge-r770/spd/poweredge-r770)
 **Spec Sheet pt-br:** [poweredge-r770-spec-sheet.pdf](https://www.delltechnologies.com/asset/pt-br/products/servers/technical-support/poweredge-r770-spec-sheet.pdf)
 **Guia Técnico pt-br:** [poweredge-r770-technical-guide.pdf](https://www.delltechnologies.com/asset/pt-br/products/servers/technical-support/poweredge-r770-technical-guide.pdf)
-**Alternativa AMD:** PowerEdge **R7725** (AMD EPYC 9965, 192C/socket, a partir de R$ 78.017)
-— [Spec Sheet pt-br](https://www.delltechnologies.com/asset/pt-br/products/servers/technical-support/poweredge-r7725-spec-sheet.pdf)
-— recomendado se densidade máxima de vCPU for prioritária sobre compatibilidade Intel.
+
 
 > **Nota KVM:** O Xeon 6 suporta VT-x, VT-d/IOMMU, EPT, e até 86 cores por socket com
 > hardware multithreading — ideal para o perfil de overcommit 3:1 definido em `04-compute-plane.md`.

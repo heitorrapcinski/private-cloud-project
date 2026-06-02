@@ -74,7 +74,7 @@
 [CmdletBinding()]
 param(
     [string] $Release       = "gazpacho",
-    [string] $OutputDir     = ".\openstack-repos",
+    [string] $OutputDir     = ".\repos\openstack",
     [int]    $ThrottleLimit = 4,
     [bool]   $Shallow       = $true,
     [ValidateSet("opendev", "github")]

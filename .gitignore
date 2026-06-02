@@ -1,2 +1,5 @@
-openstack-repos/
-dist/
+# Repositórios de código-fonte clonados localmente (grandes demais para commitar)
+repos/
+
+# Skills compiladas (geradas pelo build.ps1 — não versionar artefatos)
+skills/dist/

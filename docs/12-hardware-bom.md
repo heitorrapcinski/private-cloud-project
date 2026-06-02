@@ -21,7 +21,7 @@
 | Leaf Switch (ToR) | PowerSwitch **Z9264F-ON** | 18 | Consultar Dell | 64× 100GbE QSFP28 |
 | Spine Switch | PowerSwitch **Z9664DX-ON** | 3 | Consultar Dell | 64× 400GbE QSFP-DD |
 | OOB Switch | PowerSwitch **N3248TE-ON** | 9 | Consultar Dell | 48× 1GbE + 4× 10GbE uplink |
-| HSM Appliance | Kryptus **KNET HSM** | 3 | Consultar Kryptus | FIPS 140-2 L3, ICP-Brasil, EAL4+, PKCS#11, KMIP nativo |
+| HSM Appliance | Kryptus **ASI-HSM AHX5 KNET** | 3 | R$ 256.000 | FIPS 140-2 L3, ICP-Brasil, EAL4+, PKCS#11, KMIP nativo |
 
 ---
 
@@ -313,13 +313,16 @@ iDRAC: iDRAC9 Enterprise
 
 ---
 
-## 8. HSM Appliances — Kryptus KNET HSM
+## 8. HSM Appliances — Kryptus ASI-HSM AHX5 KNET
 
 HSMs são appliances especializados fora do portfólio Dell. O modelo recomendado é o
-**Kryptus KNET HSM** — fabricante brasileiro com FIPS 140-2 Level 3 e homologação ICP-Brasil,
-diferenciais críticos para conformidade com legislação brasileira (LGPD, SPB, PIX, Open Banking).
+**Kryptus ASI-HSM AHX5 KNET** — fabricante brasileiro com FIPS 140-2 Level 3 e homologação
+ICP-Brasil, diferenciais críticos para conformidade com legislação brasileira (LGPD, SPB, PIX,
+Open Banking).
 
 **Fonte:** [kryptus.com/knet-hsm](https://kryptus.com/knet-hsm/)
+**Preço de referência:** R$ 256.000,00/unidade — contrato público vigência 30/10/2024–29/10/2029
+(2 unidades × R$ 256.000 = R$ 512.000 — base para estimativa das 3 unidades desta arquitetura)
 
 ### Especificações — Kryptus KNET HSM
 
@@ -393,21 +396,24 @@ Solicitar: datasheet técnico completo + proposta para 3 unidades + SLA de supor
 
 ## 9. Quantitativos Consolidados
 
-### Servidores
+### Servidores e Appliances
 
-| Modelo | Role | Qtd | Preço Base Unit. | Estimativa Total |
-|---|---|---:|---|---|
-| PowerEdge R670 | Control Plane | 12 | R$ 75.890 | ~R$ 910.680 |
-| PowerEdge R670 | Network Node | 6 | R$ 75.890 | ~R$ 455.340 |
-| PowerEdge R770 | Compute | 102 | USD 30.899 | ~USD 3.151.698 |
-| PowerEdge R770 | Cinder (all-NVMe) | 3 | USD 30.899 | ~USD 92.697 |
-| PowerEdge R760xd2 | Swift | 18 | R$ 84.221 | ~R$ 1.515.978 |
-| PowerEdge XE8640 | GPU | 9 | Consultar Dell | — |
-| **Total servidores** | | **150** | | |
+| Modelo | Role | Qtd | Preço Ref. Unit. | Estimativa Total | Fonte |
+|---|---|---:|---|---|---|
+| PowerEdge R670 | Control Plane | 12 | R$ 75.890 | ~R$ 910.680 | dell.com/pt-br |
+| PowerEdge R670 | Network Node | 6 | R$ 75.890 | ~R$ 455.340 | dell.com/pt-br |
+| PowerEdge R770 | Compute | 102 | USD 30.899 | ~USD 3.151.698 | dell.com global |
+| PowerEdge R770 | Cinder (all-NVMe) | 3 | USD 30.899 | ~USD 92.697 | dell.com global |
+| PowerEdge R760xd2 | Swift | 18 | R$ 84.221 | ~R$ 1.515.978 | dell.com/pt-br |
+| PowerEdge XE8640 | GPU | 9 | Consultar Dell | — | sob proposta |
+| Kryptus ASI-HSM AHX5 KNET | HSM | 3 | R$ 256.000 | ~R$ 768.000 | contrato público 2024 |
+| **Total** | | **153** | | | |
 
-> ⚠️ Os preços acima são configurações **base** (mínimas). As configurações produção com CPU,
-> RAM e storage corretos resultarão em valores substancialmente superiores — estimativa de
-> **3–5× o preço base** dependendo da configuração de memória e storage.
+> ⚠️ **Servidores Dell:** preços de configuração **base** (mínima). Configurações de produção
+> com CPU, RAM e storage adequados resultarão em valores **3–5× superiores**.
+>
+> ⚠️ **HSM Kryptus:** preço extraído de contrato público vigente (30/10/2024–29/10/2029),
+> 2 unidades a R$ 256.000/un. Usado como referência — solicitar proposta formal para 3 unidades.
 
 ### Rede
 

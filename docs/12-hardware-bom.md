@@ -435,18 +435,26 @@ Solicitar: datasheet técnico completo + proposta para 3 unidades + SLA de supor
 
 ### Servidores e Appliances
 
-| Modelo | Role | Qtd | Preço Ref. Unit. | Estimativa Total | Fonte |
-|---|---|---:|---:|---:|---|
-| PowerEdge R670 | Control Plane | 12 | R$ 75.890 | R$ 910.680 | dell.com/pt-br |
-| PowerEdge R670 | Network Node | 6 | R$ 75.890 | R$ 455.340 | dell.com/pt-br |
-| PowerEdge R770 | Compute | 102 | R$ 82.819 | R$ 8.447.538 | dell.com/pt-br |
-| PowerEdge R770 | Cinder (all-NVMe) | 3 | R$ 82.819 | R$ 248.457 | dell.com/pt-br |
-| PowerEdge R760xd2 | Swift | 18 | R$ 84.221 | R$ 1.515.978 | dell.com/pt-br |
-| PowerEdge XE8640 | GPU | 9 | Consultar Dell | A consultar | sob proposta |
-| Kryptus ASI-HSM AHX5 KNET | HSM | 3 | R$ 256.000 | R$ 768.000 | contrato público 2024 |
-| **Total** | | **153** | | **R$ 12.345.993** ¹ | |
+| Modelo | Role | Qtd | Preço Base Dell ² | Estimativa Total | Ref. Gov. (unit.) ³ | Fonte Gov. |
+|---|---|---:|---:|---:|---|---|
+| PowerEdge R670 | Control Plane | 12 | R$ 75.890 | R$ 910.680 | R$ 96k–157k | SERPRO Itens 1/8/9 |
+| PowerEdge R670 | Network Node | 6 | R$ 75.890 | R$ 455.340 | R$ 96k–157k | SERPRO Itens 1/8/9 |
+| PowerEdge R770 | Compute | 102 | R$ 82.819 | R$ 8.447.538 | R$ 277k–305k ⁴ | SERPRO Itens 2/3/4 |
+| PowerEdge R770 | Cinder (all-NVMe) | 3 | R$ 82.819 | R$ 248.457 | R$ 277k–305k ⁴ | SERPRO Itens 2/3/4 |
+| PowerEdge R760xd2 | Swift | 18 | R$ 84.221 | R$ 1.515.978 | R$ 129k–221k | SERPRO Itens 9/10/11 |
+| PowerEdge XE8640 | GPU | 9 | Consultar Dell | A consultar | R$ 150k ⁵ | CENSIPAM Contrato 31/2025 |
+| Kryptus ASI-HSM AHX5 KNET | HSM | 3 | R$ 256.000 | R$ 768.000 | R$ 256.000 | Contrato público 2024 |
+| **Total** | | **153** | | **R$ 12.345.993** ¹ | | |
 
-¹ _Subtotal das linhas com preço público em BRL. Não inclui XE8640 (GPU, sob proposta) nem switches (todos sob proposta)._
+¹ _Subtotal das linhas com preço público Dell em BRL. Não inclui XE8640 (sob proposta) nem switches (sob proposta)._
+
+² _Preços Dell = configuração **base** (mínima). Produção com CPU/RAM/storage adequados resulta em 3–5× superior._
+
+³ _Referência Gov. = **valores estimados sigilosos** do Pregão SERPRO 91031/2025 (UASG 803080, out/2025) e Contrato CENSIPAM 31/2025. São tetos orçamentários, não preços homologados — os preços vencedores dos leilões tendem a ser inferiores. Usados apenas como balizamento de mercado público._
+
+⁴ _SERPRO Itens 2–4 têm 512 GB RAM e 15–20 núcleos/socket, configuração inferior ao R770 (1 TB RAM, 40+ núcleos/socket). Os R$ 277k–305k representam um piso de comparação — o R770 com configuração produção deverá superar este valor._
+
+⁵ _CENSIPAM Contrato 31/2025: servidor rack com **1× NVIDIA L40S 48GB PCIe** (GPU de inferência), não equivalente ao XE8640 (4× H100 80GB SXM5 de treinamento). Serve apenas como referência de piso para servidores com GPU em licitações públicas brasileiras._
 
 > ⚠️ **Servidores Dell:** preços de configuração **base** (mínima). Configurações de produção
 > com CPU, RAM e storage adequados resultarão em valores **3–5× superiores**.

@@ -21,6 +21,7 @@
 | Leaf Switch (ToR) | PowerSwitch **Z9264F-ON** | 18 | Consultar Dell | 64× 100GbE QSFP28 |
 | Spine Switch | PowerSwitch **Z9664DX-ON** | 3 | Consultar Dell | 64× 400GbE QSFP-DD |
 | OOB Switch | PowerSwitch **N3248TE-ON** | 9 | Consultar Dell | 48× 1GbE + 4× 10GbE uplink |
+| HSM Appliance | Kryptus **KNET HSM** | 3 | Consultar Kryptus | FIPS 140-2 L3, ICP-Brasil, EAL4+, PKCS#11, KMIP nativo |
 
 ---
 
@@ -312,19 +313,81 @@ iDRAC: iDRAC9 Enterprise
 
 ---
 
-## 8. HSM Appliances
+## 8. HSM Appliances — Kryptus KNET HSM
 
-Os HSMs não fazem parte do portfólio Dell (são appliances especializados). Candidatos certificados
-FIPS 140-2 Level 3 compatíveis com a arquitetura:
+HSMs são appliances especializados fora do portfólio Dell. O modelo recomendado é o
+**Kryptus KNET HSM** — fabricante brasileiro com FIPS 140-2 Level 3 e homologação ICP-Brasil,
+diferenciais críticos para conformidade com legislação brasileira (LGPD, SPB, PIX, Open Banking).
 
-| Fabricante | Modelo | FIPS | PKCS#11 | KMIP | HA Group |
-|---|---|---|---|---|---|
-| **Thales** | **Luna Network HSM 7** | 140-2 L3 | v2.40 | 1.4+ | Sim |
-| **Entrust** | nShield Connect XC | 140-2 L3 | v2.40 | 1.4+ | Sim |
-| **Futurex** | VirtuCrypt KMES | 140-2 L3 | v2.40 | 1.4+ | Sim |
+**Fonte:** [kryptus.com/knet-hsm](https://kryptus.com/knet-hsm/)
 
-> Detalhes de integração com Barbican em `docs/10-hsm-key-management.md`.
-> Scripts Ansible para deploy dos roles HSM em `ansible/roles/` (se disponível).
+### Especificações — Kryptus KNET HSM
+
+| Especificação | Requisito Arquitetural | KNET HSM | Status |
+|---|---|---|---|
+| Certificação FIPS | 140-2 Level 3 | **FIPS 140-2 Level 3** | ✅ |
+| Common Criteria | — | **EAL4+** (ISO/IEC 15408, EN 419221-5:2018) | ✅ Bônus |
+| ICP-Brasil | — | **Homologado** | ✅ Bônus (obrigatório para PKI nacional) |
+| PCI DSS | — | **Conforme** | ✅ |
+| Algoritmos | RSA, ECC, AES, SHA-2, HMAC, 3DES | RSA, ECC, AES, SHA — lista completa via datasheet | ✅ |
+| PKCS#11 | v2.40+ | ✅ (SDK incluído) | ✅ |
+| KMIP | 1.4+ | **Servidor KMIP embarcado** (nativo, sem drivers externos) | ✅ |
+| OpenSSL / JCA / CSP | — | ✅ (Windows CAPI/CSP, OpenSSL, Java JCA/JCE) | ✅ |
+| Partições (Virtual HSMs) | ≥ 100 | **até 50 Virtual HSMs** por appliance | ⚠️ ver nota |
+| HA Group / replicação | Sim | **Preparado para HA** (detalhes via proposta) | ✅ |
+| Performance RSA-2048 | ≥ 20.000 ops/s | Não publicado — solicitar datasheet | ❓ |
+| Form factor | 1U rack-mount | **1U rack-mount** (confirmar com Kryptus) | ✅ |
+| Conectividade | 2× 1GbE bonding | A confirmar via datasheet | ❓ |
+| Tamper / zeroização | Sim | **Zeroização automática** em violação física | ✅ |
+| Objetos/chaves | — | **até 2,5 milhões** de objetos (chaves + certificados) | ✅ |
+
+> ⚠️ **Partições:** A arquitetura especifica ≥ 100 partições por appliance. O KNET HSM suporta
+> até **50 Virtual HSMs** por unidade. Com 3 appliances em cluster HA, a capacidade total é
+> 150 partições — suficiente se distribuídas entre os nós. Confirmar com Kryptus se o cluster
+> expõe as partições de forma agregada ou se o limite de 50 é por nó independentemente.
+
+### Por que Kryptus em vez de Thales/Entrust
+
+| Critério | Kryptus KNET | Thales Luna 7 | Entrust nShield |
+|---|---|---|---|
+| Fabricação | 🇧🇷 Nacional | 🇺🇸 EUA/França | 🇺🇸 EUA |
+| ICP-Brasil | ✅ Homologado | Parcial (via integradores) | Parcial |
+| FIPS 140-2 L3 | ✅ | ✅ | ✅ |
+| Common Criteria EAL4+ | ✅ | ✅ | ✅ |
+| KMIP nativo | ✅ (embarcado) | Via add-on | Via add-on |
+| Suporte local (BR) | ✅ Campinas/SP | Via revenda | Via revenda |
+| Conformidade LGPD/SPB/PIX | ✅ Nativo | Requer validação | Requer validação |
+| Lei de TI nacional (preferência) | ✅ Favorável | ❌ | ❌ |
+
+### Configuração para a Arquitetura (3 appliances)
+
+```
+Qtd    : 3 unidades (1 por AZ, em U39 dos racks FD1)
+Deploy : Cluster HA activeE entre os 3 appliances
+Partições por appliance : 50 Virtual HSMs (total 150 no cluster)
+Integração : Barbican via PKCS#11 driver + librashsm (ou driver Kryptus)
+             KMIP server embarcado para serviços adicionais
+Backup : Backup criptografado para appliance offline por AZ
+         (conforme procedimento em docs/10-hsm-key-management.md)
+```
+
+### Contato e Proposta
+
+```
+Kryptus Segurança da Informação
+Site   : https://kryptus.com
+Tel    : +55 (19) 3112-5000
+WhatsApp: disponível no site
+Local  : Campinas, SP — Brasil
+Solicitar: datasheet técnico completo + proposta para 3 unidades + SLA de suporte
+```
+
+> **Nota de integração com Barbican:** O Kryptus disponibiliza SDK com suporte a PKCS#11.
+> A configuração do plugin `p11_crypto_plugin` do Barbican segue o mesmo padrão descrito em
+> `docs/10-hsm-key-management.md` — substituir apenas `library_path` pelo caminho da
+> biblioteca `.so` fornecida pela Kryptus.
+
+> Detalhes de configuração Barbican ↔ HSM em `docs/10-hsm-key-management.md`.
 
 ---
 

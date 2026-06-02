@@ -51,14 +51,14 @@ O spine da AZ ocupa o rack FD2, consumindo espaço que antes estava destinado a 
 | U4 | ToR Switch A (Leaf) | Rede primária |
 | U5 | ToR Switch B (Leaf) | Rede redundante |
 | U6 | Management Switch | OOB/IPMI |
-| U7 | Spine Switch (1x 1U) | Core fabric (1 spine por AZ) |
-| U8-U9 | Spine Patch Panel (MPO/LC) | Uplinks spine ↔ 18 leaves + mesh inter-spine |
-| U10 | Reserva de cooling | Headroom térmico do spine |
-| U11-U30 | Compute Nodes (10x 2U) | KVM Hypervisors |
-| U31-U34 | GPU Compute Node (1x 4U) | Aceleração GPU |
-| U35-U38 | Swift Storage Nodes (2x 2U) | Object Storage |
-| U39 | Network Node (1x 1U) | OVN Gateway |
-| U40-U42 | Cable Management | Organização |
+| U7-U8 | Spine Switch (1x 2U) | Core fabric (1 spine por AZ) |
+| U9-U10 | Spine Patch Panel (MPO/LC) | Uplinks spine ↔ 18 leaves + mesh inter-spine |
+| U11 | Reserva de cooling | Headroom térmico do spine |
+| U12-U31 | Compute Nodes (10x 2U) | KVM Hypervisors |
+| U32-U35 | GPU Compute Node (1x 4U) | Aceleração GPU |
+| U36-U39 | Swift Storage Nodes (2x 2U) | Object Storage |
+| U40 | Network Node (1x 1U) | OVN Gateway |
+| U41-U42 | Cable Management | Organização |
 
 ### Rack FD1 (R1, R4, R7) — Control Plane + Cinder + HSM
 

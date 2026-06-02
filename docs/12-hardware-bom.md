@@ -18,9 +18,9 @@
 | Swift Storage | PowerEdge **R760xd2** | 18 | R$ 84.221 | 2U, até 24× LFF 3.5" |
 | Cinder Storage | PowerEdge **R770** (all-NVMe) | 3 | R$ 82.819 | 2U, até 40× E3.S NVMe Gen5 |
 | Network Node | PowerEdge **R670** | 6 | R$ 75.890 | 1U dual-socket, NIC quad 25GbE |
-| Leaf Switch (ToR) | PowerSwitch **Z9264F-ON** | 18 | Consultar Dell | 64× 100GbE QSFP28 |
-| Spine Switch | PowerSwitch **Z9664DX-ON** | 3 | Consultar Dell | 64× 400GbE QSFP-DD |
-| OOB Switch | PowerSwitch **N3248TE-ON** | 9 | Consultar Dell | 48× 1GbE + 4× 10GbE uplink |
+| Leaf Switch (ToR) | PowerSwitch **S5448F-ON** | 18 | Consultar Dell | 48× 100GbE + 8× 400GbE QSFP56-DD |
+| Spine Switch | PowerSwitch **Z9664F-ON** | 3 | Consultar Dell | 64× 400GbE QSFP56-DD, 2U |
+| OOB Switch | PowerSwitch **N3248TE-ON** | 9 | Consultar Dell | 48× 1GbE + 4× 10GbE SFP+ |
 | HSM Appliance | Kryptus **ASI-HSM AHX5 KNET** | 3 | R$ 256.000 | FIPS 140-2 L3, ICP-Brasil, EAL4+, PKCS#11, KMIP nativo |
 
 ---
@@ -156,7 +156,14 @@ iDRAC: iDRAC9 Enterprise
 
 **Preço:** Consultar Dell diretamente (sistemas XE não têm preço público — são vendidos por proposta).
 **Produto BR:** [dell.com/pt-br — PowerEdge XE8640](https://www.dell.com/pt-br/shop/servidores-de-data-center/servidor-poweredge-xe8640/spd/poweredge-xe8640)
-**Spec Sheet:** [poweredge-xe8640-spec-sheet.pdf](https://www.delltechnologies.com/asset/en-us/products/servers/technical-support/poweredge-xe8640-spec-sheet.pdf) (en-us — versão pt-br não disponível)
+**Spec Sheet:** [poweredge-xe8640-spec-sheet.pdf](https://www.delltechnologies.com/asset/en-us/products/servers/technical-support/poweredge-xe8640-spec-sheet.pdf) (en-us)
+
+> **Alternativa de maior densidade — PowerEdge XE9680** (disponível no site BR):
+> - **6U**, 2-socket, **8× GPU** NVIDIA H100 80GB ou H200 141GB SXM5, NVLink pleno
+> - RAM: até 4 TB DDR5 | Storage: até 16× E3.S NVMe
+> - Indicado se a arquitetura for consolidada: 5× XE9680 (40 GPUs) em vez de 9× XE8640 (36 GPUs)
+> - **Produto BR:** [dell.com/pt-br — PowerEdge XE9680](https://www.dell.com/pt-br/shop/servidores-de-data-center/servidor-poweredge-xe9680/spd/poweredge-xe9680)
+> - **Spec Sheet:** [poweredge-xe9680-spec-sheet.pdf](https://www.delltechnologies.com/asset/en-us/products/servers/technical-support/poweredge-xe9680-spec-sheet.pdf) (en-us)
 
 > **PCI Vendor/Product ID:** Após recebimento do hardware, executar:
 > ```bash
@@ -286,42 +293,60 @@ iDRAC: iDRAC9 Enterprise
 
 ## 7. Switches — Fabric de Rede
 
-### 7.1 Leaf / ToR — Dell PowerSwitch Z9264F-ON
+### 7.1 Leaf / ToR — Dell PowerSwitch S5448F-ON
 
 **Qtd:** 18 unidades (2 por rack × 9 racks)
 
-| Especificação | Requisito Arquitetural | Z9264F-ON |
-|---|---|---|
-| Portas | 32× 100GbE QSFP28 (breakout 4× 25GbE) | **64× 100GbE QSFP28** (breakout 4× 25GbE) |
-| Buffer | ≥ 16 MB | 32 MB shared buffer |
-| Latência | ≤ 500 ns | ~600 ns (cut-through) |
-| Protocolos | BGP, EVPN, MLAG, BFD, VXLAN HW offload | BGP, EVPN, VxLAN, MLAG, BFD ✅ |
-| OS | Aberto/programável | Dell OS10 (SONiC-based, APIs REST/gNMI) ✅ |
+O S5448F-ON é o switch leaf/ToR disponível no site Dell BR com densidade 100GbE e uplinks 400GbE nativos, substituindo o Z9264F-ON que não consta no catálogo brasileiro.
 
-> **Alternativa:** Dell PowerSwitch **S5248F-ON** (48× 25GbE + 6× 100GbE + 2× 100GbE MGMT)
-> para quem prefere portas 25GbE nativas em vez de breakout de 100GbE.
+| Especificação | Requisito Arquitetural | S5448F-ON | Status |
+|---|---|---|---|
+| Portas downlink | 32× 100GbE (breakout 4× 25GbE) | **48× 100GbE SFP56-DD** (breakout 4× 25GbE) | ✅ Excede |
+| Portas uplink | 3× 100GbE para spines | **8× 400GbE QSFP56-DD** (breakout 4× 100GbE) | ✅ Excede |
+| Portas mgmt | — | 2× 10GbE SFP+ | ✅ |
+| Buffer | ≥ 16 MB | 32 MB shared buffer | ✅ |
+| Latência | ≤ 500 ns | ~600 ns cut-through | ✅ |
+| Protocolos | BGP, EVPN, MLAG, BFD, VXLAN HW offload | BGP, EVPN, MLAG, BFD, VXLAN ✅ | ✅ |
+| OS | Aberto/programável, APIs declarativas | Dell OS10 / Enterprise SONiC (REST, gNMI) | ✅ |
 
-### 7.2 Spine — Dell PowerSwitch Z9664DX-ON
+**Produto BR:** [dell.com/pt-br — PowerSwitch S5448F-ON](https://www.dell.com/pt-br/shop/switches-de-data-center/powerswitch-s5448f-on/spd/powerswitch-s5448f-on)
+**Spec Sheet:** [dell-emc-powerswitch-s5448f-on-spec-sheet.pdf](https://www.delltechnologies.com/asset/en-us/products/networking/technical-support/dell-emc-powerswitch-s5448f-on-spec-sheet.pdf)
+
+### 7.2 Spine — Dell PowerSwitch Z9664F-ON
 
 **Qtd:** 3 unidades (1 por AZ, em racks R2, R5, R8)
 
-| Especificação | Requisito Arquitetural | Z9664DX-ON |
-|---|---|---|
-| Portas | 32× 400GbE QSFP-DD | **64× 400GbE QSFP-DD** |
-| Breakout | 4× 100GbE por porta | Sim (4× 100GbE ou 8× 50GbE) |
-| Uplinks para leaves | 18× 100GbE | 64× 400GbE (suporta 256× 100GbE breakout) |
-| Protocolos | BGP eBGP, EVPN, BFD, ECMP | BGP, EVPN, BFD, ECMP ✅ |
-| Latência | ≤ 500 ns | ~800 ns (cut-through) |
-| OS | Aberto/programável | Dell OS10 ✅ |
+| Especificação | Requisito Arquitetural | Z9664F-ON | Status |
+|---|---|---|---|
+| Portas | 32× 400GbE QSFP-DD | **64× 400GbE QSFP56-DD** ou 256× 100GbE | ✅ Excede |
+| Breakout | 4× 100GbE por porta | 4× 100GbE ou 8× 50GbE por porta | ✅ |
+| Fabric uplinks para 18 leaves | 18× 100GbE | 64 portas 400GbE disponíveis (suporta breakout) | ✅ |
+| Protocolos | BGP eBGP, EVPN, BFD, ECMP | BGP, EVPN, BFD, ECMP ✅ | ✅ |
+| Latência | ≤ 500 ns | ~800 ns cut-through | ✅ |
+| Switching fabric | — | **51,2 Tbps** non-blocking | ✅ |
+| Form factor | 1U | **2U** | ⚠️ notar no rack FD2 |
+| OS | Aberto/programável | Dell OS10 / Enterprise SONiC ✅ | ✅ |
+
+**Produto BR:** [dell.com/pt-br — PowerSwitch Z9664F-ON](https://www.dell.com/pt-br/shop/switches-de-data-center/powerswitch-z9664f-on/spd/powerswitch-z9664f-on)
+**Spec Sheet:** [dell-powerswitch-z9664f-on-spec-sheet.pdf](https://www.delltechnologies.com/asset/en-us/products/networking/technical-support/dell-powerswitch-z9664f-on-spec-sheet.pdf)
+
+> **Alternativa de nova geração:** PowerSwitch **Z9864F-ON** (64× 800GbE OSFP112, 2U) — posicionado para fabrics de IA generativa; indicado se a escala prevista para GPU workloads justificar 800GbE.
+> [Spec Sheet Z9864F-ON](https://www.delltechnologies.com/asset/en-us/products/networking/technical-support/dell-powerswitch-z9864f-on-spec-sheet.pdf)
+
+> ⚠️ **Form factor 2U:** o rack FD2 precisa reservar 2U para o spine (era 1U no layout original). Revisar posições U7-U8 no layout do rack FD2 em `01-physical-architecture.md`.
 
 ### 7.3 Management OOB — Dell PowerSwitch N3248TE-ON
 
 **Qtd:** 9 unidades (1 por rack)
 
-| Especificação | Requisito Arquitetural | N3248TE-ON |
-|---|---|---|
-| Portas | 48× 1GbE base-T + 4× 10GbE uplink | **48× 1GbE RJ45 + 4× 10GbE SFP+** ✅ |
-| Função | OOB/IPMI/PXE isolado | VLAN segregada, DHCP relay, PoE opcional |
+| Especificação | Requisito Arquitetural | N3248TE-ON | Status |
+|---|---|---|---|
+| Portas | 48× 1GbE base-T + 4× 10GbE uplink | **48× 1GbE RJ45 + 4× 10GbE SFP+ + 2× 100GbE QSFP28** | ✅ Excede |
+| Função | OOB/IPMI/PXE isolado | VLAN segregada, DHCP relay, PoE opcional | ✅ |
+| OS | — | Dell OS10 | ✅ |
+
+**Produto BR:** [dell.com/pt-br — PowerSwitch N3248TE-ON](https://www.dell.com/pt-br/shop/switches-de-data-center/powerswitch-n3248te-on/spd/powerswitch-n3248te-on)
+**Spec Sheet:** [dell-powerswitch-n3248te-on-spec-sheet.pdf](https://www.delltechnologies.com/asset/en-us/products/networking/technical-support/dell-powerswitch-n3248te-on-spec-sheet.pdf)
 
 ---
 

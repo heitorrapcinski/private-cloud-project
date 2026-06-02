@@ -155,7 +155,7 @@ Eventos acima de L4 (perda de região inteira = 9 FDs, 100% de capacity loss) n�
 |----------|--------|
 | Topologia | 102 nós, 34 por AZ, distribuídos em 9 racks (12/10/12 por FD) |
 | Scheduler | Filter + Weight + Placement API |
-| Falha de 1 nó | VMs no nó ficam em ERROR; requer `nova host-evacuate` manual (ou automático via Masakari se habilitado) |
+| Falha de 1 nó | VMs no nó ficam em ERROR; requer evacuate manual (ou automático via Masakari se habilitado): `openstack server list --host <hostname> -f value -c ID \| xargs -I{} openstack server evacuate {}` — `nova host-evacuate` foi removido no OpenStack 2026.1 |
 | Falha de 1 rack (FD) | 10-12 nós perdidos; scheduler redireciona novas VMs para FDs saudáveis |
 | Falha de 1 AZ | 34 nós perdidos (33% capacity); cross-AZ evacuate requer cold migration |
 | Anti-affinity | Server groups garantem distribuição de réplicas de aplicação entre FDs |
@@ -286,7 +286,16 @@ Eventos acima de L4 (perda de região inteira = 9 FDs, 100% de capacity loss) n�
 - **Frequência esperada:** mensal
 - **Detecção:** Prometheus node_exporter down, ausência de heartbeat
 - **Impacto:** capacity drop local; VMs no nó entram em ERROR
-- **Ação:** `nova host-evacuate`; para GPU/bare-metal, reagendamento manual
+- **Ação:** evacuate manual (ver abaixo — `nova host-evacuate` foi removido no OpenStack 2026.1):
+  ```bash
+  # nova host-evacuate foi removido no OpenStack 2026.1
+  # Use uma das alternativas:
+  openstack server list --host <hostname> -f value -c ID | \
+    xargs -I{} openstack server evacuate {}
+  # ou, se Masakari estiver habilitado:
+  openstack segment host list <segment>  # verificar hosts no segmento de failover
+  ```
+  Para GPU/bare-metal, reagendamento manual.
 
 ### C3 — Falha de Leaf Switch
 - **Frequência esperada:** trimestral

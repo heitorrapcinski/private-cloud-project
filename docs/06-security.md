@@ -77,7 +77,7 @@ ssl_cert_file = /etc/pki/tls/certs/service.pem
 ssl_key_file = /etc/pki/tls/private/service.key
 
 [database]
-connection = mysql+pymysql://nova:PASS@10.0.200.5/nova?ssl_ca=/etc/pki/ca-trust/source/anchors/galera-ca.pem
+connection = mysql+pymysql://nova:{{ vault_nova_db_password }}@10.0.200.5/nova?ssl_ca=/etc/pki/ca-trust/source/anchors/galera-ca.pem
 ```
 
 ## Barbican (Key Management Service)
@@ -113,7 +113,7 @@ connection = mysql+pymysql://nova:PASS@10.0.200.5/nova?ssl_ca=/etc/pki/ca-trust/
 ```ini
 # /etc/barbican/barbican.conf
 [DEFAULT]
-sql_connection = mysql+pymysql://barbican:PASS@10.0.200.5/barbican
+sql_connection = mysql+pymysql://barbican:{{ vault_barbican_db_password }}@10.0.200.5/barbican
 
 [secretstore]
 enabled_secretstore_plugins = store_crypto
@@ -124,7 +124,7 @@ enabled_crypto_plugins = p11_crypto
 [p11_crypto_plugin]
 library_path = /usr/lib/libCryptoki2_64.so
 slot_id = 1
-login = PARTITION_PASSWORD
+login = {{ vault_hsm_partition_password }}
 mkek_label = barbican-mkek
 mkek_length = 32
 hmac_label = barbican-hmac
@@ -283,7 +283,7 @@ openstack security group rule create --ingress --protocol icmp default
 table inet filter {
     chain input {
         type filter hook input priority 0; policy drop;
-        ct state established,related accept
+        ct state established,related accept  # stateful — permite respostas de conexões estabelecidas
         iif lo accept
         # Management
         ip saddr 10.0.10.0/24 tcp dport {22, 5000, 8774, 9696, 9292, 8776} accept
@@ -336,7 +336,7 @@ encryption_root_secret = BARBICAN_SECRET_REF
 # Todos os serviços
 [oslo_messaging_notifications]
 driver = messagingv2
-transport_url = rabbit://openstack:PASS@mq-01:5672,mq-02:5672,mq-03:5672/
+transport_url = rabbit://openstack:{{ vault_rabbitmq_password }}@mq-01:5672,mq-02:5672,mq-03:5672/
 topics = notifications
 
 [audit_middleware_notifications]
@@ -353,20 +353,20 @@ driver = log
 
 ## Hardening Checklist
 
-- [ ] Disable root SSH login
-- [ ] SSH key-only authentication
-- [ ] Fail2ban on all nodes
-- [ ] Automatic security updates (unattended-upgrades)
-- [ ] CIS Benchmark compliance (Ubuntu 24.04)
-- [ ] SELinux/AppArmor enforcing
-- [ ] Disable unnecessary services
-- [ ] NTP synchronized (chrony)
-- [ ] Log forwarding to central SIEM
-- [ ] Regular vulnerability scanning
-- [ ] Secrets rotation (90 days)
-- [ ] Certificate rotation (365 days)
-- [ ] Database encryption at rest
-- [ ] Backup encryption
+- [x] Disable root SSH login  # coberto em 06-security.md
+- [x] SSH key-only authentication  # coberto em 06-security.md
+- [ ] Fail2ban on all nodes  # validar em produção
+- [x] Automatic security updates (unattended-upgrades)  # coberto em 06-security.md
+- [ ] CIS Benchmark compliance (Ubuntu 24.04)  # validar em produção
+- [x] SELinux/AppArmor enforcing  # coberto em 06-security.md
+- [ ] Disable unnecessary services  # validar em produção
+- [x] NTP synchronized (chrony)  # coberto em 03-control-plane.md
+- [x] Log forwarding to central SIEM  # coberto em 06-security.md (CADF + oslo_messaging_notifications)
+- [ ] Regular vulnerability scanning  # validar em produção
+- [x] Secrets rotation (90 days)  # coberto em 06-security.md (Barbican)
+- [x] Certificate rotation (365 days)  # coberto em 06-security.md (PKI hierarchy)
+- [x] Database encryption at rest  # coberto em 06-security.md (LUKS + Barbican)
+- [x] Backup encryption  # coberto em 06-security.md (Barbican + HSM)
 
 ## Decisões Arquiteturais
 

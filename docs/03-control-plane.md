@@ -245,7 +245,7 @@ heartbeat_rate = 2
 | Glance | source | HTTP GET /healthcheck |
 | Cinder | roundrobin | HTTP GET / |
 | Horizon | source (sticky) | HTTP GET / |
-| MariaDB | source | TCP + mysql-check |
+| MariaDB | source | `option mysql-check user haproxy_check` — Requer usuário no MariaDB: `CREATE USER 'haproxy_check'@'%';` (sem senha, sem grants) |
 | RabbitMQ | roundrobin | TCP check |
 
 ## Memcached

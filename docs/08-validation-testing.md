@@ -95,7 +95,12 @@ openstack volume delete test-cinder
 time openstack token issue  # Record response time
 
 # 2. Stop controller
-ssh ctrl-az1fd1-01 "systemctl stop apache2"  # Keystone
+# Em deploy Kolla-Ansible, Keystone roda em container — não há apache2 no host
+ssh ctrl-az1fd1-01 "docker stop keystone"
+# Verificar impacto:
+# openstack token issue  # deve falhar no controller afetado
+# Para restore:
+# docker start keystone
 
 # 3. Verify API still works
 time openstack token issue  # Should still work (via ctrl-02 or ctrl-03)
@@ -106,7 +111,7 @@ openstack network list      # Neutron API
 curl -s http://10.0.10.5:1936/haproxy?stats | grep ctrl-01  # DOWN
 
 # 5. Restore
-ssh ctrl-az1fd1-01 "systemctl start apache2"
+ssh ctrl-az1fd1-01 "docker start keystone"
 
 # 6. Verify recovery
 sleep 10
@@ -185,13 +190,19 @@ openstack server create --flavor m1.small --image ubuntu-24.04 \
 openstack server show ha-vm | grep status  # ACTIVE
 
 # 3. Simulate host failure (power off via IPMI)
+# IP do IPMI/BMC do nó de compute — substituir pelo IP real da rede OOB (VLAN 10 / 10.0.10.x)
 ipmitool -I lanplus -H 172.16.0.101 -U admin -P PASS power off
 
 # 4. Wait for Nova to detect (fencing timeout)
 sleep 120
 
 # 5. Evacuate
-nova host-evacuate compute-az1fd1-01
+# nova host-evacuate foi removido no OpenStack 2026.1
+# Use uma das alternativas:
+openstack server list --host compute-az1fd1-01 -f value -c ID | \
+  xargs -I{} openstack server evacuate {}
+# ou, se Masakari estiver habilitado:
+openstack segment host list <segment>  # verificar hosts no segmento de failover
 
 # 6. Verify VM restarted on different host
 openstack server show ha-vm | grep "OS-EXT-SRV-ATTR:host"
@@ -314,6 +325,12 @@ for node in db-01 db-02 db-03; do
 done
 
 # 2. On non-Primary nodes, force rejoin
+# > ⚠️ **PERIGO — risco de perda de dados:** `pc.bootstrap=YES` elege o nó atual como primário e descarta o estado dos outros nós.
+# > Execute APENAS no nó com o GTID mais avançado. Confirmar com:
+# > ```sql
+# > SHOW STATUS LIKE 'wsrep_last_committed';
+# > ```
+# > O nó com o maior valor é o mais atualizado. Requer aprovação de dois engenheiros antes de executar.
 mysql -e "SET GLOBAL wsrep_provider_options='pc.bootstrap=YES';"
 # WARNING: Only do this on the partition with the most recent data!
 

@@ -301,6 +301,9 @@ scrape_configs:
       - targets: ['lb-01:9101','lb-02:9101','lb-03:9101']
 
   - job_name: 'mysql'
+    # HAProxy health check para MariaDB usa: option mysql-check user haproxy_check
+    # Requer usuário no MariaDB: CREATE USER 'haproxy_check'@'%'; (sem senha, sem grants)
+    # Ver docs/03-control-plane.md — HAProxy Backend Strategy
     static_configs:
       - targets: ['db-01:9104','db-02:9104','db-03:9104']
 

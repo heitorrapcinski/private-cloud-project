@@ -67,7 +67,7 @@ Fluxos inter-AZ usam ECMP balanceado entre os 3 spines. Falha de um spine manté
 | 30 | TENANT-VXLAN | 10.0.30.0/24 | VXLAN tunnel endpoints |
 | 31 | TENANT-AZ2 | 10.0.31.0/24 | VXLAN AZ2 |
 | 32 | TENANT-AZ3 | 10.0.32.0/24 | VXLAN AZ3 |
-| 40 | EXTERNAL | 203.0.113.0/24 | Provider/External |
+| 40 | EXTERNAL | 203.0.113.0/24 (documentação/teste) | Provider/External — IPs reais definidos pelo provedor upstream; substituir por bloco de IPs públicos alocados |
 | 50 | OOB | 172.16.0.0/24 | Out-of-Band/IPMI |
 | 60 | PXE | 172.16.1.0/24 | PXE Boot/Provisioning |
 | 100 | INTERNAL-API | 10.0.100.0/24 | OpenStack internal API |
@@ -142,6 +142,26 @@ Acesso aos HSMs restrito aos controllers via NTLS/PKCS#11 (porta 1792/TCP).
 | spine-03 | R8 (AZ3/FD2) | 192.168.255.3 | Core fabric AZ3 |
 
 Endereços de interconexão spine↔leaf e spine↔spine usam /31 ponto-a-ponto na faixa 192.168.254.0/24.
+
+### Links Ponto-a-Ponto Spine ↔ Leaf (/31 — 192.168.254.0/24)
+
+| Link | Interface Spine | Interface Leaf | Rede /31 | IP Spine | IP Leaf |
+|---|---|---|---|---|---|
+| Spine-1 ↔ Leaf-R1-A | et-0/0/0 | et-0/0/48 | 192.168.254.0/31 | 192.168.254.0 | 192.168.254.1 |
+| Spine-1 ↔ Leaf-R1-B | et-0/0/1 | et-0/0/48 | 192.168.254.2/31 | 192.168.254.2 | 192.168.254.3 |
+| Spine-1 ↔ Leaf-R2-A | et-0/0/2 | et-0/0/48 | 192.168.254.4/31 | 192.168.254.4 | 192.168.254.5 |
+| Spine-1 ↔ Leaf-R2-B | et-0/0/3 | et-0/0/48 | 192.168.254.6/31 | 192.168.254.6 | 192.168.254.7 |
+| Spine-1 ↔ Leaf-R3-A | et-0/0/4 | et-0/0/48 | 192.168.254.8/31 | 192.168.254.8 | 192.168.254.9 |
+| Spine-1 ↔ Leaf-R3-B | et-0/0/5 | et-0/0/48 | 192.168.254.10/31 | 192.168.254.10 | 192.168.254.11 |
+| Spine-2 ↔ Leaf-R1-A | et-0/0/0 | et-0/0/49 | 192.168.254.16/31 | 192.168.254.16 | 192.168.254.17 |
+| Spine-2 ↔ Leaf-R1-B | et-0/0/1 | et-0/0/49 | 192.168.254.18/31 | 192.168.254.18 | 192.168.254.19 |
+| Spine-2 ↔ Leaf-R2-A | et-0/0/2 | et-0/0/49 | 192.168.254.20/31 | 192.168.254.20 | 192.168.254.21 |
+| Spine-2 ↔ Leaf-R2-B | et-0/0/3 | et-0/0/49 | 192.168.254.22/31 | 192.168.254.22 | 192.168.254.23 |
+| Spine-2 ↔ Leaf-R3-A | et-0/0/4 | et-0/0/49 | 192.168.254.24/31 | 192.168.254.24 | 192.168.254.25 |
+| Spine-2 ↔ Leaf-R3-B | et-0/0/5 | et-0/0/49 | 192.168.254.26/31 | 192.168.254.26 | 192.168.254.27 |
+| Spine-1 ↔ Spine-2 | et-0/0/48 | et-0/0/48 | 192.168.254.32/31 | 192.168.254.32 | 192.168.254.33 |
+
+> Interface names são indicativas (Juniper/Arista style). Ajustar conforme fabricante escolhido.
 
 ### VIP Addresses
 

@@ -75,8 +75,12 @@
 ```ini
 # /etc/nova/nova.conf (GPU compute nodes)
 [pci]
-alias = {"vendor_id": "VVVV", "product_id": "PPPP", "device_type": "type-PCI", "name": "gpu80", "numa_policy": "preferred"}
-passthrough_whitelist = [{"vendor_id": "VVVV", "product_id": "PPPP"}]
+alias = {"vendor_id": "10DE", "product_id": "****", "device_type": "type-PCI", "name": "gpu80", "numa_policy": "preferred"}
+# vendor_id: "10DE"    # NVIDIA PCI vendor ID — substituir pelo ID real: lspci -nn | grep -i nvidia
+# product_id: "****"   # substituir pelo product ID do modelo exato: lspci -nn | grep -i nvidia
+passthrough_whitelist = [{"vendor_id": "10DE", "product_id": "****"}]
+# vendor_id: "10DE"    # NVIDIA PCI vendor ID — substituir pelo ID real: lspci -nn | grep -i nvidia
+# product_id: "****"   # substituir pelo product ID do modelo exato: lspci -nn | grep -i nvidia
 
 [compute]
 cpu_allocation_ratio = 1.0
@@ -86,7 +90,9 @@ ram_allocation_ratio = 1.0
 ```ini
 # /etc/nova/nova.conf (controller)
 [pci]
-alias = {"vendor_id": "VVVV", "product_id": "PPPP", "device_type": "type-PCI", "name": "gpu80", "numa_policy": "preferred"}
+alias = {"vendor_id": "10DE", "product_id": "****", "device_type": "type-PCI", "name": "gpu80", "numa_policy": "preferred"}
+# vendor_id: "10DE"    # NVIDIA PCI vendor ID — substituir pelo ID real: lspci -nn | grep -i nvidia
+# product_id: "****"   # substituir pelo product ID do modelo exato: lspci -nn | grep -i nvidia
 
 [filter_scheduler]
 enabled_filters = AvailabilityZoneFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,PciPassthroughFilter,NUMATopologyFilter,AggregateInstanceExtraSpecsFilter
@@ -220,7 +226,8 @@ enabled_vgpu_types =
 ```bash
 # Instalar driver de GPU compatível com o hardware (headless, sem X11)
 # O pacote específico depende do fornecedor do acelerador instalado
-apt install <gpu-driver-server-package> <gpu-utils-package>
+apt install nvidia-driver-server  # pacote NVIDIA Data Center Driver; verificar versão em https://docs.nvidia.com/datacenter/tesla/
+# <gpu-utils-package>  # substituir pelo pacote de utilitários correspondente (ex: nvidia-utils-*)
 
 # Verificar GPUs via ferramenta do fornecedor
 <gpu-smi-tool>

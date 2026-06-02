@@ -309,11 +309,14 @@ Utility Feed B ──► ATS-B ──► PDU-B (Rack Right)
 
 ### Capacidade por Rack
 
-| Métrica | Rack Padrão | Rack FD1 (com GPU + HSM + Cinder) |
-|---------|-------------|-----------------------------------|
-| Potência máxima | 20 kW | 28 kW (liquid cooling para GPU) |
-| Potência típica | 14 kW | 20 kW |
-| Cooling | In-row cooling (N+1) | In-row cooling + rear-door heat exchanger |
+Todos os 9 racks possuem 1 GPU node (4U, liquid cooling direto integrado no servidor).
+O rack FD1 tem maior densidade elétrica por acumular também Cinder NVMe e HSM.
+
+| Métrica | Rack FD2 / FD3 (compute + GPU + Swift) | Rack FD1 (control plane + Cinder + HSM + GPU) |
+|---------|----------------------------------------|-----------------------------------------------|
+| Potência máxima | 22 kW | 30 kW |
+| Potência típica | 15 kW | 22 kW |
+| Cooling | In-row cooling N+1 + liquid cooling direto (GPU) | In-row cooling N+1 + liquid cooling direto (GPU) + rear-door heat exchanger |
 | Temperatura | 18-27°C (ASHRAE A1) | 18-27°C (ASHRAE A1) |
 | Umidade | 40-60% RH | 40-60% RH |
 

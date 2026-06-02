@@ -63,7 +63,7 @@ Sem a camada de FD, uma falha de rack derrubaria múltiplos nós simultaneamente
 | Swift | 2 nós em cada FD | Replicas zone-aware garantem distribuição entre AZs e FDs |
 | Network nodes | FD2/FD3 de cada AZ | Gateway sempre disponível em FDs não-controller |
 | Spine fabric | 1 spine em FD2 de cada AZ | Falha de rack FD2 remove 1 spine; ECMP mantém 2/3 bandwidth |
-| HSM | 1 appliance em FD1 de cada AZ | HA activeA sobrevive à perda de qualquer rack |
+| HSM | 1 appliance em FD1 de cada AZ | HA active-active sobrevive à perda de qualquer rack |
 
 Exposição operacional:
 
@@ -266,7 +266,7 @@ Eventos acima de L4 (perda de região inteira = 9 FDs, 100% de capacity loss) n�
 | Feeds | 2 feeds utility por rack (A + B) |
 | UPS | N+1 por fileira |
 | Gerador | 1 por AZ, diesel, 72h de autonomia |
-| Cooling | In-row N+1 (racks padrão), in-row + rear-door (racks FD1 com GPU/HSM) |
+| Cooling | Todos os 9 racks têm GPU node (4U, liquid cooling direto integrado). In-row cooling N+1 em todos os racks; rear-door heat exchanger adicional nos racks FD1 (maior densidade: Cinder NVMe + HSM + GPU) |
 | Falha de 1 feed | PSU redundante mantém carga |
 | Falha de UPS | Failover para UPS par |
 | Falha prolongada utility | Gerador entra em 30s; autonomia 72h |
@@ -330,7 +330,7 @@ Eventos acima de L4 (perda de região inteira = 9 FDs, 100% de capacity loss) n�
 ### C8 — Falha de 1 HSM
 - **Frequência esperada:** bi-anual
 - **Detecção:** barbican health check, PKCS#11 errors
-- **Impacto:** nenhum (HA activeA continua com 2/3)
+- **Impacto:** nenhum (HA active-active continua com 2/3)
 - **Ação:** substituição; re-sync de partições
 
 ### C9 — Perda de Energia em 1 AZ

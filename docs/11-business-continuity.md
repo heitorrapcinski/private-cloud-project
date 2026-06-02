@@ -153,11 +153,11 @@ Eventos acima de L4 (perda de região inteira = 9 FDs, 100% de capacity loss) n�
 
 | Dimensão | Design |
 |----------|--------|
-| Topologia | 102 nós, 34 por AZ, distribuídos em 9 racks (12/10/12 por FD) |
+| Topologia | 90 nós, 30 por AZ, distribuídos em 9 racks (10/10/10 por FD — simétrico) |
 | Scheduler | Filter + Weight + Placement API |
 | Falha de 1 nó | VMs no nó ficam em ERROR; requer evacuate manual (ou automático via Masakari se habilitado): `openstack server list --host <hostname> -f value -c ID \| xargs -I{} openstack server evacuate {}` — `nova host-evacuate` foi removido no OpenStack 2026.1 |
-| Falha de 1 rack (FD) | 10-12 nós perdidos; scheduler redireciona novas VMs para FDs saudáveis |
-| Falha de 1 AZ | 34 nós perdidos (33% capacity); cross-AZ evacuate requer cold migration |
+| Falha de 1 rack (FD) | 10 nós perdidos (uniforme em qualquer rack); scheduler redireciona novas VMs para FDs saudáveis |
+| Falha de 1 AZ | 30 nós perdidos (33% capacity); cross-AZ evacuate requer cold migration |
 | Anti-affinity | Server groups garantem distribuição de réplicas de aplicação entre FDs |
 | RTO | Manual: 5-10 min (evacuate de dezenas de VMs) |
 | RPO | Depende do storage backing (Cinder sync = 0, ephemeral = perda total) |

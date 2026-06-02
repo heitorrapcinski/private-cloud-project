@@ -6,9 +6,11 @@
 > preços reais licitados; (2) catálogo Dell PowerEdge/PowerSwitch BR — preços de lista para
 > configuração base; (3) cotações históricas de compras governamentais — balizamento indicativo.
 >
-> Preços de catálogo referem-se à configuração **base** (mínima) — produção com CPU, RAM e
-> storage adequados resulta em 3–5× superior para servidores sem GPU. Preços de contratos
-> públicos incluem configuração completa conforme edital.
+> Preços de catálogo referem-se à configuração de catálogo dos fabricantes. Por se tratar de um
+> **laboratório permanente** (não um ambiente de produção a escalar), não se aplica acréscimo de
+> capacidade além do especificado; antes do edital, confirmar que a configuração cotada atende aos
+> mínimos de CPU/RAM/storage da arquitetura. Preços de contratos públicos incluem configuração
+> completa conforme edital.
 >
 > **Nenhum fornecedor é mandatório.** Os modelos listados são referências de especificação e
 > preço. A licitação final deve ser por requisitos técnicos, não por marca ou modelo específico.
@@ -20,24 +22,29 @@
 | Role | Modelo de Referência | Qtd | Preço Ref. Unit. | Estimativa | Fonte |
 |---|---|---:|---|---:|---|
 | Control Plane | Dell PowerEdge **R670** | 12 | R$ 75.890 (base) | R$ 910.680 | Catálogo Dell BR ¹ |
-| Compute | Dell PowerEdge **R770** | 102 | R$ 82.819 (base) | R$ 8.447.538 | Catálogo Dell BR ¹ |
+| Compute | Dell PowerEdge **R770** | 90 | R$ 82.819 (base) | R$ 7.453.710 | Catálogo Dell BR ¹ |
 | GPU Compute | Lenovo **SR680a V3** (4× H200) | 9 | **R$ 1.260.000** | R$ 11.340.000 | Contrato SERPRO 263505 ² |
 | Swift Storage | Dell PowerEdge **R760xd2** | 18 | R$ 84.221 (base) | R$ 1.515.978 | Catálogo Dell BR ¹ |
 | Cinder Storage | Dell PowerEdge **R770** (NVMe) | 3 | R$ 82.819 (base) | R$ 248.457 | Catálogo Dell BR ¹ |
 | Network Node | Dell PowerEdge **R670** | 6 | R$ 75.890 (base) | R$ 455.340 | Catálogo Dell BR ¹ |
 | Leaf Switch | Cisco **N9K-C93180YC-FX3** | 18 | R$ 131.100 | R$ 2.359.800 | ARP SERPRO 90611/2025 ² |
 | Spine Switch | Cisco **N9K-C93600CD-GX** | 3 | R$ 288.900 | R$ 866.700 | ARP SERPRO 90611/2025 ² |
-| OOB Switch | Dell PowerSwitch **N3248TE-ON** | 9 | A consultar | A consultar | Catálogo Dell BR |
+| OOB Switch | Dell PowerSwitch **N3248TE-ON** | 9 | R$ 22.500 | R$ 202.500 | ARP IFB 97/2025 ³ (sem adesão) |
 | HSM Appliance | Kryptus **ASI-HSM AHX5 KNET** | 3 | R$ 256.000 | R$ 768.000 | Contrato público 2024 ² |
 | Racks + Transceivers | Infra física | — | — | ~R$ 802.968 | SERPRO/NTT + INCA ARP ² |
-| **Total estimado** | | **153 serv. + 30 switches** | | **~R$ 27,7M** | excl. OOB switch |
+| **Total estimado** | | **141 serv. + 30 switches** | | **~R$ 26,9M** | inclui OOB switch |
 
-> ¹ **Catálogo base:** preços de configuração mínima — servidores de produção com CPU, RAM e
->   storage adequados resultam em **3–5× superior**. Usar como piso de referência; solicitar
->   proposta formal ou verificar ARP SERPRO PE 91031/2025 (UASG 803080) para calibrar.
+> ¹ **Catálogo:** preço de configuração de catálogo dos fabricantes. Antes do edital, confirmar que
+>   a configuração cotada atende aos mínimos de CPU/RAM/storage da arquitetura; a ARP SERPRO
+>   PE 91031/2025 (UASG 803080) serve de referência adicional.
 >
 > ² **Contrato público:** preços reais licitados incluindo configuração completa. GPU e switches
 >   são as parcelas mais representativas e têm a melhor qualidade de referência de preço.
+>
+> ³ **Referência de preço (sem adesão):** ARP nº 97/2025 do IFB (Pregão Eletrônico 90015/2025,
+>   fornecedor K2 IT, dez/2025), item "Switch de Acesso L3 48 portas PoE Gigabit + 4 SFP+".
+>   A ata **veda adesão de terceiros** (cláusula 4.1) — vale apenas como referência de preço de
+>   mercado para o edital próprio do OOB. PoE/L3 são extras não exigidos para gerência.
 
 ---
 
@@ -78,7 +85,7 @@ PSU  : Dual 1+1 1500W Titanium hot-swap
 iDRAC: iDRAC9 Enterprise (Redfish, vConsole, vMedia)
 ```
 
-**Preço base:** R$ 75.890 (site pt-br — configuração mínima)
+**Preço base:** R$ 75.890 (site pt-br — configuração de catálogo)
 **Produto BR:** [dell.com/pt-br — PowerEdge R670](https://www.dell.com/pt-br/shop/servidores-de-data-center/servidor-poweredge-r670/spd/poweredge-r670)
 **Spec Sheet:** [poweredge-r670-spec-sheet.pdf](https://www.delltechnologies.com/asset/en-us/products/servers/technical-support/poweredge-r670-spec-sheet.pdf) (en-us — versão pt-br não disponível)
 **Guia Técnico pt-br:** [poweredge-r670-technical-guide.pdf](https://www.delltechnologies.com/asset/pt-br/products/servers/technical-support/poweredge-r670-technical-guide.pdf)
@@ -87,7 +94,7 @@ iDRAC: iDRAC9 Enterprise (Redfish, vConsole, vMedia)
 
 ## 2. Compute Nodes — Referência: Dell PowerEdge R770
 
-**Qtd:** 102 unidades (distribuídas nos 9 racks)
+**Qtd:** 90 unidades (10 por rack × 9 racks — distribuição simétrica 10/10/10 por AZ)
 **Referência arquitetural:** `01-physical-architecture.md` — Compute Nodes / `04-compute-plane.md`
 **Fonte do preço:** Catálogo Dell BR (configuração base). A ARP SERPRO PE 91031/2025 (UASG 803080)
 cobre servidores 2U de alto desempenho — verificar Configurações 3/4/11 do edital para comparação.
@@ -121,7 +128,7 @@ PSU  : Dual 1+1 1600W ou 2000W Titanium hot-swap
 iDRAC: iDRAC9 Enterprise
 ```
 
-**Preço base:** R$ 82.819 (site pt-br — configuração mínima)
+**Preço base:** R$ 82.819 (site pt-br — configuração de catálogo)
 **Produto BR:** [dell.com/pt-br — PowerEdge R770](https://www.dell.com/pt-br/shop/servidores-de-data-center/servidor-poweredge-r770/spd/poweredge-r770)
 **Spec Sheet pt-br:** [poweredge-r770-spec-sheet.pdf](https://www.delltechnologies.com/asset/pt-br/products/servers/technical-support/poweredge-r770-spec-sheet.pdf)
 **Guia Técnico pt-br:** [poweredge-r770-technical-guide.pdf](https://www.delltechnologies.com/asset/pt-br/products/servers/technical-support/poweredge-r770-technical-guide.pdf)
@@ -145,12 +152,13 @@ iDRAC: iDRAC9 Enterprise
 
 > ℹ️ O modelo SR680a V3 é inferido da Configuração 7 do PE 91031/2025 (4× H200 SXM5,
 > 2× Intel Xeon 5ª Ger., 2 TB RAM) — o exato modelo entregue não está explicitado no edital.
-> O SR680a V3 é **8U**, o que impacta o layout de rack: cada posição de GPU node passa de
-> 4U para 8U. Revisar `01-physical-architecture.md` antes da aquisição.
+> O SR680a V3 é **8U**. Impacto de layout **resolvido**: mantido rack **42U**, com o compute
+> reduzido para **90 nós (10/10/10 por AZ)** para acomodar o nó GPU de 8U — redução de ~12% de
+> capacidade bruta avaliada e aceita; distribuição simétrica (raio de falha de rack uniforme).
 
 | Especificação | Requisito Arquitetural | Lenovo SR680a V3 (4× H200) | Status |
 |---|---|---|---|
-| Form factor | dual-socket, suporte SXM5 | **8U** dual-socket | ⚠️ 8U — revisar rack |
+| Form factor | dual-socket, suporte SXM5 | **8U** dual-socket | ✅ acomodado em rack 42U (compute 90) |
 | CPU | ≥ 32C/socket, AVX-512, ≥ 2,3 GHz | 2× Intel Xeon Scalable 5ª Ger. | ✅ |
 | RAM | 1 TB DDR4-3200 ECC | **2 TB DDR5** | ✅ Excede |
 | GPU | 4× SXM5, NVLink ≥ 600 GB/s, MIG | 4× **NVIDIA H200 141 GB HBM3e SXM5** | ✅ Excede |
@@ -177,9 +185,14 @@ CPU  : 2× Intel Xeon Scalable 5ª Ger. (≥ 32C/socket, AVX-512)
 RAM  : 2 TB DDR5
 Boot : 2× SSD/NVMe 3.2 TB (conforme Config 7 SERPRO)
 NIC  : 2× 25GbE
-Cooling: Direct Liquid Cooling integrado
+Cooling: Direct Liquid Cooling integrado (700W/GPU)
+PSU  : Redundante dimensionada para ~6 kW (ex.: 6× 2600W Titanium N+N)
 BMC  : XClarity Controller (Redfish)
 ```
+
+> **Energia do nó (8U):** 4× H200 a 700W ≈ 2,8 kW só em GPU; com 2 CPUs + 2 TB RAM + ventilação o
+> nó chega a ~5–6 kW. A referência genérica de "2× 2400W" **não atende** — dimensionar PSU N+N para
+> ~6 kW e revisar o orçamento de potência do rack (ver layout 42U).
 
 > **PCI Vendor/Product ID (H200 SXM5):** Após recebimento, executar:
 > ```bash
@@ -226,7 +239,7 @@ PSU  : Dual 1+1 1400W Platinum hot-swap
 iDRAC: iDRAC9 Enterprise
 ```
 
-**Preço base:** R$ 84.221 (site pt-br — configuração mínima)
+**Preço base:** R$ 84.221 (site pt-br — configuração de catálogo)
 **Produto BR:** [dell.com/pt-br — PowerEdge R760xd2](https://www.dell.com/pt-br/shop/servidores-de-data-center/servidor-poweredge-r760xd2/spd/poweredge-r760xd2)
 **Spec Sheet pt-br:** [poweredge-r760xd2-spec-sheet.pdf](https://www.delltechnologies.com/asset/pt-br/products/servers/technical-support/poweredge-r760xd2-spec-sheet.pdf)
 **Guia Técnico:** [poweredge-r760xd2-technical-guide.pdf](https://www.delltechnologies.com/asset/en-us/products/servers/technical-support/poweredge-r760xd2-technical-guide.pdf)
@@ -272,7 +285,7 @@ PSU  : Dual 1+1 1600W Titanium hot-swap
 iDRAC: iDRAC9 Enterprise
 ```
 
-**Preço base:** R$ 82.819 (site pt-br — configuração mínima; all-NVMe substancialmente superior)
+**Preço base:** R$ 82.819 (site pt-br — configuração de catálogo; all-NVMe substancialmente superior)
 **Produto BR:** [dell.com/pt-br — PowerEdge R770](https://www.dell.com/pt-br/shop/servidores-de-data-center/servidor-poweredge-r770/spd/poweredge-r770)
 **Spec Sheet pt-br:** [poweredge-r770-spec-sheet.pdf](https://www.delltechnologies.com/asset/pt-br/products/servers/technical-support/poweredge-r770-spec-sheet.pdf)
 
@@ -369,13 +382,20 @@ iDRAC: iDRAC9 Enterprise
 ### 7.3 Management OOB — Dell PowerSwitch N3248TE-ON
 
 **Qtd:** 9 unidades (1 por rack)
-**Preço de referência:** Consultar Dell BR (sem ARP pública localizada para este perfil)
+**Preço de referência:** R$ 22.500,00/un — ARP nº 97/2025 do IFB (Pregão Eletrônico 90015/2025,
+fornecedor K2 IT, dez/2025), item "Switch de Acesso L3 com 48 portas PoE Gigabit e 4 SFP+".
 **Produto BR:** [dell.com/pt-br — PowerSwitch N3248TE-ON](https://www.dell.com/pt-br/shop/switches-de-data-center/powerswitch-n3248te-on/spd/powerswitch-n3248te-on)
 **Spec Sheet:** [dell-powerswitch-n3248te-on-spec-sheet.pdf](https://www.delltechnologies.com/asset/en-us/products/networking/technical-support/dell-powerswitch-n3248te-on-spec-sheet.pdf)
 
-| Especificação | Requisito Arquitetural | N3248TE-ON | Status |
+> ⚠️ **Sem direito a adesão.** A ARP IFB 97/2025 **veda adesão de terceiros** (cláusula 4.1).
+> O valor de R$ 22.500/un é usado **apenas como referência de preço de mercado** para o edital
+> próprio do OOB — a aquisição deve ocorrer por licitação própria ou outra ARP aderível.
+> O item da ata (L3 + PoE) excede o necessário para OOB; um switch L2 simples 48× 1GbE + SFP+
+> tende a custar igual ou menos, mantendo a referência como teto conservador.
+
+| Especificação | Requisito Arquitetural | N3248TE-ON / item ARP IFB | Status |
 |---|---|---|---|
-| Portas | 48× 1GbE base-T + 4× 10GbE uplink | **48× 1GbE RJ45 + 4× 10GbE SFP+ + 2× 100GbE QSFP28** | ✅ Excede |
+| Portas | 48× 1GbE base-T + 4× 10GbE uplink | **48× 1GbE RJ45 + 4× SFP+** (N3248TE-ON ainda soma 2× 100GbE QSFP28) | ✅ Atende/Excede |
 | Função | OOB/IPMI/PXE isolado | VLAN segregada, DHCP relay | ✅ |
 
 ---
@@ -470,18 +490,18 @@ Solicitar: datasheet técnico completo + proposta para 3 unidades + SLA de supor
 
 | Role | Modelo de Referência | Qtd | Melhor Preço Ref. Unit. | Estimativa Total | Qualidade da Referência |
 |---|---|---:|---:|---:|---|
-| Control Plane | Dell PowerEdge R670 | 12 | R$ 75.890 ² | R$ 910.680 | Catálogo base — subestima produção |
-| Network Node | Dell PowerEdge R670 | 6 | R$ 75.890 ² | R$ 455.340 | Catálogo base — subestima produção |
-| Compute | Dell PowerEdge R770 | 102 | R$ 82.819 ² | R$ 8.447.538 | Catálogo base — subestima produção |
-| Cinder Storage | Dell PowerEdge R770 (NVMe) | 3 | R$ 82.819 ² | R$ 248.457 | Catálogo base — subestima produção |
-| Swift Storage | Dell PowerEdge R760xd2 | 18 | R$ 84.221 ² | R$ 1.515.978 | Catálogo base — subestima produção |
+| Control Plane | Dell PowerEdge R670 | 12 | R$ 75.890 ² | R$ 910.680 | Catálogo do fabricante; confirmar config vs. spec |
+| Network Node | Dell PowerEdge R670 | 6 | R$ 75.890 ² | R$ 455.340 | Catálogo do fabricante; confirmar config vs. spec |
+| Compute | Dell PowerEdge R770 | 90 | R$ 82.819 ² | R$ 7.453.710 | Catálogo do fabricante; confirmar config vs. spec |
+| Cinder Storage | Dell PowerEdge R770 (NVMe) | 3 | R$ 82.819 ² | R$ 248.457 | Catálogo do fabricante; confirmar config vs. spec |
+| Swift Storage | Dell PowerEdge R760xd2 | 18 | R$ 84.221 ² | R$ 1.515.978 | Catálogo do fabricante; confirmar config vs. spec |
 | GPU Compute | **Lenovo 4× H200 SXM5** | 9 | **R$ 1.260.000** ⁶ᵃ | **R$ 11.340.000** | ✅ Contrato público jan/2026 — confiável |
 | HSM | Kryptus ASI-HSM AHX5 KNET | 3 | R$ 256.000 | R$ 768.000 | ✅ Contrato público 2024 — confiável |
-| **Total servidores** | | **153** | | **~R$ 23.685.993** | |
+| **Total servidores** | | **141** | | **~R$ 22.692.165** | |
 
-> ¹ Preços Dell = configuração **base** (mínima). Produção resulta em 3–5× superior para
->   servidores sem GPU. GPU (Lenovo) e HSM (Kryptus) são preços reais de contrato público.
->   Para calibrar os servidores Dell, verificar ARP SERPRO PE 91031/2025 (UASG 803080).
+> ¹ Preços Dell = configuração de catálogo do fabricante. GPU (Lenovo) e HSM (Kryptus) são preços
+>   reais de contrato público. Antes do edital, confirmar que a configuração cotada atende aos
+>   mínimos da arquitetura; a ARP SERPRO PE 91031/2025 (UASG 803080) serve de referência adicional.
 
 ### Rede e Infraestrutura — Cisco Nexus NX-OS + OpenStack OVN
 
@@ -493,8 +513,8 @@ Solicitar: datasheet técnico completo + proposta para 3 unidades + SLA de supor
 |---|---|---:|---:|---:|---|
 | N9K-C93180YC-FX3 | Leaf / ToR | 18 | 131.100 | 2.359.800 | SERPRO/NTT Reg. 283040 |
 | N9K-C93600CD-GX | Spine | 3 | 288.900 | 866.700 | SERPRO/NTT Reg. 283040 |
-| PowerSwitch N3248TE-ON | OOB Management | 9 | A consultar | A consultar | Catálogo Dell BR |
-| **Total switches** | | **30** | | **~R$ 3.226.500** + OOB | |
+| PowerSwitch N3248TE-ON | OOB Management | 9 | 22.500 | 202.500 | ARP IFB 97/2025 (sem adesão) |
+| **Total switches** | | **30** | | **~R$ 3.429.000** | |
 
 > ⚠️ Para adesão à ARP verificar saldo disponível junto à SUPGA/GATIC SERPRO SP (UASG 803080).
 
@@ -515,16 +535,17 @@ Solicitar: datasheet técnico completo + proposta para 3 unidades + SLA de supor
 
 | Grupo | Estimativa |
 |---|---:|
-| Servidores + HSM (153 unidades) | R$ 23.685.993 |
+| Servidores + HSM (141 unidades) | R$ 22.692.165 |
 | Switches Cisco (21 unidades — leaf + spine) | R$ 3.226.500 |
+| OOB Switch N3248TE-ON (9 unidades) | R$ 202.500 |
 | Infraestrutura física (racks + transceivers) | ~R$ 802.968 |
-| OOB Switch N3248TE-ON (9 unidades) | A consultar |
-| **Total itens com referência pública** | **~R$ 27.715.461** |
+| **Total itens com referência pública** | **~R$ 26.924.133** |
 
-> ℹ️ Os preços de servidores Dell (uso geral) são de **catálogo base** — produção resulta em
-> 3–5× superior. O GPU (Lenovo, R$ 1.260.000/un) e os switches Cisco (ARP SERPRO) são preços
-> reais de contratos públicos. O total de **~R$ 27,7M** é piso para os componentes com melhor
-> referência; o custo real de produção será superior nos itens Dell de uso geral.
+> ℹ️ Os preços de servidores Dell (uso geral) são de **catálogo do fabricante**; GPU (Lenovo,
+> R$ 1.260.000/un) e switches Cisco (ARP SERPRO) são preços reais de contratos públicos. O total
+> de **~R$ 26,9M** é o hardware ativo do laboratório, todo com referência pública. Por ser um
+> laboratório permanente, não há acréscimo de capacidade além da especificação; antes do edital,
+> confirmar que a configuração cotada atende aos mínimos de CPU/RAM/storage da arquitetura.
 
 ---
 
@@ -532,22 +553,26 @@ Solicitar: datasheet técnico completo + proposta para 3 unidades + SLA de supor
 
 | Item | Situação |
 |---|---|
-| GPU node form factor | SR680a V3 é **8U** — revisar layout de rack (`01-physical-architecture.md`). Posições GPU nos racks FD1/FD2/FD3 precisam ser recalculadas de 4U para 8U. |
-| Spine switch form factor | N9K-C93600CD-GX é **1U** — `01-physical-architecture.md` registrava spine como 2U. Rack FD2 ganha 1U de folga. |
-| NVMe Cinder | `01-physical-architecture.md` usa **NVMe SFF** agnóstico de form factor — aceita U.2, E3.S/EDSFF ou equivalente PCIe Gen4+. |
-| GPU DLC | SR680a V3 / H200 SXM5 utiliza Direct Liquid Cooling integrado — compatível com requisito DLC ≥ 400W/GPU da arquitetura. |
-| GPU product ID | Executar `lspci -nn \| grep -i nvidia` após entrega (H200 SXM5: `10de:2335`) e preencher em `09-gpu-compute.md`. |
-| Transceivers | SFP-10/25G-CSR-S (R$741/un) são módulos ópticos Cisco — verificar compatibilidade com switches Cisco N9K antes de especificar em edital. |
+| GPU node form factor | ✅ **Resolvido** — nó GPU de **8U** acomodado em **rack 42U**, com compute reduzido a **90 (10/10/10 por AZ)**; redução de ~12% avaliada e aceita. |
+| Energia do nó GPU | ✅ **Resolvido** — PSU redimensionada para ~6 kW (N+N); "2× 2400W" descartado; orçamento de rack reverificado. |
+| Spine switch form factor | ✅ **Resolvido** — N9K-C93600CD-GX é **1U** (era registrado 2U); folga ajuda a acomodar o nó GPU de 8U no rack 42U. |
+| NVMe Cinder | ✅ **Resolvido** — **E3.S/EDSFF aceito como equivalente funcional** de U.2 (PCIe Gen5). |
+| CPU do nó GPU | ✅ **Resolvido** — requisito alinhado para **≥ 32C/socket** (GPU é o gargalo). |
+| HSM (partições / RSA-2048) | ✅ **Resolvido** — fixados como requisito de edital (≥ 100 partições agregadas no cluster; ≥ 20.000 RSA-2048 ops/s). |
+| GPU DLC | SR680a V3 / H200 SXM5 usa DLC integrado a 700W/GPU — atende (e excede) o requisito DLC ≥ 400W/GPU. |
+| GPU product ID | A confirmar no recebimento: `lspci -nn \| grep -i nvidia` (H200 SXM5: `10de:2335`). |
+| Transceivers | A confirmar: compatibilidade dos módulos ópticos com os switches Cisco N9K antes do edital. |
 
 ---
 
 ## 11. Próximos Passos
 
-1. **Revisar layout de rack para GPU 8U** — o SR680a V3 ocupa 8U (não 4U como registrado em
-   `01-physical-architecture.md`). Recalcular posições nos racks FD1/FD2/FD3.
-2. **RFQ formal para servidores de uso geral** (Control Plane, Compute, Storage, Network) —
-   os preços Dell de catálogo são configuração base. Solicitar proposta com configuração
-   completa ou verificar preços da ARP SERPRO PE 91031/2025 (UASG 803080, Configs 1–6, 11–13).
+1. **Adquirir racks 42U** — o nó GPU de 8U é acomodado reduzindo o compute para 90 (10/10/10);
+   layout recalculado. Preço de rack pela ARP INCA 5/2026.
+2. **Confirmar configuração e preço dos servidores de uso geral** (Control Plane, Compute,
+   Storage, Network) — verificar que a configuração de catálogo cotada atende aos mínimos da
+   arquitetura (RAM/CPU/storage) e validar o preço via RFQ ou ARP SERPRO PE 91031/2025
+   (UASG 803080, Configs 1–6, 11–13).
 3. **Verificar saldo na ARP SERPRO 90611/2025** para switches Cisco (SUPGA/GATIC SERPRO SP) e
    **ARP SERPRO PE 91031/2025** para servidores GPU (Config 7, Lenovo H200).
 4. **Selecionar CPU exata** para servidores de uso geral — Xeon 6 linha P (Performance) para

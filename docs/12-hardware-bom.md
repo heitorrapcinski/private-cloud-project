@@ -17,28 +17,27 @@
 
 ## Resumo Executivo
 
-| Role | Modelo de Referência | Qtd | Melhor Preço Ref. Unit. | Fonte da Referência |
-|---|---|---:|---|---|
-| Control Plane | Dell PowerEdge **R670** ¹ | 12 | R$ 75.890 (base) | Catálogo Dell BR |
-| Compute | Dell PowerEdge **R770** ¹ | 102 | R$ 82.819 (base) | Catálogo Dell BR |
-| GPU Compute | Lenovo **4× H200 SXM5** ² | 9 | **R$ 1.260.000** | Contrato SERPRO 263505 (jan/2026) |
-| Swift Storage | Dell PowerEdge **R760xd2** ¹ | 18 | R$ 84.221 (base) | Catálogo Dell BR |
-| Cinder Storage | Dell PowerEdge **R770** (NVMe) ¹ | 3 | R$ 82.819 (base) | Catálogo Dell BR |
-| Network Node | Dell PowerEdge **R670** ¹ | 6 | R$ 75.890 (base) | Catálogo Dell BR |
-| Leaf Switch (ToR) | Cisco **N9K-C93180YC-FX3** ³ | 18 | R$ 131.100 | ARP SERPRO 90611/2025 |
-| Spine Switch | Cisco **N9K-C93600CD-GX** ³ | 3 | R$ 288.900 | ARP SERPRO 90611/2025 |
-| OOB Switch | Dell PowerSwitch **N3248TE-ON** ¹ | 9 | Consultar | Catálogo Dell BR |
-| HSM Appliance | Kryptus **ASI-HSM AHX5 KNET** | 3 | R$ 256.000 | Contrato público 2024 |
+| Role | Modelo de Referência | Qtd | Preço Ref. Unit. | Estimativa | Fonte |
+|---|---|---:|---|---:|---|
+| Control Plane | Dell PowerEdge **R670** | 12 | R$ 75.890 (base) | R$ 910.680 | Catálogo Dell BR ¹ |
+| Compute | Dell PowerEdge **R770** | 102 | R$ 82.819 (base) | R$ 8.447.538 | Catálogo Dell BR ¹ |
+| GPU Compute | Lenovo **SR680a V3** (4× H200) | 9 | **R$ 1.260.000** | R$ 11.340.000 | Contrato SERPRO 263505 ² |
+| Swift Storage | Dell PowerEdge **R760xd2** | 18 | R$ 84.221 (base) | R$ 1.515.978 | Catálogo Dell BR ¹ |
+| Cinder Storage | Dell PowerEdge **R770** (NVMe) | 3 | R$ 82.819 (base) | R$ 248.457 | Catálogo Dell BR ¹ |
+| Network Node | Dell PowerEdge **R670** | 6 | R$ 75.890 (base) | R$ 455.340 | Catálogo Dell BR ¹ |
+| Leaf Switch | Cisco **N9K-C93180YC-FX3** | 18 | R$ 131.100 | R$ 2.359.800 | ARP SERPRO 90611/2025 ² |
+| Spine Switch | Cisco **N9K-C93600CD-GX** | 3 | R$ 288.900 | R$ 866.700 | ARP SERPRO 90611/2025 ² |
+| OOB Switch | Dell PowerSwitch **N3248TE-ON** | 9 | A consultar | A consultar | Catálogo Dell BR |
+| HSM Appliance | Kryptus **ASI-HSM AHX5 KNET** | 3 | R$ 256.000 | R$ 768.000 | Contrato público 2024 ² |
+| Racks + Transceivers | Infra física | — | — | ~R$ 802.968 | SERPRO/NTT + INCA ARP ² |
+| **Total estimado** | | **153 serv. + 30 switches** | | **~R$ 27,7M** | excl. OOB switch |
 
-> ¹ Sem contrato público de referência localizado. Dell BR é a fonte com melhor rastreabilidade
->   pública de preços para servidores rack de uso geral neste segmento. A ARP SERPRO PE 91031/2025
->   (UASG 803080) cobre servidores equivalentes — consultar saldo disponível.
+> ¹ **Catálogo base:** preços de configuração mínima — servidores de produção com CPU, RAM e
+>   storage adequados resultam em **3–5× superior**. Usar como piso de referência; solicitar
+>   proposta formal ou verificar ARP SERPRO PE 91031/2025 (UASG 803080) para calibrar.
 >
-> ² GPU: referência principal é o Contrato SERPRO 263505 (Lenovo, H200 SXM5, jan/2026). O Dell
->   XE8640 (H100) é alternativa com spec inferior e preço histórico superior. Ver Seção 3.
->
-> ³ Switches: ARP SERPRO 90611/2025 aderível (NTT Brasil). Dell S5448F-ON/Z9664F-ON mantidos
->   como Opção A alternativa. Ver Seção 7.
+> ² **Contrato público:** preços reais licitados incluindo configuração completa. GPU e switches
+>   são as parcelas mais representativas e têm a melhor qualidade de referência de preço.
 
 ---
 
@@ -133,122 +132,61 @@ iDRAC: iDRAC9 Enterprise
 
 ---
 
-## 3. GPU Compute Nodes — Referência Principal: Lenovo 4× H200 SXM5 (SERPRO/Lenovo 2026)
+## 3. GPU Compute Nodes — Lenovo ThinkSystem SR680a V3 (4× H200 SXM5)
 
 **Qtd:** 9 unidades (1 por rack, 3 por AZ)
 **Referência arquitetural:** `01-physical-architecture.md` — GPU Compute Nodes / `09-gpu-compute.md`
-**Fonte do preço (primária):** Contrato SERPRO 263505 — Lenovo Tecnologia (Brasil), jan/2026,
-**R$ 1.260.000/un**, 4× NVIDIA H200 SXM5 141 GB HBM3e. ARP PE 91031/2025 (UASG 803080) aderível.
-**Fonte do preço (alternativa):** Dell PowerEdge XE8640 — consultar proposta (sem preço público).
-**Modelo inferido:** Lenovo ThinkSystem **SR680a V3** (configuração 4× H200 SXM5)
+**Preço de referência:** R$ 1.260.000/un — Contrato SERPRO 263505, Lenovo Tecnologia (Brasil)
+(CNPJ 07.275.920/0001-61), jan/2026, vigência até jan/2031. ARP PE 91031/2025 (UASG 803080) aderível.
 **Datasheet:** [ds0180 — ThinkSystem SR680a V3 Datasheet](https://lenovopress.lenovo.com/datasheet/ds0180-lenovo-thinksystem-sr680a-v3)
 **Product Guide:** [lp1909 — ThinkSystem SR680a V3 Server Product Guide](https://lenovopress.lenovo.com/lp1909-thinksystem-sr680a-v3-server)
 **GPU Guide:** [lp1944 — ThinkSystem NVIDIA H200 141GB GPUs Product Guide](https://lenovopress.lenovo.com/lp1944-nvidia-h200-141gb-gpu)
 **Technical Specs:** [pubs.lenovo.com — SR680a V3 Specifications](https://pubs.lenovo.com/sr680a-v3/server_specifications_technical)
 
-> ℹ️ O modelo exato entregue pela Lenovo no Contrato 263505 não está explicitado no edital —
-> o SR680a V3 é inferido por ser o único ThinkSystem com 4–8× H200 SXM5 e 2× Intel Xeon 5ª Ger.
-> O SR680a V3 é **8U** (vs 4U do XE8640) — verificar impacto no layout de rack se este modelo
-> for adquirido. Com 8U por GPU node, os racks FD1/FD2/FD3 precisariam ser revisados.
+> ℹ️ O modelo SR680a V3 é inferido da Configuração 7 do PE 91031/2025 (4× H200 SXM5,
+> 2× Intel Xeon 5ª Ger., 2 TB RAM) — o exato modelo entregue não está explicitado no edital.
+> O SR680a V3 é **8U**, o que impacta o layout de rack: cada posição de GPU node passa de
+> 4U para 8U. Revisar `01-physical-architecture.md` antes da aquisição.
 
-### Referência primária de preço: SERPRO PE 91031/2025, Configuração 7
-
-O Contrato SERPRO 263505 (Lenovo, jan/2026) representa a referência de mercado mais recente e
-qualificada disponível para servidores GPU de data center. A **Configuração 7** especifica
-4× **NVIDIA H200 SXM5** — geração posterior ao H100, com **141 GB HBM3e** e **4,8 TB/s** de
-largura de banda de memória, a um preço 23% inferior à nossa referência histórica H100.
-
-O Dell PowerEdge XE8640 (4× H100 SXM5) é mantido abaixo como referência alternativa para
-comparação de specs — mas não é mais a referência de preço primária.
-
-| Especificação | Requisito Arquitetural | PowerEdge XE8640 | Status |
+| Especificação | Requisito Arquitetural | Lenovo SR680a V3 (4× H200) | Status |
 |---|---|---|---|
-| Form factor | 2U, dual-socket, suporte SXM4/PCIe Gen4 | **4U** dual-socket | ⚠️ ver nota |
-| CPU | 40C/socket, VT-d/IOMMU | 2× Xeon Scalable 5ª Ger. até **56C/socket** | ✅ |
-| RAM | 1 TB DDR4-3200 ECC | até **4 TB DDR5** (32 DIMMs) | ✅ Excede |
-| GPU | 4× 80 GB HBM2e, SXM5, NVLink ≥ 600 GB/s, MIG | 4× **NVIDIA H100 80 GB SXM5**, NVLink pleno | ✅ |
-| FP64 | ≥ 9 TFLOPS | H100: **33.5 TFLOPS FP64** | ✅ Excede |
-| FP32 | ≥ 19 TFLOPS | H100: **67 TFLOPS FP32** | ✅ Excede |
-| MIG | Suportado | MIG até 7 instâncias por GPU | ✅ |
-| BMC | IPMI 2.0 + Redfish | iDRAC9 Enterprise | ✅ |
-| PSU | 2× 2400W Platinum | **2800W Titanium** redundante hot-swap | ✅ Excede |
-| Cooling GPU | Liquid cooling ≥ 400W TDP/GPU | Liquid cooling integrado (Direct Liquid Cooling) | ✅ |
+| Form factor | dual-socket, suporte SXM5 | **8U** dual-socket | ⚠️ 8U — revisar rack |
+| CPU | ≥ 32C/socket, AVX-512, ≥ 2,3 GHz | 2× Intel Xeon Scalable 5ª Ger. | ✅ |
+| RAM | 1 TB DDR4-3200 ECC | **2 TB DDR5** | ✅ Excede |
+| GPU | 4× SXM5, NVLink ≥ 600 GB/s, MIG | 4× **NVIDIA H200 141 GB HBM3e SXM5** | ✅ Excede |
+| Memória GPU | 80 GB HBM2e | **141 GB HBM3e** (+76%) | ✅ Excede |
+| Bandwidth GPU | — | **4,8 TB/s** | ✅ |
+| FP64 | ≥ 9 TFLOPS | **34 TFLOPS** | ✅ Excede |
+| FP32 | ≥ 19 TFLOPS | **67 TFLOPS** | ✅ Excede |
+| Tensor DL | — | ~1979 TFLOPS (FP16/BF16) | ✅ |
+| NVLink | ≥ 600 GB/s bidirecional | **900 GB/s** | ✅ Excede |
+| MIG | Suportado (Kubernetes nativo) | ✅ até 7 instâncias por GPU | ✅ |
+| Cooling GPU | Direct Liquid Cooling ≥ 400W/GPU | **DLC integrado** (700W TDP) | ✅ |
+| NIC | 2× 25GbE | 2× NIC 25 GbE | ✅ |
+| BMC | IPMI 2.0 + Redfish | XClarity Controller (IPMI 2.0 + Redfish) | ✅ |
 
-> ⚠️ **Impacto no layout de rack:** O XE8640 é **4U** (não 2U como especificado na arquitetura).
-> Cada rack FD1/FD2/FD3 precisa reservar **4U** para o GPU node em vez de 2U.
-> Recomenda-se revisar o layout de rack em `01-physical-architecture.md` para acomodar este
-> ajuste (impacto: -2U de compute por rack com GPU, equivalente a 1 compute node por rack afetado).
-> Alternativa de maior densidade: **PowerEdge XE9680** (6U, 8× GPU H100/H200 SXM5) —
-> consolida 2 GPU nodes em 1 servidor ao custo de 6U em vez de 4U.
+> ⚠️ **Fibre Channel:** A Configuração 7 inclui 2× FC 32 Gb/s (requisito SERPRO/SAN).
+> Nossa arquitetura usa Ethernet/NVMe-oF — os adaptadores FC estarão presentes mas inativos.
+> Não representam incompatibilidade; são custo embutido no preço do contrato.
 
 ### Configuração Recomendada por Nó
 
 ```
-GPU  : 4× NVIDIA HGX H100 80 GB 700W SXM5 (NVLink pleno)
-CPU  : 2× Intel Xeon Scalable 5ª Ger. (≥ 40C/socket)
-RAM  : 16× 64 GB DDR5 = 1 TB
-Boot : 2× SSD SATA 480 GB (RAID1)
-NVMe : 2× NVMe 3.84 TB (local scratch para ML workloads)
-NIC  : OCP 3.0 Dual Port 25GbE + InfiniBand/RoCE para comunicação GPU-GPU entre nós
-PSU  : Dual 2800W Titanium redundante hot-swap
-iDRAC: iDRAC9 Enterprise
+GPU  : 4× NVIDIA HGX H200 141 GB HBM3e 700W SXM5 (NVLink 900 GB/s pleno)
+CPU  : 2× Intel Xeon Scalable 5ª Ger. (≥ 32C/socket, AVX-512)
+RAM  : 2 TB DDR5
+Boot : 2× SSD/NVMe 3.2 TB (conforme Config 7 SERPRO)
+NIC  : 2× 25GbE
+Cooling: Direct Liquid Cooling integrado
+BMC  : XClarity Controller (Redfish)
 ```
 
-**Preço:** Consultar Dell diretamente (sistemas XE não têm preço público — são vendidos por proposta).
-**Produto BR:** [dell.com/pt-br — PowerEdge XE8640](https://www.dell.com/pt-br/shop/servidores-de-data-center/servidor-poweredge-xe8640/spd/poweredge-xe8640)
-**Spec Sheet:** [poweredge-xe8640-spec-sheet.pdf](https://www.delltechnologies.com/asset/en-us/products/servers/technical-support/poweredge-xe8640-spec-sheet.pdf) (en-us)
-
-> **Alternativa de maior densidade — PowerEdge XE9680** (disponível no site BR):
-> - **6U**, 2-socket, **8× GPU** NVIDIA H100 80GB ou H200 141GB SXM5, NVLink pleno
-> - RAM: até 4 TB DDR5 | Storage: até 16× E3.S NVMe
-> - Indicado se a arquitetura for consolidada: 5× XE9680 (40 GPUs) em vez de 9× XE8640 (36 GPUs)
-> - **Produto BR:** [dell.com/pt-br — PowerEdge XE9680](https://www.dell.com/pt-br/shop/servidores-de-data-center/servidor-poweredge-xe9680/spd/poweredge-xe9680)
-> - **Spec Sheet:** [poweredge-xe9680-spec-sheet.pdf](https://www.delltechnologies.com/asset/en-us/products/servers/technical-support/poweredge-xe9680-spec-sheet.pdf) (en-us)
-
-> **PCI Vendor/Product ID:** Após recebimento do hardware, executar:
+> **PCI Vendor/Product ID (H200 SXM5):** Após recebimento, executar:
 > ```bash
 > lspci -nn | grep -i nvidia
-> # Exemplo de saída esperada: 10de:2331  (H100 PCIe) ou 10de:2330  (H100 SXM5)
-> # H200 SXM5 PCI ID: 10de:2335
+> # H200 SXM5: 10de:2335
 > ```
-> Substituir os valores em `09-gpu-compute.md` conforme o modelo exato recebido.
-
-### Referência de Preço Gov. — SERPRO PE 91031/2025, Configuração 7 (H200 SXM5)
-
-> **Fonte:** Contrato SERPRO 263505, Processo SERPRO-PSI-2025/00080, fornecedor
-> **Lenovo Tecnologia (Brasil) Ltda.** (CNPJ 07.275.920/0001-61), vigência 06/01/2026–05/01/2031.
-> Valor unitário: **R$ 1.260.000,00** — 6 unidades total (3 BSB + 3 SP) = R$ 7.560.000,00.
-> ARP PE 91031/2025 (UASG 803080 SERPRO/SP) — aderível por órgãos federais.
-
-A Configuração 7 do edital especifica servidor com **4× NVIDIA H200 SXM5** (identificado pelos
-requisitos de 141 GB HBM3e e 4,8 TB/s de largura de banda — specs exclusivas do H200):
-
-| Especificação Config 7 (edital) | Valor exigido | H100 SXM5 | H200 SXM5 | Nossa arq. |
-|---|---|---|---|---|
-| Memória GPU | ≥ 141 GB HBM3e | 80 GB HBM2e ❌ | **141 GB HBM3e** ✅ | 80 GB |
-| Bandwidth memória | ≥ 4,8 TB/s | 3,35 TB/s ❌ | **4,8 TB/s** ✅ | — |
-| FP64 por GPU | ≥ 30 TFLOPS | 33,5 TFLOPS ✅ | 34 TFLOPS ✅ | ≥ 9 TFLOPS |
-| FP32 por GPU | ≥ 60 TFLOPS | 67 TFLOPS ✅ | 67 TFLOPS ✅ | ≥ 19 TFLOPS |
-| Tensor Deep Learning | ≥ 1671 TFLOPS | ~1979 TFLOPS (FP16) ✅ | ~1979 TFLOPS ✅ | — |
-| NVLink / interface | SXM5, ≥ 900 GB/s | SXM5, 900 GB/s ✅ | SXM5, 900 GB/s ✅ | SXM5, ≥ 600 GB/s |
-| MIG (Kubernetes) | Nativo, sem licença extra | ✅ | ✅ | ✅ |
-| RAM servidor | 2 TB | — | — | 1 TB |
-| CPU | ≥ 32C/socket, AVX-512, ≥ 2,3 GHz | — | — | ≥ 40C/socket |
-| Cooling | não especificado ⚠️ | DLC requerido (700W) | DLC requerido (700W) | DLC ≥ 400W/GPU |
-| Fibre Channel 32 Gb/s | 2× FC (Emulex/QLogic) | — | — | ❌ não requerido |
-
-> ⚠️ **Fibre Channel:** A Config 7 inclui 2× FC 32 Gb/s (requisito SERPRO para storage SAN).
-> Nossa arquitetura usa **Ethernet / NVMe-oF** — os adaptadores FC estão no servidor mas
-> não serão utilizados. Não representam incompatibilidade, apenas custo embutido.
->
-> ⚠️ **Cooling:** O edital não especifica explicitamente liquid cooling, mas H200 SXM5 a 700W
-> TDP **exige** Direct Liquid Cooling. O servidor Lenovo vencedor (provável ThinkSystem SR680a V3
-> ou SD550 V3) utiliza DLC integrado — confirmar no Termo de Referência/proposta Lenovo.
->
-> ✅ **Conclusão:** Config 7 **atende e excede** todos os requisitos de GPU da nossa arquitetura.
-> O H200 é a geração posterior ao H100 (mesma família SXM5). A diferença funcional para
-> workloads de ML é principalmente a maior memória (141 vs 80 GB) — importante para modelos
-> de linguagem grandes (LLMs) que não cabem em H100.
+> Preencher em `09-gpu-compute.md` com o ID exato após entrega.
 
 ---
 
@@ -376,176 +314,69 @@ iDRAC: iDRAC9 Enterprise
 
 ## 7. Switches — Fabric de Rede
 
-> Duas opções mapeadas com referências de preço distintas. **Opção B (Cisco/ARP SERPRO) tem
-> preços públicos homologados e ARP aderível**; Opção A (Dell) não tem preço público disponível.
-> A escolha entre as opções impacta o modelo de gerência (SONiC open vs NX-OS standalone) mas
-> **não o SDN** — em ambas o overlay é OpenStack OVN.
+> Fabric Cisco Nexus em **modo NX-OS standalone** com **OpenStack OVN** como SDN overlay.
+> Preços da ARP SERPRO 90611/2025 (NTT Brasil, Reg. 283040) — aderível por órgãos federais.
+>
+> ```
+> OVERLAY (SDN)  →  OpenStack Neutron + OVN
+>                   VXLAN tunnels, security groups, floating IPs, LBaaS
+> UNDERLAY       →  Nexus 9000 NX-OS · eBGP/ECMP · os switches enxergam só IP
+> ```
+> Cisco APIC **não é necessário** — o OVN é o plano de controle de rede virtual.
 
-### 7.1 Leaf / ToR — Opção A: Dell PowerSwitch S5448F-ON
+### 7.1 Leaf / ToR — Cisco Nexus N9K-C93180YC-FX3
 
 **Qtd:** 18 unidades (2 por rack × 9 racks)
-**Fonte do preço:** Consultar Dell BR (sem preço público).
-
-O S5448F-ON é o switch leaf/ToR disponível no catálogo Dell BR com densidade 100GbE e uplinks 400GbE nativos, substituindo o Z9264F-ON que não consta no catálogo brasileiro.
-
-| Especificação | Requisito Arquitetural | S5448F-ON | Status |
-|---|---|---|---|
-| Portas downlink | 32× 100GbE (breakout 4× 25GbE) | **48× 100GbE SFP56-DD** (breakout 4× 25GbE) | ✅ Excede |
-| Portas uplink | 3× 100GbE para spines | **8× 400GbE QSFP56-DD** (breakout 4× 100GbE) | ✅ Excede |
-| Portas mgmt | — | 2× 10GbE SFP+ | ✅ |
-| Buffer | ≥ 16 MB | 32 MB shared buffer | ✅ |
-| Latência | ≤ 500 ns | ~600 ns cut-through | ✅ |
-| Protocolos | BGP, EVPN, MLAG, BFD, VXLAN HW offload | BGP, EVPN, MLAG, BFD, VXLAN ✅ | ✅ |
-| OS | Aberto/programável, APIs declarativas | Dell OS10 / Enterprise SONiC (REST, gNMI) | ✅ |
-
-**Produto BR:** [dell.com/pt-br — PowerSwitch S5448F-ON](https://www.dell.com/pt-br/shop/switches-de-data-center/powerswitch-s5448f-on/spd/powerswitch-s5448f-on)
-**Spec Sheet:** [dell-emc-powerswitch-s5448f-on-spec-sheet.pdf](https://www.delltechnologies.com/asset/en-us/products/networking/technical-support/dell-emc-powerswitch-s5448f-on-spec-sheet.pdf)
-
-### 7.2 Spine — Opção A: Dell PowerSwitch Z9664F-ON
-
-**Qtd:** 3 unidades (1 por AZ, em racks R2, R5, R8)
-**Fonte do preço:** Consultar Dell BR (sem preço público).
-
-| Especificação | Requisito Arquitetural | Z9664F-ON | Status |
-|---|---|---|---|
-| Portas | 32× 400GbE QSFP-DD | **64× 400GbE QSFP56-DD** ou 256× 100GbE | ✅ Excede |
-| Breakout | 4× 100GbE por porta | 4× 100GbE ou 8× 50GbE por porta | ✅ |
-| Fabric uplinks para 18 leaves | 18× 100GbE | 64 portas 400GbE disponíveis (suporta breakout) | ✅ |
-| Protocolos | BGP eBGP, EVPN, BFD, ECMP | BGP, EVPN, BFD, ECMP ✅ | ✅ |
-| Latência | ≤ 500 ns | ~800 ns cut-through | ✅ |
-| Switching fabric | — | **51,2 Tbps** non-blocking | ✅ |
-| Form factor | 1U | **2U** | ⚠️ notar no rack FD2 |
-| OS | Aberto/programável | Dell OS10 / Enterprise SONiC ✅ | ✅ |
-
-**Produto BR:** [dell.com/pt-br — PowerSwitch Z9664F-ON](https://www.dell.com/pt-br/shop/switches-de-data-center/powerswitch-z9664f-on/spd/powerswitch-z9664f-on)
-**Spec Sheet:** [dell-powerswitch-z9664f-on-spec-sheet.pdf](https://www.delltechnologies.com/asset/en-us/products/networking/technical-support/dell-powerswitch-z9664f-on-spec-sheet.pdf)
-
-> **Alternativa de nova geração:** PowerSwitch **Z9864F-ON** (64× 800GbE OSFP112, 2U) — posicionado para fabrics de IA generativa; indicado se a escala prevista para GPU workloads justificar 800GbE.
-> [Spec Sheet Z9864F-ON](https://www.delltechnologies.com/asset/en-us/products/networking/technical-support/dell-powerswitch-z9864f-on-spec-sheet.pdf)
-
-> ⚠️ **Form factor 2U:** o rack FD2 precisa reservar 2U para o spine (era 1U no layout original). Revisar posições U7-U8 no layout do rack FD2 em `01-physical-architecture.md`.
-
-### 7.3 Management OOB — Dell PowerSwitch N3248TE-ON
-
-**Qtd:** 9 unidades (1 por rack)
-**Fonte do preço:** Consultar Dell BR (sem preço público). Para este perfil (48× 1GbE OOB)
-qualquer switch gerenciável de acesso também atende — sem ARP pública localizada.
-
-| Especificação | Requisito Arquitetural | N3248TE-ON | Status |
-|---|---|---|---|
-| Portas | 48× 1GbE base-T + 4× 10GbE uplink | **48× 1GbE RJ45 + 4× 10GbE SFP+ + 2× 100GbE QSFP28** | ✅ Excede |
-| Função | OOB/IPMI/PXE isolado | VLAN segregada, DHCP relay, PoE opcional | ✅ |
-| OS | — | Dell OS10 | ✅ |
-
-**Produto BR:** [dell.com/pt-br — PowerSwitch N3248TE-ON](https://www.dell.com/pt-br/shop/switches-de-data-center/powerswitch-n3248te-on/spd/powerswitch-n3248te-on)
-**Spec Sheet:** [dell-powerswitch-n3248te-on-spec-sheet.pdf](https://www.delltechnologies.com/asset/en-us/products/networking/technical-support/dell-powerswitch-n3248te-on-spec-sheet.pdf)
-
-### 7.4 Alternativa — Cisco Nexus 9000 em modo NX-OS standalone (SERPRO/NTT Contrato 283040)
-
-> **Fonte de referência de preços:** Contrato SERPRO × NTT Brasil (Reg. 283040, PE 90611/2025),
-> assinado em 21/05/2026, vigência 12 meses. Fornecedor: NTT Brasil Comércio e Serviços de
-> Tecnologia Ltda (CNPJ 05.437.734/0001-56). Processo SERPRO-PSI-2025/00051 / ARP 90611/2025.
-> Valor total contratado: R$ 6.076.351,10.
-
-Esta opção usa os switches Cisco Nexus em **modo NX-OS standalone** (não ACI), como underlay
-BGP/ECMP puro. O SDN desta arquitetura é provido inteiramente pelo **OpenStack + OVN**:
-
-```
-┌──────────────────────────────────────────────────────────┐
-│  OVERLAY (SDN)  →  OpenStack Neutron + OVN               │
-│  Virtual networks, security groups, roteamento virtual,   │
-│  VXLAN tunnels terminados nos hipervisores (OVN vtep),   │
-│  floating IPs, LBaaS (Octavia), FWaaS                    │
-├──────────────────────────────────────────────────────────┤
-│  UNDERLAY  →  Nexus 9000 em NX-OS standalone             │
-│  eBGP / ECMP entre leaves e spines                       │
-│  Os switches enxergam apenas pacotes IP —                 │
-│  são agnósticos ao VXLAN do OVN por cima                 │
-└──────────────────────────────────────────────────────────┘
-```
-
-A controladora Cisco APIC (DCN-VAPIC) **não é necessária** nesta arquitetura segregada — ela
-só é obrigatória no SERPRO porque os novos switches precisam ingressar no fabric ACI já existente.
-Aqui, o OVN é o plano de controle de rede virtual.
-
-> **Nota sobre o modo NX-OS:** Os switches N9K-C93180YC-FX3 e N9K-C93600CD-GX chegam
-> configuráveis em modo ACI ou NX-OS standalone — são o mesmo hardware. A conversão entre
-> modos exige apenas reload e reconfiguracao inicial. Em NX-OS standalone, todos os recursos
-> de BGP, OSPF, VXLAN hardware offload, BFD e ECMP estão disponíveis nativamente.
-
-#### 7.4.1 Leaf / ToR — Cisco Nexus N9K-C93180YC-FX3
-
-**Qtd sugerida:** 18 unidades (2 por rack × 9 racks, mesma topologia atual)
+**Preço de referência:** R$ 131.100,00/un — ARP SERPRO 90611/2025 (NTT Brasil, Reg. 283040)
+**Suporte Cisco:** [cisco.com — Nexus 93180YC-FX3](https://www.cisco.com/c/en/us/support/switches/nexus-93180yc-fx3-switch/model.html)
+**Datasheet:** [Nexus 9300-FX3 Series Data Sheet (c78-744052)](https://www.cisco.com/c/en/us/products/collateral/switches/nexus-9000-series-switches/datasheet-c78-744052.html)
+**Hardware Guide (NX-OS):** [Nexus 93180YC-FX3 NX-OS Mode Installation Guide](https://www.cisco.com/c/en/us/td/docs/dcn/hw/nx-os/nexus9000/93180yc-fx3/cisco-nexus-93180yc-fx3-nx-os-mode-switch-hardware-installation-guide/m_overview1.html)
 
 | Especificação | Requisito Arquitetural | N9K-C93180YC-FX3 | Status |
 |---|---|---|---|
 | Portas downlink | 32× 100GbE (breakout 4× 25GbE) | **48× 10/25GbE SFP28** non-blocking | ✅ Excede |
-| Portas uplink | 3× 100GbE para spines | **6× 40/100GbE QSFP28** (1 por spine + 3 uplinks) | ✅ |
+| Portas uplink | 3× 100GbE para spines | **6× 40/100GbE QSFP28** | ✅ |
 | Throughput | — | **3,6 Tbps** non-blocking | ✅ |
-| Latência | ≤ 500 ns | Baixa latência (hardware pipeline Cisco ASIC) | ✅ |
-| Protocolos underlay | BGP, OSPF, BFD, ECMP | BGP, OSPF, OSPFv3, MP-BGP, BFD, ECMP | ✅ |
-| Protocolos overlay | VXLAN, EVPN, VTEP, L2/L3 GW | VXLAN/EVPN, VTEP, Distributed Anycast GW | ✅ |
-| SDN | APIs declarativas | **NX-OS**: NETCONF, RESTCONF, NX-API (Python, Ansible) | ✅ |
-| Multi-chassis | MLAG / vPC | **vPC** (Virtual PortChannel) | ✅ |
-| Integração hypervisor | VMware, KVM, OpenStack | ✅ (OVN underlay — sem agente no switch) | ✅ |
+| Latência | ≤ 500 ns | Baixa latência (Cisco ASIC) | ✅ |
+| Protocolos | BGP, EVPN, VXLAN HW offload, BFD, ECMP | BGP, OSPF, MP-BGP-EVPN, VXLAN, BFD, ECMP | ✅ |
+| Multi-chassis | MLAG | **vPC** (Virtual PortChannel) | ✅ |
+| APIs | NETCONF, REST, gNMI | NETCONF, RESTCONF, NX-API (Python, Ansible) | ✅ |
 | Form factor | 1U | **1U rack** | ✅ |
 | Fonte | Redundante hot-swap | Dual AC hot-swap, bivolt | ✅ |
 
-**Preço contratado (SERPRO 2026):** R$ 131.100,00/un
-**Part number:** N9K-C93180YC-FX3
-**Fabric existente SERPRO:** Este modelo já está implantado nos DCs BSB e SPO do SERPRO
-**Suporte Cisco:** [cisco.com — Nexus 93180YC-FX3](https://www.cisco.com/c/en/us/support/switches/nexus-93180yc-fx3-switch/model.html)
-**Datasheet:** [Nexus 9300-FX3 Series Switches Data Sheet (datasheet-c78-744052)](https://www.cisco.com/c/en/us/products/collateral/switches/nexus-9000-series-switches/datasheet-c78-744052.html)
-**Hardware Install Guide (NX-OS):** [Nexus 93180YC-FX3 NX-OS Mode — Hardware Installation Guide](https://www.cisco.com/c/en/us/td/docs/dcn/hw/nx-os/nexus9000/93180yc-fx3/cisco-nexus-93180yc-fx3-nx-os-mode-switch-hardware-installation-guide/m_overview1.html)
+### 7.2 Spine — Cisco Nexus N9K-C93600CD-GX
 
-#### 7.4.2 Spine — Cisco Nexus N9K-C93600CD-GX (Border-Leaf como Spine)
+**Qtd:** 3 unidades (1 por AZ, racks R2/R5/R8)
+**Preço de referência:** R$ 288.900,00/un — ARP SERPRO 90611/2025 (NTT Brasil, Reg. 283040)
+**Suporte Cisco:** [cisco.com — Nexus 93600CD-GX](https://www.cisco.com/c/en/us/support/switches/nexus-93600cd-gx-switch/model.html)
+**Datasheet:** [Nexus 9300-GX Series Data Sheet](https://www.cisco.com/c/en/us/products/collateral/switches/nexus-9000-series-switches/nexus-9300-gx-series-switches-ds.html)
+**Hardware Guide (NX-OS):** [Nexus 93600CD-GX NX-OS Mode Installation Guide](https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/hw/n93600cd-gx-hig/guide/b_c93600cd-gx-nxos-mode-hardware-installation-guide/m_overview1.html)
 
-**Qtd sugerida:** 3 unidades (1 por AZ, racks R2/R5/R8 — mesmo posicionamento do Z9664F-ON)
-
-> No contrato SERPRO este equipamento é denominado "Switch Tipo 2 – Border-Leaf". Na topologia
-> desta arquitetura, com 18 leaves e 3 spines, o N9K-C93600CD-GX atende ao papel de **Spine**:
-> suas 8× 400GbE (breakout 4× 100GbE = 32 portas 100GbE) cobrem as 18 conexões leaf→spine com
-> margem. É o modelo de maior performance da família Nexus 9300 sem ser um Spine dedicado.
+> Denominado "Border-Leaf" no contrato SERPRO. Nesta topologia (18 leaves × 3 spines)
+> as 8× 400GbE em breakout 4× 100GbE = 32× 100GbE cobrem as 18 conexões leaf→spine com margem.
 
 | Especificação | Requisito Arquitetural | N9K-C93600CD-GX | Status |
 |---|---|---|---|
-| Portas 400GbE | 32× 400GbE QSFP-DD | **8× 400GbE QSFP-DD** (breakout → 32× 100GbE) | ✅ (via breakout) |
-| Portas 100GbE | 18 para leaves + 3 inter-spine | 28× 40/100GbE + 8× 400GbE → ≥ 36× 100GbE | ✅ |
+| Portas uplink para leaves | 18× 100GbE + 3 inter-spine | 8× 400GbE → 32× 100GbE (breakout) | ✅ |
+| Portas 100GbE adicionais | — | 28× 40/100GbE | ✅ |
 | Throughput | — | **12 Tbps** non-blocking | ✅ |
-| Roteamento unicast | ≥ 512.000 rotas | 512.000 rotas unicast | ✅ |
-| Roteamento multicast | ≥ 32.000 rotas | 32.000 rotas multicast | ✅ |
+| Rotas unicast | ≥ 512.000 | 512.000 | ✅ |
 | Protocolos | BGP eBGP, EVPN, BFD, ECMP | BGP, MP-BGP-EVPN, OSPF, BFD, ECMP | ✅ |
-| DCI | Datacenter Interconnect | ✅ (funcionalidade disponível) | ✅ |
-| Form factor | 2U | **1U** | ✅ Melhor (economiza 1U vs Z9664F-ON) |
+| Form factor | 1–2U | **1U** | ✅ |
 
-**Preço contratado (SERPRO 2026):** R$ 288.900,00/un
-**Part number:** N9K-C93600CD-GX
-**Suporte Cisco:** [cisco.com — Nexus 93600CD-GX](https://www.cisco.com/c/en/us/support/switches/nexus-93600cd-gx-switch/model.html)
-**Datasheet:** [Nexus 9300-GX Series Switches Data Sheet](https://www.cisco.com/c/en/us/products/collateral/switches/nexus-9000-series-switches/nexus-9300-gx-series-switches-ds.html)
-**Hardware Install Guide (NX-OS):** [Nexus 93600CD-GX NX-OS Mode — Hardware Installation Guide](https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/hw/n93600cd-gx-hig/guide/b_c93600cd-gx-nxos-mode-hardware-installation-guide/m_overview1.html)
-**Hardware Install Guide (NX-OS PDF):** [b_c93600cd-gx-nxos-mode-hardware-installation-guide.pdf](https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/hw/n93600cd-gx-hig/guide/b_c93600cd-gx-nxos-mode-hardware-installation-guide.pdf)
+> ⚠️ Se a escala crescer para >32 leaves por spine, migrar para spine dedicado (N9K-C9364C).
 
-> ⚠️ **Nota de escala:** Em implantações Cisco ACI de maior escala, o papel de Spine é exercido
-> por switches dedicados (ex: N9K-C9364C, N9K-C9336C-FX2) que já compõem o fabric SERPRO
-> (cláusula 2.2.1.1.2 do contrato). Para esta arquitetura (18 leaves × 3 spines), o
-> N9K-C93600CD-GX é dimensionalmente adequado. Se a escala crescer para >32 leaves por spine,
-> será necessário migrar para spine dedicado.
+### 7.3 Management OOB — Dell PowerSwitch N3248TE-ON
 
-#### 7.4.3 Controladora SDN — Cisco APIC Virtual (DCN-VAPIC)
+**Qtd:** 9 unidades (1 por rack)
+**Preço de referência:** Consultar Dell BR (sem ARP pública localizada para este perfil)
+**Produto BR:** [dell.com/pt-br — PowerSwitch N3248TE-ON](https://www.dell.com/pt-br/shop/switches-de-data-center/powerswitch-n3248te-on/spd/powerswitch-n3248te-on)
+**Spec Sheet:** [dell-powerswitch-n3248te-on-spec-sheet.pdf](https://www.delltechnologies.com/asset/en-us/products/networking/technical-support/dell-powerswitch-n3248te-on-spec-sheet.pdf)
 
-> ❌ **Não necessário para esta arquitetura.** O APIC só é exigido quando os switches operam
-> em modo ACI e precisam ingressar num fabric ACI existente (caso SERPRO). Aqui o SDN é
-> provido pelo **OpenStack OVN** — não há necessidade de controladora externa de rede.
->
-> O item DCN-VAPIC do contrato SERPRO/NTT (R$ 45.437,55/un) é incluído apenas como referência
-> de preço público. **Não deve ser adquirido** para esta infra.
-
-| Especificação | Relevância aqui | Alternativa |
-|---|---|---|
-| Provisionamento SDN | ❌ não aplicável | OpenStack Neutron API + Heat/Terraform |
-| Multi-tenant | ❌ não aplicável | OpenStack Projects + Neutron |
-| Integração KVM/OpenStack | ❌ não aplicável | OVN integrado nativamente ao Neutron |
-| APIs declarativas | ❌ não aplicável | Neutron REST API + oslo.config |
+| Especificação | Requisito Arquitetural | N3248TE-ON | Status |
+|---|---|---|---|
+| Portas | 48× 1GbE base-T + 4× 10GbE uplink | **48× 1GbE RJ45 + 4× 10GbE SFP+ + 2× 100GbE QSFP28** | ✅ Excede |
+| Função | OOB/IPMI/PXE isolado | VLAN segregada, DHCP relay | ✅ |
 
 ---
 
@@ -646,73 +477,26 @@ Solicitar: datasheet técnico completo + proposta para 3 unidades + SLA de supor
 | Swift Storage | Dell PowerEdge R760xd2 | 18 | R$ 84.221 ² | R$ 1.515.978 | Catálogo base — subestima produção |
 | GPU Compute | **Lenovo 4× H200 SXM5** | 9 | **R$ 1.260.000** ⁶ᵃ | **R$ 11.340.000** | ✅ Contrato público jan/2026 — confiável |
 | HSM | Kryptus ASI-HSM AHX5 KNET | 3 | R$ 256.000 | R$ 768.000 | ✅ Contrato público 2024 — confiável |
-| **Total servidores** | | **153** | | **~R$ 23.685.993** ¹ | |
+| **Total servidores** | | **153** | | **~R$ 23.685.993** | |
 
-¹ _Total usando referência Lenovo/H200 para GPU (R$ 11.340.000). Não inclui switches.
-  Com a referência Dell/H100 anterior (R$ 14.805.000 GPU), o total seria ~R$ 27.150.993.
-  A melhora de R$ 3.465.000 decorre de especificação superior (H200) a preço menor._
+> ¹ Preços Dell = configuração **base** (mínima). Produção resulta em 3–5× superior para
+>   servidores sem GPU. GPU (Lenovo) e HSM (Kryptus) são preços reais de contrato público.
+>   Para calibrar os servidores Dell, verificar ARP SERPRO PE 91031/2025 (UASG 803080).
 
-² _Preços Dell = configuração **base** (mínima). Servidores de produção com CPU, RAM e
-  storage adequados resultam em 3–5× superior. Usar como piso de referência apenas.
-  Para orçamento mais preciso, solicitar proposta à Dell com configuração completa ou
-  verificar ARP SERPRO PE 91031/2025 (UASG 803080) para servidores equivalentes._
-
-³ _Referência Gov. servidores de uso geral: **Pregão SERPRO PE 91031/2025** (UASG 803080,
-  abertura 05/11/2025) cobre 13 configurações de servidor rack. Preços dos lotes não
-  extraídos (exceto Config 7 GPU). Servidores equivalentes ao R670/R770/R760xd2 estão
-  nas Configurações 1–6 e 11–13 deste pregão._
-
-⁴ _Configurações 1–6 do PE 91031/2025 têm 512 GB–1 TB RAM e 24–32 núcleos/socket —
-  similar ao nosso perfil. Os preços vencedores são o melhor balizamento disponível para
-  uma eventual licitação, mas não foram extraídos nesta análise._
-
-⁶ᵃ _**GPU — referência primária:** Contrato SERPRO 263505, fornecedor **Lenovo Tecnologia (Brasil)**
-  (CNPJ 07.275.920/0001-61), jan/2026, vigência até jan/2031. "Configuração 7": 4× NVIDIA H200
-  SXM5 141 GB HBM3e, 2× CPU ≥ 32C, 2 TB RAM, 2× SSD/NVMe 3.2 TB, 2× FC 32 Gb/s, 2× 25GbE.
-  Preço: **R$ 1.260.000/un**. ARP PE 91031/2025 (UASG 803080) aderível. Config 7 **excede**
-  nossa especificação (H200 > H100, 141 GB > 80 GB), a preço 23% menor que ref. anterior._
-
-⁷ _**GPU — referência teto:** ARP INCA Nº 5/2026 (Pregão 91.234/2025, válida ~dez/2026) —
-  VERSATUS HPC, "GPU alto desempenho, NVIDIA, refrigerada a ar" — R$ 2.894.000/un.
-  ⚠️ "Refrigerada a ar" pode indicar H100/H200 PCIe (não SXM5 DLC). Teto de referência
-  2026. ARP aderível (Art. 4.1, Lei 14.133/2021)._
-
-> ⚠️ **Servidores uso geral (R670/R770/R760xd2):** preços de catálogo base — subestimam
-> a configuração de produção em 3–5×. Solicitar proposta com configuração completa ou
-> verificar preços da ARP SERPRO PE 91031/2025 (UASG 803080) para calibrar.
->
-> ⚠️ **HSM Kryptus:** preço de contrato público vigente (2024–2029), 2 unidades a
-> R$ 256.000/un. Solicitar proposta formal para 3 unidades com SLA.
-
-### Rede e Infraestrutura — Opção A: Dell SONiC (fabric aberto)
-
-| Modelo | Role | Qtd | Preço Ref. Unit. | Estimativa Total | Ref. Gov. (unit.) | Fonte Gov. |
-|---|---|---:|---|---|---|---|
-| PowerSwitch S5448F-ON | Leaf / ToR | 18 | Consultar Dell | A consultar | — | — |
-| PowerSwitch Z9664F-ON | Spine | 3 | Consultar Dell | A consultar | — | — |
-| PowerSwitch N3248TE-ON | OOB Management | 9 | Consultar Dell | A consultar | — | — |
-| **Total switches Opção A** | | **30** | | **A consultar** | | |
-
-### Rede e Infraestrutura — Opção B: Cisco Nexus NX-OS standalone + OpenStack OVN
+### Rede e Infraestrutura — Cisco Nexus NX-OS + OpenStack OVN
 
 > Preços extraídos do **Contrato SERPRO × NTT Brasil, Reg. 283040** (PE 90611/2025, 21/05/2026).
-> ARP 90611/2025 é aderível por órgãos federais (Art. 4.1, Lei 14.133/2021) — oportunidade de
-> compra pública sem nova licitação pelo período de vigência da Ata.
->
-> Nesta opção os switches operam em **modo NX-OS standalone** (não ACI). O SDN é provido pelo
-> **OpenStack OVN** — a controladora APIC (DCN-VAPIC) **não é adquirida**.
+> ARP 90611/2025 (UASG 803080) é aderível por órgãos federais (Art. 4.1, Lei 14.133/2021).
+> Switches operam em **modo NX-OS standalone** — sem APIC; SDN provido pelo OpenStack OVN.
 
 | Modelo | Role | Qtd | Preço Contrato (R$) | Estimativa Total (R$) | Fonte |
 |---|---|---:|---:|---:|---|
-| N9K-C93180YC-FX3 | Leaf / ToR | 18 | 131.100,00 | 2.359.800,00 | SERPRO/NTT Reg. 283040 |
-| N9K-C93600CD-GX | Spine | 3 | 288.900,00 | 866.700,00 | SERPRO/NTT Reg. 283040 |
-| ~~DCN-VAPIC~~ | ~~Controladora APIC~~ | ~~—~~ | ~~45.437,55~~ | ~~não adquirido~~ | não necessário — OVN é o SDN |
-| PowerSwitch N3248TE-ON | OOB Management | 9 | Consultar Dell | A consultar | — |
-| **Total switches Opção B** | | **30** | | **~R$ 3.226.500** | |
+| N9K-C93180YC-FX3 | Leaf / ToR | 18 | 131.100 | 2.359.800 | SERPRO/NTT Reg. 283040 |
+| N9K-C93600CD-GX | Spine | 3 | 288.900 | 866.700 | SERPRO/NTT Reg. 283040 |
+| PowerSwitch N3248TE-ON | OOB Management | 9 | A consultar | A consultar | Catálogo Dell BR |
+| **Total switches** | | **30** | | **~R$ 3.226.500** + OOB | |
 
-> ⚠️ Os preços da tabela acima são da ARP SERPRO (fornecedor NTT), contratados para 10 Leaf
-> (BSB) + 10 Leaf (SP) + 2 Border-Leaf (BSB) + 4 Border-Leaf (SP). Para adesão, verificar
-> disponibilidade de saldo na ARP junto ao SERPRO (SUPGA/GATIC, UASG 803080).
+> ⚠️ Para adesão à ARP verificar saldo disponível junto à SUPGA/GATIC SERPRO SP (UASG 803080).
 
 ### Infraestrutura Física
 
@@ -721,78 +505,59 @@ Solicitar: datasheet técnico completo + proposta para 3 unidades + SLA de supor
 | Rack 42U 19" | APC ou equivalente | 9 | R$ 17.500 | R$ 157.500 | ARP INCA 5/2026, Item 9 |
 | Transceivers 10/25GbE | SFP-10/25G-CSR-S SFP28 SR (hosts → leaf) | ~600 | R$ 741 ⁸ | ~R$ 444.600 | SERPRO/NTT Reg. 283040, Item 8 |
 | Transceivers 100GbE BiDi | QSFP-100G-SR1.2 LC MMF (leaf → spine) | 54 | R$ 2.250 | R$ 121.500 | SERPRO/NTT Reg. 283040, Item 5 |
-| Transceivers 100GbE SR4 | QSFP-100G-SR4-S MPO-12 MMF | — | R$ 2.026 | — | SERPRO/NTT Reg. 283040, Item 6 |
 | Transceivers 400GbE | QDD-400G-SR4.2-BD QSFP-DD MPO-12 (spine) | ~12 | R$ 6.614 | ~R$ 79.368 | SERPRO/NTT Reg. 283040, Item 7 |
+| **Total infra física** | | | | **~R$ 802.968** | |
 
-> ⁸ Transceivers 10/25GbE: estimativa de 2 por servidor × ~300 servidores sem GPU = ~600 unidades.
-> **Nota de preço:** O valor do contrato SERPRO/NTT (R$741/un) é **5× inferior** ao da ARP INCA
-> 5/2026 (R$3.900/un, Item 3). A estimativa total cai de ~R$2.340.000 para ~R$444.600.
-> O quantitativo exato depende do projeto de cabeamento detalhado.
+> ⁸ Estimativa: 2 transceivers por servidor × ~300 servidores sem GPU ≈ 600 unidades.
+> Quantitativo exato depende do projeto de cabeamento detalhado.
 
-> **Nota de uso das referências de transceiver:** Os part numbers SFP-10/25G-CSR-S e
-> QSFP-100G-SR1.2 são módulos ópticos Cisco. Switches Dell (Opção A) suportam módulos
-> compatíveis de terceiros (via DAC/AOC ou módulos homologados Dell) — verificar
-> compatibilidade antes de reutilizar estes preços para a Opção A.
+### Total Consolidado
+
+| Grupo | Estimativa |
+|---|---:|
+| Servidores + HSM (153 unidades) | R$ 23.685.993 |
+| Switches Cisco (21 unidades — leaf + spine) | R$ 3.226.500 |
+| Infraestrutura física (racks + transceivers) | ~R$ 802.968 |
+| OOB Switch N3248TE-ON (9 unidades) | A consultar |
+| **Total itens com referência pública** | **~R$ 27.715.461** |
+
+> ℹ️ Os preços de servidores Dell (uso geral) são de **catálogo base** — produção resulta em
+> 3–5× superior. O GPU (Lenovo, R$ 1.260.000/un) e os switches Cisco (ARP SERPRO) são preços
+> reais de contratos públicos. O total de **~R$ 27,7M** é piso para os componentes com melhor
+> referência; o custo real de produção será superior nos itens Dell de uso geral.
 
 ---
 
 ## 10. Notas de Alinhamento com a Arquitetura
 
-| Item | Situação | Ação tomada |
-|---|---|---|
-| GPU node form factor | `01-physical-architecture.md` atualizado de 2U para **4U** | Layouts dos 3 tipos de rack revisados; FD1 usa painéis verticais laterais para cable mgmt |
-| Spine switch form factor | `01-physical-architecture.md` atualizado de 1U para **2U** (Z9664F-ON é 2U) | Rack FD2: posições U7-U42 recalculadas — total continua 42U |
-| NVMe Cinder | `01-physical-architecture.md` atualizado para **NVMe SFF** (agnóstico de form factor) | Aceita U.2, E3.S/EDSFF ou equivalente PCIe Gen4+ |
-| GPU TDP cooling | Requisito de liquid cooling ≥ 400W/GPU mantido na arquitetura | XE8640 atende com Direct Liquid Cooling integrado |
-| GPU product ID | Placeholder em `09-gpu-compute.md` | Executar `lspci -nn \| grep -i nvidia` após entrega e preencher |
-| Switch Leaf | Z9264F-ON não está no catálogo BR | Substituído por **S5448F-ON** (48×100GbE + 8×400GbE), disponível no site dell.com/pt-br |
-| Fabric SDN — Cisco ACI | Contrato SERPRO/NTT 283040 (21/05/2026) identifica fabric Cisco ACI compatível com a arquitetura | Adicionada **Opção B** (Seção 7.4) com Cisco ACI. Requer decisão: Dell SONiC/OS10 (Opção A) × Cisco ACI (Opção B). Ver tabela comparativa abaixo. |
-| Transceivers — novo preço de referência | Preços da ARP INCA 5/2026 substituídos por referências mais recentes (contrato 2026) | SFP28 25GbE: R$741/un (vs R$3.900 INCA) — impacto -R$1.895.400 na estimativa total |
-| GPU — nova referência de preço (H200) | SERPRO PE 91031/2025, Config 7 (Lenovo, jan/2026, R$ 1.260.000/un) — H200 SXM5 141GB HBM3e | Substitui referência Embrapa 2023 (H100, R$ 1.645.000). Estimativa GPU: R$ 11.340.000 (−R$ 3.465.000 vs anterior). **H200 excede todos os requisitos GPU da arquitetura**. ⚠️ Decisão pendente: manter XE8640/H100 ou considerar Lenovo SR680a V3/H200 via ARP SERPRO |
-
-### Decisão Pendente: Fabric de Rede — Dell SONiC vs Cisco Nexus NX-OS
-
-> Em **ambas as opções o SDN é o OpenStack OVN** — os switches físicos são underlay puro
-> (BGP/ECMP). Não há controladora de rede externa em nenhum dos dois casos.
-
-| Critério | Opção A — Dell SONiC/OS10 | Opção B — Cisco Nexus NX-OS standalone |
-|---|---|---|
-| SDN (overlay) | OpenStack OVN | OpenStack OVN (idêntico) |
-| Underlay | eBGP/ECMP via SONiC | eBGP/ECMP via NX-OS |
-| Controladora de rede | Nenhuma (distribuído) | Nenhuma (distribuído — sem APIC) |
-| Integração OpenStack | OVN ML2 plugin (padrão) | OVN ML2 plugin (padrão, idêntico) |
-| Vendor lock-in | Baixo (SONiC open-source) | Médio (NX-OS proprietário, mas protocolo-compatível) |
-| Preço de referência Gov. | Sob consulta (sem ARP pública) | ✅ **ARP SERPRO 90611/2025 aderível** — preços homologados |
-| Disponibilidade de saldo | — | Verificar junto a SUPGA/GATIC SERPRO SP |
-| Suporte 60 meses | Sob negociação Dell | ✅ Incluído no contrato NTT (Reg. 283040) |
-| Curva operacional | Alta (SONiC é recente) | Moderada (NX-OS bem estabelecido no mercado BR) |
+| Item | Situação |
+|---|---|
+| GPU node form factor | SR680a V3 é **8U** — revisar layout de rack (`01-physical-architecture.md`). Posições GPU nos racks FD1/FD2/FD3 precisam ser recalculadas de 4U para 8U. |
+| Spine switch form factor | N9K-C93600CD-GX é **1U** — `01-physical-architecture.md` registrava spine como 2U. Rack FD2 ganha 1U de folga. |
+| NVMe Cinder | `01-physical-architecture.md` usa **NVMe SFF** agnóstico de form factor — aceita U.2, E3.S/EDSFF ou equivalente PCIe Gen4+. |
+| GPU DLC | SR680a V3 / H200 SXM5 utiliza Direct Liquid Cooling integrado — compatível com requisito DLC ≥ 400W/GPU da arquitetura. |
+| GPU product ID | Executar `lspci -nn \| grep -i nvidia` após entrega (H200 SXM5: `10de:2335`) e preencher em `09-gpu-compute.md`. |
+| Transceivers | SFP-10/25G-CSR-S (R$741/un) são módulos ópticos Cisco — verificar compatibilidade com switches Cisco N9K antes de especificar em edital. |
 
 ---
 
 ## 11. Próximos Passos
 
-1. **Decidir fabric de rede: Opção A (Dell SONiC) ou Opção B (Cisco Nexus NX-OS)** — em
-   ambas o SDN é OpenStack OVN; a diferença é apenas o hardware de underlay e o preço.
-   Ver tabela comparativa na Seção 10. Para Opção B, verificar saldo na ARP SERPRO 90611/2025
-   (contato: SUPGA/GATIC SERPRO SP). **Cisco APIC/ACI não é necessário** em nenhuma das opções.
-2. **RFQ formal com Dell** para os 153 servidores (independente da decisão de switch) — volumes
-   dessa magnitude normalmente resultam em descontos de 20–40% sobre o preço de lista.
-3. ~~**Validar layout de rack**~~ ✅ **Concluído** — GPU 4U e Spine 2U já incorporados em
-   `01-physical-architecture.md`; layouts FD1/FD2/FD3 recalculados e validados em 42U.
-4. **Selecionar CPU exata** para cada role (a linha Xeon 6 tem modelos E/P — Efficient e
-   Performance; os compute nodes devem usar a linha P para maior contagem de cores).
-5. **Definir backplane NVMe** para Cinder nodes — confirmar se E3.S ou U.2 dependendo da
-   disponibilidade no momento da compra; atualizar spec em `01-physical-architecture.md`.
-6. **Contatar Kryptus** para proposta formal de 3 unidades ASI-HSM AHX5 KNET + SLA de suporte
-   + confirmar: performance RSA-2048 ops/s, form factor exato, HA group entre AZs, e agregação
-   de partições no cluster. Tel: +55 (19) 3112-5000 | kryptus.com.
-7. **Confirmar PCI Vendor/Product ID das GPUs** — executar `lspci -nn | grep -i nvidia` após
-   entrega dos XE8640 e atualizar `09-gpu-compute.md`.
-8. **Provisionar licenças iDRAC** — iDRAC9 Enterprise é necessário para Redfish, Virtual
-   Console e automação; verificar se já incluso no SKU ou licença separada.
-9. **Se Opção A (Dell):** Obter cotações dos switches (S5448F-ON, Z9664F-ON, N3248TE-ON) —
-   todos estão no catálogo dell.com/pt-br mas sem preço público; solicitar via canal comercial
-   Dell BR. Levantar preços de transceivers compatíveis com switches Dell.
-10. **Se Opção B (Cisco ACI):** Verificar compatibilidade do plugin Cisco ACI com a versão do
-    OpenStack adotada (`docs/03-control-plane.md`), e confirmar se o cluster APIC virtual de
-    2 nós é suficiente ou se 3 nós são necessários para quórum.
+1. **Revisar layout de rack para GPU 8U** — o SR680a V3 ocupa 8U (não 4U como registrado em
+   `01-physical-architecture.md`). Recalcular posições nos racks FD1/FD2/FD3.
+2. **RFQ formal para servidores de uso geral** (Control Plane, Compute, Storage, Network) —
+   os preços Dell de catálogo são configuração base. Solicitar proposta com configuração
+   completa ou verificar preços da ARP SERPRO PE 91031/2025 (UASG 803080, Configs 1–6, 11–13).
+3. **Verificar saldo na ARP SERPRO 90611/2025** para switches Cisco (SUPGA/GATIC SERPRO SP) e
+   **ARP SERPRO PE 91031/2025** para servidores GPU (Config 7, Lenovo H200).
+4. **Selecionar CPU exata** para servidores de uso geral — Xeon 6 linha P (Performance) para
+   Compute/GPU; linha E (Efficient) aceitável para Control Plane e Storage.
+5. **Definir backplane NVMe** para Cinder nodes — confirmar E3.S ou U.2 conforme disponibilidade;
+   atualizar spec em `01-physical-architecture.md`.
+6. **Contatar Kryptus** para proposta formal (3 unidades ASI-HSM AHX5 KNET) — confirmar
+   performance RSA-2048 ops/s, HA group entre AZs e agregação de partições no cluster.
+   Tel: +55 (19) 3112-5000 | kryptus.com.
+7. **Confirmar PCI ID das GPUs** — executar `lspci -nn | grep -i nvidia` após entrega do
+   SR680a V3 e preencher em `09-gpu-compute.md`.
+8. **Verificar BMC do SR680a V3** — confirmar suporte a Redfish e IPMI 2.0 via XClarity
+   Controller para integração com Ironic/automação de provisionamento.

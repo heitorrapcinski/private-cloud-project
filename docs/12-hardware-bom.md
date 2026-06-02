@@ -403,7 +403,7 @@ Open Banking).
 
 ```
 Qtd    : 3 unidades (1 por AZ, em U39 dos racks FD1)
-Deploy : Cluster HA activeE entre os 3 appliances
+Deploy : Cluster HA active-active entre os 3 appliances
 Partições por appliance : 50 Virtual HSMs (total 150 no cluster)
 Integração : Barbican via PKCS#11 driver + librashsm (ou driver Kryptus)
              KMIP server embarcado para serviços adicionais
@@ -436,15 +436,17 @@ Solicitar: datasheet técnico completo + proposta para 3 unidades + SLA de supor
 ### Servidores e Appliances
 
 | Modelo | Role | Qtd | Preço Ref. Unit. | Estimativa Total | Fonte |
-|---|---|---:|---|---|---|
-| PowerEdge R670 | Control Plane | 12 | R$ 75.890 | ~R$ 910.680 | dell.com/pt-br |
-| PowerEdge R670 | Network Node | 6 | R$ 75.890 | ~R$ 455.340 | dell.com/pt-br |
-| PowerEdge R770 | Compute | 102 | R$ 82.819 | ~R$ 8.447.538 | dell.com/pt-br |
-| PowerEdge R770 | Cinder (all-NVMe) | 3 | R$ 82.819 | ~R$ 248.457 | dell.com/pt-br |
-| PowerEdge R760xd2 | Swift | 18 | R$ 84.221 | ~R$ 1.515.978 | dell.com/pt-br |
-| PowerEdge XE8640 | GPU | 9 | Consultar Dell | — | sob proposta |
-| Kryptus ASI-HSM AHX5 KNET | HSM | 3 | R$ 256.000 | ~R$ 768.000 | contrato público 2024 |
-| **Total** | | **153** | | | |
+|---|---|---:|---:|---:|---|
+| PowerEdge R670 | Control Plane | 12 | R$ 75.890 | R$ 910.680 | dell.com/pt-br |
+| PowerEdge R670 | Network Node | 6 | R$ 75.890 | R$ 455.340 | dell.com/pt-br |
+| PowerEdge R770 | Compute | 102 | R$ 82.819 | R$ 8.447.538 | dell.com/pt-br |
+| PowerEdge R770 | Cinder (all-NVMe) | 3 | R$ 82.819 | R$ 248.457 | dell.com/pt-br |
+| PowerEdge R760xd2 | Swift | 18 | R$ 84.221 | R$ 1.515.978 | dell.com/pt-br |
+| PowerEdge XE8640 | GPU | 9 | Consultar Dell | A consultar | sob proposta |
+| Kryptus ASI-HSM AHX5 KNET | HSM | 3 | R$ 256.000 | R$ 768.000 | contrato público 2024 |
+| **Total** | | **153** | | **R$ 12.345.993** ¹ | |
+
+¹ _Subtotal das linhas com preço público em BRL. Não inclui XE8640 (GPU, sob proposta) nem switches (todos sob proposta)._
 
 > ⚠️ **Servidores Dell:** preços de configuração **base** (mínima). Configurações de produção
 > com CPU, RAM e storage adequados resultarão em valores **3–5× superiores**.
@@ -454,12 +456,12 @@ Solicitar: datasheet técnico completo + proposta para 3 unidades + SLA de supor
 
 ### Rede
 
-| Modelo | Role | Qtd |
-|---|---|---:|
-| PowerSwitch Z9264F-ON | Leaf / ToR | 18 |
-| PowerSwitch Z9664DX-ON | Spine | 3 |
-| PowerSwitch N3248TE-ON | OOB Management | 9 |
-| **Total switches** | | **30** |
+| Modelo | Role | Qtd | Preço Ref. Unit. | Estimativa Total | Fonte |
+|---|---|---:|---|---|---|
+| PowerSwitch S5448F-ON | Leaf / ToR | 18 | Consultar Dell | A consultar | dell.com/pt-br |
+| PowerSwitch Z9664F-ON | Spine | 3 | Consultar Dell | A consultar | dell.com/pt-br |
+| PowerSwitch N3248TE-ON | OOB Management | 9 | Consultar Dell | A consultar | dell.com/pt-br |
+| **Total switches** | | **30** | | **A consultar** | |
 
 ---
 
@@ -468,22 +470,30 @@ Solicitar: datasheet técnico completo + proposta para 3 unidades + SLA de supor
 | Item | Situação | Ação tomada |
 |---|---|---|
 | GPU node form factor | `01-physical-architecture.md` atualizado de 2U para **4U** | Layouts dos 3 tipos de rack revisados; FD1 usa painéis verticais laterais para cable mgmt |
+| Spine switch form factor | `01-physical-architecture.md` atualizado de 1U para **2U** (Z9664F-ON é 2U) | Rack FD2: posições U7-U42 recalculadas — total continua 42U |
 | NVMe Cinder | `01-physical-architecture.md` atualizado para **NVMe SFF** (agnóstico de form factor) | Aceita U.2, E3.S/EDSFF ou equivalente PCIe Gen4+ |
 | GPU TDP cooling | Requisito de liquid cooling ≥ 400W/GPU mantido na arquitetura | XE8640 atende com Direct Liquid Cooling integrado |
 | GPU product ID | Placeholder em `09-gpu-compute.md` | Executar `lspci -nn \| grep -i nvidia` após entrega e preencher |
+| Switch Leaf | Z9264F-ON não está no catálogo BR | Substituído por **S5448F-ON** (48×100GbE + 8×400GbE), disponível no site dell.com/pt-br |
 
 ---
 
 ## 11. Próximos Passos
 
-1. **RFQ formal com Dell** para os 150 servidores + 30 switches — volumes dessa magnitude
+1. **RFQ formal com Dell** para os 153 servidores + 30 switches — volumes dessa magnitude
    normalmente resultam em descontos de 20–40% sobre o preço de lista.
-2. **Validar layout de rack** em `01-physical-architecture.md` para acomodar GPU nodes 4U.
+2. ~~**Validar layout de rack**~~ ✅ **Concluído** — GPU 4U e Spine 2U já incorporados em
+   `01-physical-architecture.md`; layouts FD1/FD2/FD3 recalculados e validados em 42U.
 3. **Selecionar CPU exata** para cada role (a linha Xeon 6 tem modelos E/P — Efficient e
    Performance; os compute nodes devem usar a linha P para maior contagem de cores).
 4. **Definir backplane NVMe** para Cinder nodes — confirmar se E3.S ou U.2 dependendo da
-   disponibilidade do modelo no momento da compra.
-5. **Levantar HSM** com Thales/Entrust para cotação e tempo de entrega (lead time tipicamente
-   8–16 semanas para FIPS L3).
-6. **Provisionar licenças iDRAC** — iDRAC9 Enterprise é necessário para Redfish, Virtual
-   Console e recursos de automação; verificar se já incluso ou licença separada.
+   disponibilidade no momento da compra; atualizar spec em `01-physical-architecture.md`.
+5. **Contatar Kryptus** para proposta formal de 3 unidades ASI-HSM AHX5 KNET + SLA de suporte
+   + confirmar: performance RSA-2048 ops/s, form factor exato, HA group entre AZs, e agregação
+   de partições no cluster. Tel: +55 (19) 3112-5000 | kryptus.com.
+6. **Confirmar PCI Vendor/Product ID das GPUs** — executar `lspci -nn | grep -i nvidia` após
+   entrega dos XE8640 e atualizar `09-gpu-compute.md`.
+7. **Provisionar licenças iDRAC** — iDRAC9 Enterprise é necessário para Redfish, Virtual
+   Console e automação; verificar se já incluso no SKU ou licença separada.
+8. **Obter cotações dos switches** (S5448F-ON, Z9664F-ON, N3248TE-ON) — todos estão no
+   catálogo dell.com/pt-br mas sem preço público; solicitar via canal comercial Dell BR.

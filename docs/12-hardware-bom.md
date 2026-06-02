@@ -442,7 +442,7 @@ Solicitar: datasheet técnico completo + proposta para 3 unidades + SLA de supor
 | PowerEdge R770 | Compute | 102 | R$ 82.819 | R$ 8.447.538 | R$ 277k–305k ⁴ | SERPRO Itens 2/3/4 |
 | PowerEdge R770 | Cinder (all-NVMe) | 3 | R$ 82.819 | R$ 248.457 | R$ 277k–305k ⁴ | SERPRO Itens 2/3/4 |
 | PowerEdge R760xd2 | Swift | 18 | R$ 84.221 | R$ 1.515.978 | R$ 129k–221k | SERPRO Itens 9/10/11 |
-| PowerEdge XE8640 | GPU | 9 | ~R$ 1.645.000 ⁶ | ~R$ 14.805.000 | R$ 1.645.000 ⁶ | Embrapa PE 12/2023, Item 02 |
+| PowerEdge XE8640 | GPU | 9 | ~R$ 1.645.000 ⁶ | ~R$ 14.805.000 | R$ 1.645k–2.894k ⁶⁷ | Embrapa 2023 / INCA ARP 2026 |
 | Kryptus ASI-HSM AHX5 KNET | HSM | 3 | R$ 256.000 | R$ 768.000 | R$ 256.000 | Contrato público 2024 |
 | **Total** | | **153** | | **~R$ 27.150.993** ¹ | | |
 
@@ -456,7 +456,9 @@ Solicitar: datasheet técnico completo + proposta para 3 unidades + SLA de supor
 
 ⁵ _CENSIPAM Contrato 31/2025: servidor rack com **1× NVIDIA L40S 48GB PCIe** (GPU de inferência), não equivalente ao XE8640 (4× H100 80GB SXM5 de treinamento). Mantido como referência de piso._
 
-⁶ _XE8640 Ref. Gov.: cotação Perficomp referenciando **Embrapa UASG 135027, Pregão 12/2023, Item 02** — 4 unidades a R$ 1.645.000 cada, validade 16/11/2024. Configuração: 2× Xeon Gold 6448Y 32C, **2TB RAM**, 4× NVMe 7.68TB U.2 Gen4, 4× NVIDIA HGX H100 SXM5 80GB HBM3, Broadcom 57504 Quad 25GbE, 5 anos ProSupport 4h on-site. Spec mais robusta que a nossa (nossa tem 1TB RAM e 2× NVMe 3.84TB), portanto R$ 1.645.000 é um teto conservador. Preço defasado ~18 meses — mercado H100 teve variações significativas. ARP não localizada; tratar como referência indicativa._
+⁶ _XE8640 Ref. Gov. (piso): cotação Perficomp referenciando **Embrapa UASG 135027, Pregão 12/2023, Item 02** — 4 unidades a R$ 1.645.000 cada, validade 16/11/2024. Configuração: 2× Xeon Gold 6448Y 32C, **2TB RAM**, 4× NVMe 7.68TB U.2 Gen4, 4× NVIDIA HGX H100 SXM5 80GB HBM3, Broadcom 57504 Quad 25GbE, 5 anos ProSupport 4h on-site. Spec mais robusta que a nossa; preço defasado ~18 meses. ARP não localizada; tratar como referência indicativa._
+
+⁷ _XE8640 Ref. Gov. (teto): **ARP INCA Nº 5/2026** (Pregão 91.234/2025, PNCP 23/12/2025, válida até ~dez/2026) — fornecedor VERSATUS HPC, Item 1: "Plataforma computacional GPU alto desempenho, NVIDIA, **refrigerada a ar**" — R$ 2.894.000/unidade. **⚠️ Atenção: "refrigerada a ar" diverge do XE8640** (que usa Direct Liquid Cooling para H100 SXM5 700W). Sem acesso ao Termo de Referência do Pregão 91.234/2025, não é possível confirmar se o equipamento homologado corresponde ao XE8640 ou a uma plataforma diferente (ex: servidor com H100/H200 PCIe air-cooled). R$ 2.894.000 representa um **teto de referência 2026**. Esta ARP é aderível por qualquer órgão federal como não-participante (Art. 4.1, Lei 14.133/2021) — oportunidade de compra pública sem nova licitação._
 
 > ⚠️ **Servidores Dell:** preços de configuração **base** (mínima). Configurações de produção
 > com CPU, RAM e storage adequados resultarão em valores **3–5× superiores**.
@@ -464,14 +466,24 @@ Solicitar: datasheet técnico completo + proposta para 3 unidades + SLA de supor
 > ⚠️ **HSM Kryptus:** preço extraído de contrato público vigente (30/10/2024–29/10/2029),
 > 2 unidades a R$ 256.000/un. Usado como referência — solicitar proposta formal para 3 unidades.
 
-### Rede
+### Rede e Infraestrutura
 
-| Modelo | Role | Qtd | Preço Ref. Unit. | Estimativa Total | Fonte |
-|---|---|---:|---|---|---|
-| PowerSwitch S5448F-ON | Leaf / ToR | 18 | Consultar Dell | A consultar | dell.com/pt-br |
-| PowerSwitch Z9664F-ON | Spine | 3 | Consultar Dell | A consultar | dell.com/pt-br |
-| PowerSwitch N3248TE-ON | OOB Management | 9 | Consultar Dell | A consultar | dell.com/pt-br |
-| **Total switches** | | **30** | | **A consultar** | |
+| Modelo | Role | Qtd | Preço Ref. Unit. | Estimativa Total | Ref. Gov. (unit.) | Fonte Gov. |
+|---|---|---:|---|---|---|---|
+| PowerSwitch S5448F-ON | Leaf / ToR | 18 | Consultar Dell | A consultar | — | — |
+| PowerSwitch Z9664F-ON | Spine | 3 | Consultar Dell | A consultar | — | — |
+| PowerSwitch N3248TE-ON | OOB Management | 9 | Consultar Dell | A consultar | — | — |
+| **Total switches** | | **30** | | **A consultar** | | |
+
+### Infraestrutura Física (item não contemplado anteriormente)
+
+| Item | Especificação | Qtd | Ref. Gov. Unit. | Estimativa Total | Fonte |
+|---|---|---:|---:|---:|---|
+| Rack 42U 19" | APC ou equivalente | 9 | R$ 17.500 | R$ 157.500 | ARP INCA 5/2026, Item 9 |
+| Transceivers 25GbE | SFP28 (hosts → leaf) | ~600 | R$ 3.900 ⁸ | ~R$ 2.340.000 | ARP INCA 5/2026, Item 3 |
+| Transceivers 100GbE | QSFP28 (leaf → spine) | 54 | R$ 3.200 | R$ 172.800 | ARP INCA 5/2026, Item 2 |
+
+> ⁸ Transceivers 25GbE (ARP INCA): estimativa de 2 por servidor × ~300 servidores sem GPU = ~600 unidades. Valor indicativo — quantitativo real depende do projeto de cabeamento detalhado.
 
 ---
 

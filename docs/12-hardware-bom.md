@@ -14,7 +14,7 @@
 |---|---|---:|---|---|
 | Control Plane | PowerEdge **R670** | 12 | R$ 75.890 | 1U dual-socket Intel Xeon 6 |
 | Compute | PowerEdge **R770** | 102 | R$ 82.819 | 2U dual-socket Intel Xeon 6 |
-| GPU Compute | PowerEdge **XE8640** | 9 | Consultar Dell | 4U, 4× H100 SXM5 NVLink |
+| GPU Compute | PowerEdge **XE8640** | 9 | ~R$ 1.645.000 ⁶ | 4U, 4× H100 SXM5 NVLink |
 | Swift Storage | PowerEdge **R760xd2** | 18 | R$ 84.221 | 2U, até 24× LFF 3.5" |
 | Cinder Storage | PowerEdge **R770** (all-NVMe) | 3 | R$ 82.819 | 2U, até 40× E3.S NVMe Gen5 |
 | Network Node | PowerEdge **R670** | 6 | R$ 75.890 | 1U dual-socket, NIC quad 25GbE |
@@ -442,19 +442,21 @@ Solicitar: datasheet técnico completo + proposta para 3 unidades + SLA de supor
 | PowerEdge R770 | Compute | 102 | R$ 82.819 | R$ 8.447.538 | R$ 277k–305k ⁴ | SERPRO Itens 2/3/4 |
 | PowerEdge R770 | Cinder (all-NVMe) | 3 | R$ 82.819 | R$ 248.457 | R$ 277k–305k ⁴ | SERPRO Itens 2/3/4 |
 | PowerEdge R760xd2 | Swift | 18 | R$ 84.221 | R$ 1.515.978 | R$ 129k–221k | SERPRO Itens 9/10/11 |
-| PowerEdge XE8640 | GPU | 9 | Consultar Dell | A consultar | R$ 150k ⁵ | CENSIPAM Contrato 31/2025 |
+| PowerEdge XE8640 | GPU | 9 | ~R$ 1.645.000 ⁶ | ~R$ 14.805.000 | R$ 1.645.000 ⁶ | Embrapa PE 12/2023, Item 02 |
 | Kryptus ASI-HSM AHX5 KNET | HSM | 3 | R$ 256.000 | R$ 768.000 | R$ 256.000 | Contrato público 2024 |
-| **Total** | | **153** | | **R$ 12.345.993** ¹ | | |
+| **Total** | | **153** | | **~R$ 27.150.993** ¹ | | |
 
-¹ _Subtotal das linhas com preço público Dell em BRL. Não inclui XE8640 (sob proposta) nem switches (sob proposta)._
+¹ _Total incluindo XE8640 com referência Embrapa (R$ 14.805.000) + demais itens com preço BRL (R$ 12.345.993). Não inclui switches (sob proposta)._
 
-² _Preços Dell = configuração **base** (mínima). Produção com CPU/RAM/storage adequados resulta em 3–5× superior._
+² _Preços Dell = configuração **base** (mínima). Produção com CPU/RAM/storage adequados resulta em 3–5× superior para servidores sem GPU._
 
 ³ _Referência Gov. = **valores estimados sigilosos** do Pregão SERPRO 91031/2025 (UASG 803080, out/2025) e Contrato CENSIPAM 31/2025. São tetos orçamentários, não preços homologados — os preços vencedores dos leilões tendem a ser inferiores. Usados apenas como balizamento de mercado público._
 
 ⁴ _SERPRO Itens 2–4 têm 512 GB RAM e 15–20 núcleos/socket, configuração inferior ao R770 (1 TB RAM, 40+ núcleos/socket). Os R$ 277k–305k representam um piso de comparação — o R770 com configuração produção deverá superar este valor._
 
-⁵ _CENSIPAM Contrato 31/2025: servidor rack com **1× NVIDIA L40S 48GB PCIe** (GPU de inferência), não equivalente ao XE8640 (4× H100 80GB SXM5 de treinamento). Serve apenas como referência de piso para servidores com GPU em licitações públicas brasileiras._
+⁵ _CENSIPAM Contrato 31/2025: servidor rack com **1× NVIDIA L40S 48GB PCIe** (GPU de inferência), não equivalente ao XE8640 (4× H100 80GB SXM5 de treinamento). Mantido como referência de piso._
+
+⁶ _XE8640 Ref. Gov.: cotação Perficomp referenciando **Embrapa UASG 135027, Pregão 12/2023, Item 02** — 4 unidades a R$ 1.645.000 cada, validade 16/11/2024. Configuração: 2× Xeon Gold 6448Y 32C, **2TB RAM**, 4× NVMe 7.68TB U.2 Gen4, 4× NVIDIA HGX H100 SXM5 80GB HBM3, Broadcom 57504 Quad 25GbE, 5 anos ProSupport 4h on-site. Spec mais robusta que a nossa (nossa tem 1TB RAM e 2× NVMe 3.84TB), portanto R$ 1.645.000 é um teto conservador. Preço defasado ~18 meses — mercado H100 teve variações significativas. ARP não localizada; tratar como referência indicativa._
 
 > ⚠️ **Servidores Dell:** preços de configuração **base** (mínima). Configurações de produção
 > com CPU, RAM e storage adequados resultarão em valores **3–5× superiores**.

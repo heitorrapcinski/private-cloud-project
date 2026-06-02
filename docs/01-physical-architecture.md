@@ -35,10 +35,10 @@ Cada rack (42U) segue um layout lógico padronizado. Existem três variantes:
 | U5 | ToR Switch B (Leaf) | Rede redundante |
 | U6 | Management Switch | OOB/IPMI |
 | U7-U30 | Compute Nodes (12x 2U) | KVM Hypervisors |
-| U31-U32 | GPU Compute Node (1x 2U) | Aceleração GPU |
-| U33-U36 | Swift Storage Nodes (2x 2U) | Object Storage |
-| U37-U38 | Network Node (1x 1U) ou Reserva | OVN Gateway |
-| U39-U42 | Cable Management / Reserva | Organização e expansão |
+| U31-U34 | GPU Compute Node (1x 4U) | Aceleração GPU |
+| U35-U38 | Swift Storage Nodes (2x 2U) | Object Storage |
+| U39 | Network Node (1x 1U) | OVN Gateway |
+| U40-U42 | Cable Management / Reserva | Organização e expansão |
 
 ### Rack FD2 (R2, R5, R8) — Aloja Spine (1 por AZ)
 
@@ -55,10 +55,10 @@ O spine da AZ ocupa o rack FD2, consumindo espaço que antes estava destinado a 
 | U8-U9 | Spine Patch Panel (MPO/LC) | Uplinks spine ↔ 18 leaves + mesh inter-spine |
 | U10 | Reserva de cooling | Headroom térmico do spine |
 | U11-U30 | Compute Nodes (10x 2U) | KVM Hypervisors |
-| U31-U32 | GPU Compute Node (1x 2U) | Aceleração GPU |
-| U33-U36 | Swift Storage Nodes (2x 2U) | Object Storage |
-| U37-U38 | Network Node (1x 1U) | OVN Gateway |
-| U39-U42 | Cable Management | Organização |
+| U31-U34 | GPU Compute Node (1x 4U) | Aceleração GPU |
+| U35-U38 | Swift Storage Nodes (2x 2U) | Object Storage |
+| U39 | Network Node (1x 1U) | OVN Gateway |
+| U40-U42 | Cable Management | Organização |
 
 ### Rack FD1 (R1, R4, R7) — Control Plane + Cinder + HSM
 
@@ -72,10 +72,12 @@ O spine da AZ ocupa o rack FD2, consumindo espaço que antes estava destinado a 
 | U7-U10 | Control Plane Nodes (4x 1U) | Controller + DB + MQ + LB |
 | U11-U12 | Cinder Storage Node (1x 2U) | Block Storage |
 | U13-U36 | Compute Nodes (12x 2U) | KVM Hypervisors |
-| U37-U38 | GPU Compute Node (1x 2U) | Aceleração GPU |
-| U39 | HSM Appliance (1x 1U) | Gestão de chaves criptográficas |
-| U40 | Network Node (1x 1U) | OVN Gateway |
-| U41-U42 | Cable Management | Organização |
+| U37-U40 | GPU Compute Node (1x 4U) | Aceleração GPU |
+| U41 | HSM Appliance (1x 1U) | Gestão de chaves criptográficas |
+| U42 | Network Node (1x 1U) | OVN Gateway |
+
+> **Nota FD1:** Com o GPU node em 4U, os 42U são totalmente utilizados. Gerenciamento de cabos
+> é feito via painéis verticais laterais do rack (sem consumo de U).
 
 ## Distribuição de Roles por AZ
 
@@ -144,9 +146,9 @@ A distribuição reflete a presença dos spines nos racks FD2, que cedem 2 slots
 
 | Appliance | AZ | FD | Rack | Função |
 |-----------|----|----|------|--------|
-| hsm-az1-01 | AZ1 | FD1 | R1 | Partição primária (HA activeE) |
-| hsm-az2-01 | AZ2 | FD1 | R4 | Partição replicada (HA activeE) |
-| hsm-az3-01 | AZ3 | FD1 | R7 | Partição replicada (HA activeE) |
+| hsm-az1-01 | AZ1 | FD1 | R1 | Partição primária (HA active-active) |
+| hsm-az2-01 | AZ2 | FD1 | R4 | Partição replicada (HA active-active) |
+| hsm-az3-01 | AZ3 | FD1 | R7 | Partição replicada (HA active-active) |
 
 Detalhes em `docs/10-hsm-key-management.md`.
 
@@ -172,7 +174,7 @@ Cada leaf tem 3 uplinks 100GbE (1 para cada spine). Os 3 spines formam full-mesh
 | CPU | 2x processadores x86_64, 28 cores / 56 threads cada, base clock ≥ 2.6 GHz, suporte AVX-512 |
 | RAM | 256 GB DDR4-3200 ECC RDIMM (expansível a 1 TB) |
 | Boot | 2x SSD SATA 480 GB em RAID1 (hardware ou software) |
-| Data | 2x NVMe U.2 1.92 TB |
+| Data | 2x NVMe SFF 1.92 TB |
 | NIC | 2x portas 25GbE com suporte a RDMA (RoCEv2), SR-IOV |
 | Gerenciamento OOB | Controladora BMC com suporte a IPMI 2.0 e Redfish |
 | PSU | 2x 800W Platinum, hot-swap, feeds redundantes |
@@ -185,7 +187,7 @@ Cada leaf tem 3 uplinks 100GbE (1 para cada spine). Os 3 spines formam full-mesh
 | CPU | 2x processadores x86_64, 40 cores / 80 threads cada, base clock ≥ 2.3 GHz, suporte a VT-x, VT-d/IOMMU, AVX-512, EPT |
 | RAM | 1 TB DDR4-3200 ECC RDIMM |
 | Boot | 2x SSD SATA 480 GB em RAID1 |
-| Local Storage | 2x NVMe U.2 3.84 TB (ephemeral) |
+| Local Storage | 2x NVMe SFF 3.84 TB (ephemeral) |
 | NIC | 2x portas 25GbE com RDMA, SR-IOV, multiqueue |
 | Gerenciamento OOB | BMC com IPMI 2.0 e Redfish |
 | PSU | 2x 1400W Platinum, hot-swap, feeds redundantes |
@@ -194,12 +196,12 @@ Cada leaf tem 3 uplinks 100GbE (1 para cada spine). Os 3 spines formam full-mesh
 
 | Componente | Requisito Técnico |
 |------------|-------------------|
-| Form factor | Servidor rack 2U, dual-socket, com suporte a aceleradores PCIe Gen4 x16 e SXM |
+| Form factor | Servidor rack 4U, dual-socket, com suporte a aceleradores PCIe Gen5 x16 e SXM |
 | CPU | 2x processadores x86_64, 40 cores / 80 threads cada, suporte a VT-d/IOMMU |
 | RAM | 1 TB DDR4-3200 ECC RDIMM |
 | GPU | 4x aceleradores compute-class: 80 GB HBM2e VRAM, interconexão NVLink ≥ 600 GB/s bidirecional, form factor SXM4, suporte a MIG, FP64 ≥ 9 TFLOPS, FP32 ≥ 19 TFLOPS, TF32 ≥ 150 TFLOPS, API CUDA compatível |
 | Boot | 2x SSD SATA 480 GB em RAID1 |
-| Local Storage | 2x NVMe U.2 3.84 TB |
+| Local Storage | 2x NVMe SFF 3.84 TB |
 | NIC | 2x portas 25GbE com RDMA, SR-IOV |
 | Gerenciamento OOB | BMC com IPMI 2.0 e Redfish |
 | PSU | 2x 2400W Platinum, hot-swap, feeds redundantes |
@@ -214,7 +216,7 @@ Cada leaf tem 3 uplinks 100GbE (1 para cada spine). Os 3 spines formam full-mesh
 | RAM | 256 GB DDR4-3200 ECC RDIMM |
 | Boot | 2x SSD SATA 480 GB em RAID1 |
 | Object | 12x HDD SAS 12Gbps 16 TB (7.2k RPM) |
-| Account/Container | 2x NVMe U.2 1.92 TB |
+| Account/Container | 2x NVMe SFF 1.92 TB |
 | NIC | 2x portas 25GbE com RDMA |
 | Gerenciamento OOB | BMC com IPMI 2.0 e Redfish |
 | PSU | 2x 1400W Platinum, hot-swap |
@@ -223,11 +225,11 @@ Cada leaf tem 3 uplinks 100GbE (1 para cada spine). Os 3 spines formam full-mesh
 
 | Componente | Requisito Técnico |
 |------------|-------------------|
-| Form factor | Servidor rack 2U com 24+ baias NVMe U.2 |
+| Form factor | Servidor rack 2U com 24+ baias NVMe SFF (U.2, E3.S/EDSFF ou equivalente PCIe Gen4+) |
 | CPU | 2x processadores x86_64, 28 cores / 56 threads cada, base clock ≥ 2.0 GHz |
 | RAM | 512 GB DDR4-3200 ECC RDIMM |
 | Boot | 2x SSD SATA 480 GB em RAID1 |
-| Block | 24x NVMe U.2 3.84 TB |
+| Block | 24x NVMe SFF 3.84 TB (U.2, E3.S/EDSFF ou equivalente) |
 | NIC | 2x portas 25GbE com RDMA, suporte NVMe-oF |
 | HBA | Controladora Tri-mode SAS/SATA/NVMe com ≥ 16 portas |
 | Gerenciamento OOB | BMC com IPMI 2.0 e Redfish |
@@ -362,9 +364,9 @@ Exemplos:
 4. **Full-mesh triangular entre spines**: 3 links inter-spine (1 por par) mantêm caminhos de backup para tráfego entre leaves de AZs distintas sem depender de um único spine.
 5. **Trade-off explícito de capacidade**: Manter apenas 9 racks custou 6 compute nodes (108 → 102) e 1 spine a menos (4 → 3). A decisão prioriza footprint físico e simplicidade operacional sobre capacidade bruta.
 6. **25GbE para hosts**: Custo-benefício ideal para workloads enterprise; RDMA e SR-IOV obrigatórios.
-7. **NVMe para Cinder**: Latência sub-milissegundo para block storage.
+7. **NVMe para Cinder**: Latência sub-milissegundo para block storage. O form factor (U.2, E3.S/EDSFF ou equivalente) é definido pelo servidor escolhido; o requisito é NVMe PCIe Gen4+ com ≥ 3.84 TB por baia.
 8. **HDD para Swift**: Custo/TB otimizado para object storage com replicação 3x.
 9. **Dual-homed networking**: Cada host com 2 NICs em switches distintos (MLAG).
 10. **GPU compute plane dedicado**: Aceleradores em nós separados, 1 por FD, distribuindo risco entre AZs.
-11. **HSM em FD1 de cada AZ**: Cluster de 3 appliances em HA activeE para chaves criptográficas FIPS 140-2 Level 3.
+11. **HSM em FD1 de cada AZ**: Cluster de 3 appliances em HA active-active para chaves criptográficas FIPS 140-2 Level 3.
 12. **Requisitos técnicos agnósticos de marca**: Especificações baseadas em padrões abertos (IPMI, Redfish, PKCS#11, PCIe) permitem múltiplos fornecedores.

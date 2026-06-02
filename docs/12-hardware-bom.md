@@ -426,14 +426,14 @@ Solicitar: datasheet técnico completo + proposta para 3 unidades + SLA de supor
 
 ---
 
-## 10. Notas de Desvio da Especificação Original
+## 10. Notas de Alinhamento com a Arquitetura
 
-| Item | Especificação Original | Hardware Dell | Impacto |
-|---|---|---|---|
-| GPU node form factor | 2U | **4U** (XE8640) | Cada rack com GPU node perde 2U de espaço para compute (+2U) |
-| NVMe Cinder | U.2 (SFF-8639) | **E3.S** (EDSFF) no R770 | Form factor diferente, performance equivalente ou superior; validar backplane |
-| GPU TDP cooling | Liquid cooling ≥ 400W/GPU | **Direct Liquid Cooling** integrado no XE8640 | Requer infraestrutura de agua/coolant no rack |
-| GPU product ID | Placeholder `10DE/****` | H100 SXM5: provavelmente `10de:2330` | Confirmar com `lspci -nn` após entrega; atualizar `09-gpu-compute.md` |
+| Item | Situação | Ação tomada |
+|---|---|---|
+| GPU node form factor | `01-physical-architecture.md` atualizado de 2U para **4U** | Layouts dos 3 tipos de rack revisados; FD1 usa painéis verticais laterais para cable mgmt |
+| NVMe Cinder | `01-physical-architecture.md` atualizado para **NVMe SFF** (agnóstico de form factor) | Aceita U.2, E3.S/EDSFF ou equivalente PCIe Gen4+ |
+| GPU TDP cooling | Requisito de liquid cooling ≥ 400W/GPU mantido na arquitetura | XE8640 atende com Direct Liquid Cooling integrado |
+| GPU product ID | Placeholder em `09-gpu-compute.md` | Executar `lspci -nn \| grep -i nvidia` após entrega e preencher |
 
 ---
 
